@@ -1,0 +1,6 @@
+./Solver -genben -var 5 -clause 5 -clausesize 3 -sat 1 -domain 3 -drand 1 -file "out.txt" | ./Solver -b2f -file "out.txt" -model "finite.txt" | ./Solver -solvech -var 5 -clause 5 -file "finite.txt" 
+
+./Solver -genben -var 100 -clause 20 -clausesize 3 -sat 1 -domain 3 -drand 1 -file "out.txt" | ./Solver -b2f -file "out.txt" -model "finite.txt" | ./Solver -solvech -var 100 -clause 20 -file "finite.txt" 
+
+
+
