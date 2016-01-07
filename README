@@ -1,9 +1,13 @@
+# mvl-solver
 //*****************************************************************
 // README
 //
+//*****************************************************************
+This is the solver created by Hemal A. Lal, which I am going to modify.
+See: http://www.d.umn.edu/~lalx0004/research/.
+//*****************************************************************
 // Description of how to execute the program with examples.
 //*****************************************************************
-
 //\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
 1. **** Generating Benchmark Problem Help ****
 **** Use the following format to run the program ****
