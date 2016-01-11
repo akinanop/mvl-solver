@@ -1,6 +1,7 @@
 
 This is the solver created by Hemal A. Lal, which I am going to modify.
-See: http://www.d.umn.edu/~lalx0004/research/.
+See: http://www.d.umn.edu/~lalx0004/research/. Currently the solver contains an error: it gives false results on unsatisfiable cases.
+See Jain_report.pdf (Chapter 2 and 5) for description of the mistake.
 
 Description of how to execute the program with examples.
 
