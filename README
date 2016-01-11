@@ -4,15 +4,13 @@ See: http://www.d.umn.edu/~lalx0004/research/.
 
 Description of how to execute the program with examples.
 
-## Generating Benchmark Problem 
+1. **** Generating Benchmark Problem ****
 
-Use the following format to run the program: 
+**** Use the following format to run the program **** 
 
-~~~
-exe -genben -var <int> -clause <int> -clausesize <int> -sat <1/0>
+% exe -genben -var <int> -clause <int> -clausesize <int> -sat <1/0>
       -domain <int> -drand <1/0> -file <string>
-~~~
-
+      
 where : 
 
 exe               | * name of executable 
