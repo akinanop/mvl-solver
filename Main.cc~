@@ -75,7 +75,7 @@ int main(int argc, char ** argv)
   
   else if(!strcmp(argv[1], "-solvech"))
     {
-      //Call SolveFinite - see SolveFinite.cc
+      //Call SolveFinite from Global.h
       SolveFinite(clineinfo, "ch");
     }
 

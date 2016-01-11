@@ -16,7 +16,7 @@ using namespace std;
 //**********************************************************************//
 //Function Definitions
 //SolveFinite
-//This function calls the finite domain solver and tries to find a model for 
+//This function calls the finite domain solver and tries to find a model for
 //the problem if the problem is satisfiable
 void SolveFinite(CommandLine * cline, string type)
 {
@@ -43,7 +43,7 @@ void SolveFinite(CommandLine * cline, string type)
   if(type == "ch")
     {
       // 1. Chronological Backtrackin
-      result = fobj->ChronoBacktrack(0);
+      result = fobj->ChronoBacktrack(0); // The function defined in Formula.cc
     }
   // 2. NonChronological Backtracking with Clause learning
   //result = fobj->NonChronoBacktrack(0);
@@ -51,7 +51,7 @@ void SolveFinite(CommandLine * cline, string type)
     {
       //3. NonChronological Backtracking with Clause learning
       //this is a loop version, faster than recursive
-      result = fobj->NonChronoBacktrackLoop(0);
+      result = fobj->NonChronoBacktrackLoop(0); // The function defined in Formula.cc
     }
   //compute the search time
   difftime = fobj->TIME_E - fobj->TIME_S;
