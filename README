@@ -1,4 +1,3 @@
-# mvl-solver
 
 This is the solver created by Hemal A. Lal, which I am going to modify.
 See: http://www.d.umn.edu/~lalx0004/research/.
@@ -15,9 +14,8 @@ exe -genben -var <int> -clause <int> -clausesize <int> -sat <1/0>
 ~~~
 
 where : 
-|command           |explanation
-|------------------|---------------------|
-| exe             | * name of executable |
+
+exe               | * name of executable 
 
   -genben         | * option stating create benchmark problem
   -var            | * number of variables in benchmark problem
