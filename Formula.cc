@@ -285,7 +285,7 @@ bool Formula::checkSat()
       //if clause is not SAT return false
       if(!CLAUSELIST[i]->SAT)
 	{
-	  //cout<<"unsat clause :"<<i<<endl;
+	  cout<<"unsat clause :"<<i<<endl;
 	  return false;
 	}
     }
@@ -671,10 +671,11 @@ inline void Formula::addLiteral(int var, bool equals, int val)
   current = NULL;
 }
 
-//anaylzeConflict
+//anaylzeConflict: TODO FIX the mistake here: THE LEARNED CLAUSES ARE NOT entailed
+// BY THE THEORY
 int Formula::analyzeConflict()
 {
-  //cout<<"Conflict at level : "<<LEVEL<<endl;
+  cout<<"Conflict at level : "<<LEVEL<<endl;
   //learnedClause
   Clause * learnedClause = new Clause();
   int CID = CONFLICTINGCLAUSE;
@@ -926,7 +927,7 @@ int Formula::NonChronoBacktrack(int level)
   //start of finite domain extended dpll
   // return 0 : if theory satisfied
   // return 1 : if time out
-  // return 2 : if conflict and later used as unsatisfied
+  // return 2 : if CONFLICT and later used as unsatisfied
 
   //set LEVEL
   LEVEL = level;
