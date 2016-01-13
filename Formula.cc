@@ -409,7 +409,7 @@ void Formula::reduceTheory(int var, bool equals, int val)
 {
   if(equals)
     {
-      //cout<<"reducing : "<<var<<"="<<val<<" at "<<LEVEL<<endl;
+      cout<<"reducing : "<<var<<"="<<val<<" at "<<LEVEL<<endl;
       //first satisfy all clauses with literal, and remove
       //negate literal from claues
       satisfyClauses(var, equals, val);
@@ -453,7 +453,7 @@ void Formula::reduceTheory(int var, bool equals, int val)
     }
   else
     {
-      //cout<<"reducing : "<<var<<"!"<<val<<" at "<<LEVEL<<endl;
+      cout<<"reducing : "<<var<<"!"<<val<<" at "<<LEVEL<<endl;
       //first satisfy all clauses with negate literal, and remove
       //literal from claues
       satisfyClauses(var, equals, val);
@@ -648,7 +648,7 @@ inline void Formula::unsatisfyClauses(int var, bool equals, int val, int level)
 //addLiteral
 inline void Formula::addLiteral(int var, bool equals, int val)
 {
-  //cout<<"add .. "<<var<<(equals?"=":"!")<<val<<endl;
+  cout<<"add .. "<<var<<(equals?"=":"!")<<val<<endl;
   VARRECORD * current = NULL;
   //for every record of this literal increase the number of
   //unassigned literals from unsatisfied clauses
@@ -832,7 +832,7 @@ bool Formula::unitPropagation()
     return true;
   else
     {
-      //cout<<"Conflict : "<<CONFLICTINGCLAUSE<<endl;
+      cout<<"Conflict : "<<CONFLICTINGCLAUSE<<endl;
       UNITLIST.clear();
       return false;
     }
