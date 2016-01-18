@@ -39,21 +39,39 @@ void SolveFinite(CommandLine * cline, string type)
   fobj->TIME_E = GetTime();
   //call the algorithm
   fobj->checkUnit();
+
   // *** Extended DPLL Algorithm Options
-  if(type == "ch")
-    {
-      // 1. Chronological Backtrackin
-      result = fobj->ChronoBacktrack(0); // The function defined in Formula.cc
+
+ if(type == "ch")
+
+ {
+  result = 1;
+//  cout << "\n This solver doesn't support chronological backtracking"<<endl;
+ }
+
+/* To simplify debugging, I remove chronological backtrcking for now
+
+ {
+      // 1. Chronological Backtracking
+      result = fobj->ChronoBacktrack(0); // The function defined in Formula_old.cc
     }
+
+*/
+
   // 2. NonChronological Backtracking with Clause learning
-  //result = fobj->NonChronoBacktrack(0);
-  else
+
+
+//  else  result = fobj->NonChronoBacktrack(0);
+ else
     {
-      //3. NonChronological Backtracking with Clause learning
-      //this is a loop version, faster than recursive
-      result = fobj->NonChronoBacktrackLoop(0); // The function defined in Formula.cc
+      //3. NonChronological Backtracking with Clause learning - "loop version"
+      result = fobj->NonChronoBacktrack(0);
+    //  result = fobj->NonChronoBacktrackLoop(0); // The function defined in Formula.cc
     }
-  //compute the search time
+
+
+
+  // compute the search time
   difftime = fobj->TIME_E - fobj->TIME_S;
   totaltime += difftime;
   printf("%2.4f\t %2.4f\t", difftime, totaltime);
