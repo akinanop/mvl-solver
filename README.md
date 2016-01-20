@@ -1,24 +1,8 @@
 ## Finite Domain Satisfiablity Solver
 
-*Note*: This solver corrects and improves the solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/.
+*Note*: This solver corrects and improves the (unsound) solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/.
 
-Currently the solver is unsound as shown by the following example (described in *Jain_report.pdf*, p.28). When you run the solver on the *counterexample.txt*, you get the following result:
-
-```
-**** Finite Domain Sat Solver - Hemal A Lal ****
-0.0001	 0.0003	SAT
-
-Number of Decisions   : 4
-Number of Units       : 0
-Number of Backtracks  : 0
-Number of Entails     : 0
-Number of Levels      : 4
-Number of Variables   : 4
-Number of Clauses     : 18
-
-Verifying model ... unsat clause :0
-model is INCORRECT
-```
+In particular, now on the counterexample described in [*Jain_report.pdf*, p.28] the solver produces the correct result.
 
 Here follows the description of how to execute the program. 
 
