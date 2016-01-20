@@ -1,0 +1,2 @@
+NOTES, 20.01.2016
+Problem is with checkEntail( var) in Formula.cc
