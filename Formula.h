@@ -3,7 +3,7 @@
 // Finite Domain Solver - Hemal Lal
 //
 // File : Formula.h
-// Description : represents the whole formula, contains the 
+// Description : represents the whole formula, contains the
 // variables, all the clauses in the theory, maintains info about
 // time spent for building, solving, and overall time. Also number
 // of backtracks, conflicts etc.
@@ -50,7 +50,6 @@ public:
   //DECISIONS = stores number of decisions done so far
   //UNITS = stores number of unit propagations done so far
   //ENTAILS = stores number of entailments done so far
-  //PURELITERAL = atom to store pure literal info
   //ENTAILLITERAL = atom to store entailed literal info
   //UNITLIST = stores info about unit clauses in theory
   //UNITCLAUSE = clause that just got unit and satisfied
@@ -67,7 +66,6 @@ public:
   int DECISIONS;
   int UNITS;
   int ENTAILS;
-  Literal * PURELITERAL;
   Literal * ENTAILLITERAL;
   list <int> UNITLIST;
   int UNITCLAUSE;
@@ -98,12 +96,9 @@ public:
   int checkConflict();
   //checkUnit : checks for unit clauses and adds clause id to unitlist
   void checkUnit();
-  //checkEntail : checks for entailed atom if any in the theory and 
+  //checkEntail : checks for entailed atom if any in the theory and
   //stores info in ENTAILLITEAL, returns true if finds one
   bool checkEntail(int var);
-  //checkPureLiteral : checks for pure literal if any in the theory and
-  //stores info in PURELITEAL, returns true if finds one
-  bool checkPureLiteral();
   //chooseLiteral : selects next branching literal from the current theory
   Literal * chooseLiteral();
   //reduceTheory : reduces the theory by satisfying literals/clauses
@@ -127,9 +122,9 @@ public:
   bool unitPropagation();
   //NonChronoBacktrack : Extended DPLL algorithm with clause learning and
   //non chronological backtracking, returns backtrack level
-  int NonChronoBacktrack(int level);  
+  int NonChronoBacktrack(int level);
 
-  int NonChronoBacktrackLoop(int level);  
+  int NonChronoBacktrackLoop(int level);
   //ChronoBacktrack : Extended DPLL algorithm without any learning
   int ChronoBacktrack(int level);
 };
