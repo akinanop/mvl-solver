@@ -20,14 +20,14 @@ Verifying model ... unsat clause :0
 model is INCORRECT
 ```
 
-Here follows the description of how to execute the program. 
+Here follows the description of how to execute the program.
 
-### Generating Benchmark Problem 
+### Generating Benchmark Problem
 
-If you want to generate a random benchmark problem, use the following format to run the program: 
+If you want to generate a random benchmark problem, use the following format to run the program:
 
 ``` exe -genben -var <int> -clause <int> -clausesize <int> -sat <1/0>
-      -domain <int> -drand <1/0> -file <string> ```
+      -domain <int> -drand <1/0> -bool <1/0> -file <string> ```
 
 where :
 
@@ -49,15 +49,17 @@ exe               | * name of executable
  * - required fields
 ```
 
+EXAMPLE: ``` ./Solver -genben -var 4 -clause 18 -clausesize 2 -sat 0 -domain 2 -bool 1 -file "finite.txt" ```
+
 ### Finite Domain Solver with Chronological Backtracking
 
-Use the following format to run the program. The solver accepts problems in extended DIMACS format. See *report.pdf*, p. 30 for the syntax description. 
+Use the following format to run the program. The solver accepts problems in extended DIMACS format. See *report.pdf*, p. 30 for the syntax description.
 
 ``` exe -solvech -var <int> -clause <int> -file <string> -time <int> ```
 
 where :
 
-``` 
+```
   exe             : * name of executable
   -solvech        : * option stating to solve the finite domain problem
   -var            : * number of variables in benchmark problem
@@ -66,18 +68,18 @@ where :
   -time           : amount of time allowed for solver to run (in seconds)
 
  * - required fields
-``` 
+```
 EXAMPLE: ``` ./Solver -solvech -var 4 -clause 18 -file "counterexample.txt" ```
 
 
 ### Finite Domain Solver with NonChronological Backtracking
 
-Use the following format to run the program: 
+Use the following format to run the program:
 
 ``` exe -solvenc -var <int> -clause <int> -file <string> -time <int> ```
 
 where :
-``` 
+```
   exe             : * name of executable
   -solvenc        : * option stating to solve the finite domain problem
   -var            : * number of variables in benchmark problem
@@ -89,21 +91,21 @@ where :
 ```
 
 
-### Convert Boolean to Finite Domain 
+### Convert Boolean to Finite Domain
 
 Use the following format to run the program. The solver accepts problems in DIMACS format.
 
 ``` exe -b2f -file <string> -model <string> ```
 where :
 
-``` 
+```
  exe             : * name of executable
  -b2f            : * option stating to convert file
  -file           : * name of the boolean file
  -model          : * name of the finite file
 
  * - required fields
-``` 
+```
 
 
 ### Convert Finite Domain to Boolean : Linear Encoding
@@ -123,7 +125,7 @@ where :
 ```
 
 
-### Convert Finite Domain to Boolean : Quadratic Encoding 
+### Convert Finite Domain to Boolean : Quadratic Encoding
 
 Use the following format to run the program:
 

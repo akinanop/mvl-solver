@@ -16,7 +16,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
-#include <string>
+#include <cstring>
 #include <fstream>
 #include <set>
 #include <vector>
@@ -43,7 +43,7 @@ struct CommandLine
   int DOMAIN_SIZE;
   //Boolean value : Random domain size = True, Fixed domain size = False
   bool DRAND;
-  //Boolean value : defines if benchmark is in boolean form or modified cnf 
+  //Boolean value : defines if benchmark is in boolean form or modified cnf
   //form(finite)
   bool BOOL_FINITE;
   //File name
@@ -71,7 +71,7 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv);
 //cnf form
 void GenBenFin(CommandLine * cline);
 //GenBenBool
-//This is the main function for generating boolean benchmark problem in 
+//This is the main function for generating boolean benchmark problem in
 //boolean cnf form
 void GenBenBool(CommandLine * cline);
 //Boolean2Finite
