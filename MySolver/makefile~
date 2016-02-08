@@ -10,16 +10,16 @@ Global.o: ~/netshare/mvl-solver/Global.cc ~/netshare/mvl-solver/Global.h
 	g++ -g -c ~/netshare/mvl-solver/Global.cc
 
 GenBenFunc.o: ~/netshare/mvl-solver/GenBenFunc.cc ~/netshare/mvl-solver/Global.h ~/netshare/mvl-solver/Literal.h
-	g++ -g -c ~/netshare/mvl-solver/GenBenFunc.cc
+	g++ -g -c ~/netshare/mvl-solver/src/GenBenFunc.cc
 
-Boolean2Finite.o: ~/netshare/mvl-solver/Boolean2Finite.cc ~/netshare/mvl-solver/Global.h
-	g++ -g -c ~/netshare/mvl-solver/Boolean2Finite.cc
+Boolean2Finite.o: ~/netshare/mvl-solver/src/Boolean2Finite.cc ~/netshare/mvl-solver/Global.h
+	g++ -g -c ~/netshare/mvl-solver/src/Boolean2Finite.cc
 
-LinearEncode.o : ~/netshare/mvl-solver/LinearEncode.cc ~/netshare/mvl-solver/Global.h
-	g++ -g -c ~/netshare/mvl-solver/LinearEncode.cc
+LinearEncode.o : ~/netshare/mvl-solver/src/LinearEncode.cc ~/netshare/mvl-solver/Global.h
+	g++ -g -c ~/netshare/mvl-solver/src/LinearEncode.cc
 
-QuadraticEncode.o : ~/netshare/mvl-solver/QuadraticEncode.cc ~/netshare/mvl-solver/Global.h
-	g++ -g -c ~/netshare/mvl-solver/QuadraticEncode.cc
+QuadraticEncode.o : ~/netshare/mvl-solver/src/QuadraticEncode.cc ~/netshare/mvl-solver/Global.h
+	g++ -g -c ~/netshare/mvl-solver/src/QuadraticEncode.cc
 
 Clause.o: ~/netshare/mvl-solver/Clause.cc ~/netshare/mvl-solver/Clause.h
 	g++ -g -c ~/netshare/mvl-solver/Clause.cc
