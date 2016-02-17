@@ -2,7 +2,7 @@
 
 *Note*: This solver corrects and improves the (unsound) solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. In particular, now on the counterexample described in [*Jain_report.pdf*, p.28] the solver produces the correct result.
 
-Here follows the description of how to execute the program.
+Below follows the description of how to execute the program.
 
 ### Generating Benchmark Problem
 
