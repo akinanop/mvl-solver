@@ -3,31 +3,31 @@ Solver: Main.o Global.o GenBenFunc.o Boolean2Finite.o LinearEncode.o QuadraticEn
 	g++ -o Solver Main.o Global.o GenBenFunc.o Boolean2Finite.o LinearEncode.o QuadraticEncode.o Clause.o Variable.o Formula.o SolveFinite.o
 
 # Compile source code
-Main.o: ~/netshare/mvl-solver/Main.cc ~/netshare/mvl-solver/Global.h ~/netshare/mvl-solver/Formula.h
-	g++ -g -c ~/netshare/mvl-solver/Main.cc
+Main.o: ~/netshare/mvl-solver/src/Main.cc ~/netshare/mvl-solver/src/Global.h ~/netshare/mvl-solver/src/Formula.h
+	g++ -g -c ~/netshare/mvl-solver/src/Main.cc
 
-Global.o: ~/netshare/mvl-solver/Global.cc ~/netshare/mvl-solver/Global.h
-	g++ -g -c ~/netshare/mvl-solver/Global.cc
+Global.o: ~/netshare/mvl-solver/src/Global.cc ~/netshare/mvl-solver/src/Global.h
+	g++ -g -c ~/netshare/mvl-solver/src/Global.cc
 
-GenBenFunc.o: ~/netshare/mvl-solver/GenBenFunc.cc ~/netshare/mvl-solver/Global.h ~/netshare/mvl-solver/Literal.h
+GenBenFunc.o: ~/netshare/mvl-solver/src/GenBenFunc.cc ~/netshare/mvl-solver/src/Global.h ~/netshare/mvl-solver/src/Literal.h
 	g++ -g -c ~/netshare/mvl-solver/src/GenBenFunc.cc
 
-Boolean2Finite.o: ~/netshare/mvl-solver/src/Boolean2Finite.cc ~/netshare/mvl-solver/Global.h
+Boolean2Finite.o: ~/netshare/mvl-solver/src/Boolean2Finite.cc ~/netshare/mvl-solver/src/Global.h
 	g++ -g -c ~/netshare/mvl-solver/src/Boolean2Finite.cc
 
-LinearEncode.o : ~/netshare/mvl-solver/src/LinearEncode.cc ~/netshare/mvl-solver/Global.h
+LinearEncode.o : ~/netshare/mvl-solver/src/LinearEncode.cc ~/netshare/mvl-solver/src/Global.h
 	g++ -g -c ~/netshare/mvl-solver/src/LinearEncode.cc
 
-QuadraticEncode.o : ~/netshare/mvl-solver/src/QuadraticEncode.cc ~/netshare/mvl-solver/Global.h
+QuadraticEncode.o : ~/netshare/mvl-solver/src/QuadraticEncode.cc ~/netshare/mvl-solver/src/Global.h
 	g++ -g -c ~/netshare/mvl-solver/src/QuadraticEncode.cc
 
-Clause.o: ~/netshare/mvl-solver/Clause.cc ~/netshare/mvl-solver/Clause.h
-	g++ -g -c ~/netshare/mvl-solver/Clause.cc
+Clause.o: ~/netshare/mvl-solver/src/Clause.cc ~/netshare/mvl-solver/src/Clause.h
+	g++ -g -c ~/netshare/mvl-solver/src/Clause.cc
 
-Variable.o: ~/netshare/mvl-solver/Variable.cc ~/netshare/mvl-solver/src/Variable.h
+Variable.o: ~/netshare/mvl-solver/src/Variable.cc ~/netshare/mvl-solver/src/Variable.h
 	g++ -g -c ~/netshare/mvl-solver/src/Variable.cc
 
-Formula.o:  ~/netshare/mvl-solver/Formula.cc ~/netshare/mvl-solver/src/Formula.h
+Formula.o:  ~/netshare/mvl-solver/src/Formula.cc ~/netshare/mvl-solver/src/Formula.h
 	g++ -g -c ~/netshare/mvl-solver/src/Formula.cc
 
 SolveFinite.o: ~/netshare/mvl-solver/src/SolveFinite.cc ~/netshare/mvl-solver/src/Formula.h

@@ -221,8 +221,6 @@ void Formula::PrintInfo()
 //============================================================================\\
 ================================================================================
 
-//verifyModel : DOESN'T WORK PROPERLY as witnessed byt counterexample.txt
-
 bool Formula::verifyModel()
 {
   //set all clause to false
@@ -285,15 +283,17 @@ bool Formula::verifyModel()
 
 // checkSat: if some clause is not SAT return false
 bool Formula::checkSat()
-{
+{ cout <<"Checking satisfiabiity"<<endl;
   int size = CLAUSELIST.size();
+  cout <<"# of clauses: "<<size<<endl;
   for(int i=0; i<size; i++)
     {
       if(!CLAUSELIST[i]->SAT)
-	{
+	{ cout<<"Some clause not sat"<<endl;
 	  return false;
 	}
     }
+    cout<<"All clauses are sat"<<endl;
   return true;
 }
 
@@ -371,7 +371,7 @@ bool Formula::checkEntail(int var)
   return false;
 }
 
-//chooseLiteral
+//chooseLiteral: MISTAKE in choosing the literal
 Literal * Formula::chooseLiteral()
 {
   int max = -1;
@@ -391,16 +391,18 @@ Literal * Formula::chooseLiteral()
 	      if(VARLIST[i]->ATOMASSIGN[j] == 0)
 		{
 		  tmax = VARLIST[i]->ATOMCNTPOS[j] - VARLIST[i]->ATOMCNTNEG[j];
-		  if(max < tmax)
-		    {
+		//  if(max < tmax)
+		  //  {
 		      max = tmax;
 		      tvar = i;
 		      tval = j;
-		    }
+		    //}
 		}
 	    }
 	}
     }
+
+    cout<<"var: "<< tvar <<endl;
   return (tvar != -1 ? new Literal(tvar, tval) : NULL);
 }
 
@@ -907,8 +909,9 @@ int Formula::NonChronoBacktrack(int level)
     }
 
   //When there is no conflict, choose a literal to branch on
-
   Literal * atom = chooseLiteral();
+  cout<<"Chose literal"<<endl;
+
   if(atom)
     {
       DECISIONS++;
