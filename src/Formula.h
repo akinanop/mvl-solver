@@ -78,8 +78,11 @@ public:
   Formula();
   //One argument constructor
   Formula (CommandLine * cline);
+  // 2-arg constructor
+  Formula(int vars, int clauses);
   //BuildFunction : builds the theory using the input cnf file
   void BuildFunction(CommandLine * cline);
+  void BuildFunction(string name);
   //PrintVar : prints the variable and its value
   void PrintVar();
   //PrintClause : prints the clauses in the theory

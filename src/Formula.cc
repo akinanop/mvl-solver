@@ -30,6 +30,27 @@ Formula::Formula()
   DECSTACK.reserve(10);
 }
 
+//  2-arg constructor
+
+Formula::Formula(int vars, int clauses)
+{
+  //Setting appropriate values and resizing vectors
+  VARLIST.reserve(vars);
+  CLAUSELIST.reserve(clauses);
+  TIMELIMIT = 3600;
+  TIME_S = 0;
+  TIME_E = 0;
+  LEVEL = 0;
+  UNITS = 0;
+  BACKTRACKS = 0;
+  DECISIONS = 0;
+  ENTAILS = 0;
+  UNITCLAUSE = -1;
+  CONFLICT = false;
+  CONFLICTINGCLAUSE = -1;
+  DECSTACK.reserve(vars+1);
+}
+
 //1-arg constructor
 Formula::Formula(CommandLine * cline)
 {
@@ -54,6 +75,127 @@ Formula::Formula(CommandLine * cline)
 //======================= READ INPUT =========================================\\
 ================================================================================
 
+/*Non-commandline build function
+
+void Formula::BuildFunction(string name)
+{
+  //local variables
+  fstream infile;
+  char line_buffer[3000];
+  char word_buffer[3000];
+  int clause_num = 0;
+  int atom_num = 0;
+  int var, val;
+  char ch;
+  char ch1;
+  string str;
+  int temp;
+  Variable * temp_var = NULL;
+  Literal * temp_atom = NULL;
+  Clause * temp_clause = NULL;
+
+  //to start variable from 1 and not from 0 we need this
+  VARLIST.push_back( new Variable(0, 0));
+  VARLIST[0]->SAT = true;
+
+  TIME_S = GetTime();
+  //opening infile to read and checking if it opens
+  infile.open(name, ios::in);
+  if(!infile)
+    {
+      cout<<endl;
+      cout<<"**** ERROR ****"<<endl;
+      cout<<"Could not open input file : "<<endl;
+      cout<<endl;
+      exit(1);
+    }
+
+  //now reading each line from the infile and if needed to convert
+  //then converting it and writing to outfile or just writing directly
+  while(infile.getline(line_buffer, 3000))
+    {
+      temp_clause = new Clause();
+      //if line is comment - just write
+      if(line_buffer[0] == 'c')
+	{
+	  //do nothing
+	  ;
+	}
+      //else if line is p cnf var_num clause_num - just write
+      else if(line_buffer[0] == 'p')
+	{
+	  //do nothing
+	  ;
+	}
+      //else if line is d var# domsize
+      else if(line_buffer[0] == 'd')
+	{
+	  temp = sscanf(line_buffer, "d %d %d", &var, &val);
+	  temp_var = new Variable(var, val);
+	  VARLIST.push_back(temp_var);
+	}
+      //else its variables
+      else
+	{
+	  char * lp = line_buffer;
+	  do
+	    {
+	      char * wp = word_buffer;
+	      //erasing all leading space/tabs
+	      while (*lp && ((*lp == ' ') || (*lp == '\t')))
+		{
+		  lp++;
+		}
+	      //reading each value into word buffer
+	      while (*lp && (*lp != ' ') && (*lp != '\t') && (*lp != '\n'))
+		{
+		  *(wp++) = *(lp++);
+		}
+	      *wp = '\0';
+	      //converting into int and writing to file
+	      if(strlen(word_buffer) != 0)
+		{
+		  temp = sscanf(word_buffer, "%d %c %d", &var, &ch, &val);
+		  if(ch == '!')
+		    temp = sscanf(word_buffer, "%d %c %c %d", &var, &ch, &ch1, &val);
+		  //checking if variable = 0 i.e end of line
+		  if(var != 0)
+		    {
+		      //add it to clause_list's atom_list
+		      temp_atom = new Literal(var, ch, val);
+		      temp_clause->AddAtom(temp_atom);
+
+		      //increment the index representing value so that
+		      //we can keep track of number of occurences of each
+		      //variable and its domain value, if ch is = then increment
+		      //the value count, else increment others count
+		      if(ch == '=')
+			{
+			  VARLIST[var]->ATOMCNTPOS[val]++;
+			  VARLIST[var]->AddRecord(clause_num, val, true);
+			}
+		      else
+			{
+			  VARLIST[var]->ATOMCNTNEG[val]++;
+			  VARLIST[var]->AddRecord(clause_num, val, false);
+			}
+		      atom_num++;
+		    }
+		}
+	    }while(*lp);
+	  CLAUSELIST.push_back(temp_clause);
+	  atom_num = 0;
+	  ++clause_num;
+	}
+    }
+
+  //closing file
+  infile.close();
+  TIME_E = GetTime();
+}
+
+
+*/
 //BuildFunction
 void Formula::BuildFunction(CommandLine * cline)
 {

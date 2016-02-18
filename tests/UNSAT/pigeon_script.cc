@@ -9,11 +9,12 @@ using namespace std;
 
 int main(){
 
-  for(int pgn=11; pgn < 21; pgn++){
+  for(int pgn=11; pgn < 1001; pgn++){
 
     int hole = pgn-1;
     ofstream file;
-    string name = static_cast<ostringstream*>( &(ostringstream() << pgn) )->str();
+    string name = "pgn"+to_string(pgn);
+    // string name = static_cast<ostringstream*>( &(ostringstream() << pgn) )->str();
     file.open(name);
     int clauses = ( pow(pgn-1,2) * pgn)/2;
     file<<"c This is a pigeonhole problem with "<<pgn<<" pigeons and "<<hole<<" holes"<< endl;
@@ -33,7 +34,7 @@ int main(){
 
     }
     file.close();
-
+    pgn = pgn + 10;
   }
   return 0;
 }
