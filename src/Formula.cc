@@ -516,7 +516,7 @@ bool Formula::checkEntail(int var)
 //chooseLiteral: MISTAKE in choosing the literal
 Literal * Formula::chooseLiteral()
 {
-  int max = -1;
+  int max = -999999999;
   int size = VARLIST.size();
   int domainsize = -1;
   int tvar = -1;
@@ -533,12 +533,12 @@ Literal * Formula::chooseLiteral()
 	      if(VARLIST[i]->ATOMASSIGN[j] == 0)
 		{
 		  tmax = VARLIST[i]->ATOMCNTPOS[j] - VARLIST[i]->ATOMCNTNEG[j];
-		//  if(max < tmax)
-		  //  {
+		 if(max < tmax)
+		   {
 		      max = tmax;
 		      tvar = i;
 		      tval = j;
-		    //}
+		    }
 		}
 	    }
 	}
