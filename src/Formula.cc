@@ -708,7 +708,7 @@ inline void Formula::removeLiteral(int var, bool equals, int val)
 
 //undoTheory
 void Formula::undoTheory(int level)
-{
+{ cout<<"Undoing the theory"<<endl;
   //for each variable v
   //for each domain d from dom(v) .. undo
   for(int i=1; i<VARLIST.size(); i++)
@@ -805,7 +805,7 @@ inline void Formula::unsatisfyClauses(int var, bool equals, int val, int level)
 //addLiteral
 inline void Formula::addLiteral(int var, bool equals, int val)
 {
-  cout<<"Add to partial interpretation: "<<var<<(equals?"=":"!")<<val<<endl;
+  cout<<"Add literal: "<<var<<(equals?"=":"!")<<val<<endl;
   VARRECORD * current = NULL;
   //for every record of this literal increase the number of
   //unassigned literals from unsatisfied clauses
@@ -825,7 +825,7 @@ inline void Formula::addLiteral(int var, bool equals, int val)
 	}
       current = current->next;
     }
-  current = NULL;
+  //current = NULL;
 }
 
 //anaylzeConflict: TODO FIX the mistake here: THE LEARNED CLAUSES ARE NOT entailed
@@ -912,7 +912,7 @@ int Formula::analyzeConflict()
 	      index++;
 	    }
 	  if(DECSTACK[index]->EQUAL)
-	    learnedClause->AddAtom(new Literal(DECSTACK[index]->VAR, '!',
+	    learnedClause->AddAtom(new Literal(DECSTACK[index]->VAR, '!', /// WAs !
 					       DECSTACK[index]->VAL));
 	  else
 	    learnedClause->AddAtom(new Literal(DECSTACK[index]->VAR, '=',
@@ -928,12 +928,13 @@ int Formula::analyzeConflict()
 
 
 	  //computing the backtrack level : CID
-	  CID = 0;
+	 //CID = 0;
         cout<< "learned a clause:"<<endl;
         learnedClause -> Print();
 	  //if learned clause has only one literal then backtrack to level 0
-	  if(csize == 1)
-	    return CID;
+	 if(csize == 1)
+	   return 0;
+
 	  for(int i=0; i<csize; i++)
 	    {
 	      if((tlevel != VARLIST[learnedClause->ATOM_LIST[i]->VAR]
