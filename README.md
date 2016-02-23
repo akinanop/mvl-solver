@@ -51,7 +51,7 @@ where :
 
  * - required fields
 ```
-EXAMPLE: ``` ./Solver -solvech -var 4 -clause 18 -file "counterexample.txt" ```
+EXAMPLE: ``` ./Solver -solvenc -var 4 -clause 18 -file "counterexample.txt" ```
 
 
 ### Finite Domain Solver with NonChronological Backtracking
