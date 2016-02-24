@@ -35,12 +35,13 @@ public:
   //VAR = variable name
   //VAL = value assigned to variable
   //EQUAL = is the atom = (true) or ! (false)
+
   int VAR;
   int VAL;
   bool EQUAL;
 
   //Zero argument constructor
-  Literal() { VAR = -1; VAL = -1; EQUAL = true; }
+  Literal() { VAR = -1; VAL = -1; EQUAL = true;}
   //Two argument constructor
   Literal(int vr, int vl) { VAR = vr; VAL = vl; EQUAL = true; }
   //Three argument constructor
@@ -50,14 +51,21 @@ public:
     if(ch == '=') EQUAL = true;
     else EQUAL = false;
   }
+
+//  Literal(int vr, int vl, int REASON){
+
+//  VAR = vr; VAL = vl; EQUAL = true; REASON = REASON;
+
+//  }
+
   //Print : function to print the atom
-  void Print() 
-  { 
+  void Print()
+  {
     cout<<VAR;
     if(EQUAL) cout<<"="; else cout<<"!=";
     cout<<VAL;
   }
-  
+
 };
 // End of Code
 //

@@ -9,7 +9,7 @@ using namespace std;
 
 int main(){
 
-  for(int pgn=11; pgn < 1001; pgn++){
+  for(int pgn=2; pgn < 4; pgn++){
 
     int hole = pgn-1;
     ofstream file;
@@ -34,7 +34,7 @@ int main(){
 
     }
     file.close();
-    pgn = pgn + 10;
+  //  pgn = pgn + 10;
   }
   return 0;
 }

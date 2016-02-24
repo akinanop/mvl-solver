@@ -28,7 +28,7 @@ using namespace std;
 // Clause
 // This class represents the Clause object which stores the atoms
 // in the clause. It also stores number of atoms in the clause,
-// number of unsatisfied claues, whether clause is satisfied or not, 
+// number of unsatisfied claues, whether clause is satisfied or not,
 // level at which it got satisfied.
 //
 // Start of Code
@@ -45,7 +45,7 @@ public:
   bool SAT;
   int NumAtom;
   int NumUnAss;
-  int LEVEL;
+  int CLEVEL;
 
   //Zero Argument Constructor
   Clause();

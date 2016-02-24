@@ -19,7 +19,7 @@ Clause::Clause()
   SAT = false;
   NumAtom = 0;
   NumUnAss = 0;
-  LEVEL = -1;
+  CLEVEL = -1;
 }
 
 //One Argument Constructor
@@ -29,7 +29,7 @@ Clause::Clause(int size)
   SAT = false;
   NumAtom = 0;
   NumUnAss = 0;
-  LEVEL = -1;
+  CLEVEL = -1;
 }
 
 //Destructor
@@ -45,6 +45,7 @@ void Clause::AddAtom(Literal * atom)
   NumAtom++;
   NumUnAss++;
 }
+
 
 //Print
 void Clause::Print()
@@ -103,13 +104,13 @@ inline void Clause::decNumUnAss()
 //getLevel
 inline int Clause::getLevel()
 {
-  return LEVEL;
+  return CLEVEL;
 }
 
 //setLevel
 inline void Clause::setLevel(int level)
 {
-  LEVEL = level;
+  CLEVEL = level;
 }
 
 //isUnit

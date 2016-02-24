@@ -53,14 +53,17 @@ public:
   //SAT = boolean variable true if variable assigned else false
   //LEVEL = Level at which the variable got satisfied and assigned , default -1
   //ATOMLEVEL = array storing levels at which each domain value is assigned
-  //ATOMASSIGN = array storing whether = or != is satisfied, 
+  //ATOMASSIGN = array storing whether = or != is satisfied,
   //             0 is none, 1:=, -1:!=
-  //ATOMCNTPOS = array storing counts of positive occurences of each domain
+
+  //ATOMCNTPOS = array storing counts of positive occurences of each domain - for choosing decision literal
   //ATOMCNTNEG = array storing counts of negative occurences of each domain
+
   //ATOMRECPOS = array storing records of positive occurences of each domain
   //ATOMRECNEG = array storing records of negative occurences of each domain
+
   //FLAG = array storing true if the literal is involved in conflict
-  //CLAUSEID = array storing the clause id which cause this literal to be 
+  //CLAUSEID = array storing the clause id which cause this literal to be
   //           implied
   int VAR;
   int VAL;

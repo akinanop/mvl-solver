@@ -324,9 +324,10 @@ void Formula::checkUnit()
 
 //checkEntail
 bool Formula::checkEntail(int var)
-{
-  if(ENTAILLITERAL)
-    delete ENTAILLITERAL;
+{ cout<<"Checking entailment..."<<endl;
+  //if(ENTAILLITERAL)
+    //delete ENTAILLITERAL;
+    // cout<<"Successfully freed entailment var"<<endl;
   int domainsize = 0;
   bool flag = false;
   int domainvalue = -1;
@@ -366,15 +367,15 @@ bool Formula::checkEntail(int var)
 }
 
 //checkPureLiteral
-bool Formula::checkPureLiteral()
+/*bool Formula::checkPureLiteral()
 {
   return false;
-}
+} */
 
 //chooseLiteral
 Literal * Formula::chooseLiteral()
 {
-  int max = -9999999999999999;
+  int max = -99999999999999;
   int size = VARLIST.size();
   int domainsize = -1;
   int tvar = -1;
@@ -456,7 +457,7 @@ void Formula::reduceTheory(int var, bool equals, int val)
       cout<<"reducing : "<<var<<"!"<<val<<" at "<<LEVEL<<endl;
       //first satisfy all clauses with negate literal, and remove
       //literal from claues
-      satisfyClauses(var, equals, val);
+      satisfyClauses(var, equals, val); 
       removeLiteral(var, !equals, val);
       VARLIST[var]->ATOMASSIGN[val] = -1;
       VARLIST[var]->ATOMLEVEL[val] = LEVEL;
@@ -470,11 +471,13 @@ void Formula::reduceTheory(int var, bool equals, int val)
       if(checkEntail(var))
 	{
 	  ENTAILS++;
-	  //cout<<"Entailment .."<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
+	  cout<<"Entailment .."<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
 	  VARLIST[ENTAILLITERAL->VAR]->CLAUSEID[ENTAILLITERAL->VAL] = UNITCLAUSE;
 	  reduceTheory(ENTAILLITERAL->VAR, true, ENTAILLITERAL->VAL);
 	}
     }
+
+   
 }
 
 //satisfyClauses
@@ -714,9 +717,9 @@ int Formula::analyzeConflict()
 	      tval = CLAUSELIST[CID]->ATOM_LIST[i]->VAL;
 	      tequal = CLAUSELIST[CID]->ATOM_LIST[i]->EQUAL;
 
-	      if(!VARLIST[tvar]->FLAG[tval])
+	      if(!VARLIST[tvar]->FLAG[tvar])
 		{
-		  VARLIST[tvar]->FLAG[tval] = true;
+		  VARLIST[tvar]->FLAG[tvar] = true;
 		  if((VARLIST[tvar]->VAL != -1) &&
 		     (VARLIST[tvar]->CLAUSEID[tval] == VARLIST[tvar]->CLAUSEID[VARLIST[tvar]->VAL]))
 		    VARLIST[tvar]->FLAG[VARLIST[tvar]->VAL] = true;

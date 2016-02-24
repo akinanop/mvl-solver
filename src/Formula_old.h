@@ -81,7 +81,6 @@ public:
   // 2-arg constructor
   Formula(int vars, int clauses);
   //BuildFunction : builds the theory using the input cnf file
-
   void BuildFunction(CommandLine * cline);
   void BuildFunction(string name);
   //PrintVar : prints the variable and its value
@@ -104,7 +103,6 @@ public:
   //stores info in ENTAILLITEAL, returns true if finds one
   bool checkEntail(int var);
   //chooseLiteral : selects next branching literal from the current theory
-  void addReason(int var, int val); // needed for analyzing coflict
   Literal * chooseLiteral();
   //reduceTheory : reduces the theory by satisfying literals/clauses
   void reduceTheory(int var, bool equals, int val);
