@@ -535,10 +535,13 @@ bool Formula::checkEntail(int var) // NO PROBLEM HERE
 void Formula::addReason(int var, int val)
 {
   Clause * reason = new Clause(2);
-  reason -> SAT = true;
+//  reason -> SAT = true;
   reason ->AddAtom(new Literal(var, '=', val));
   reason -> AddAtom(new Literal(var, '!', val));
   CLAUSELIST.push_back(reason);
+  VARLIST[var] -> AddRecord(CLAUSELIST.size()-1,val,true);
+  VARLIST[var] -> AddRecord(CLAUSELIST.size()-1,val,false);
+
   return ;
 }
 //chooseLiteral
@@ -595,7 +598,7 @@ void Formula::reduceTheory(int var, bool equals, int val)
       VARLIST[var]->SAT = true;
       VARLIST[var]->LEVEL = LEVEL;
 
-      VARLIST[var]->CLAUSEID[val] = UNITCLAUSE;
+     VARLIST[var]->CLAUSEID[val] = UNITCLAUSE;
       //Add literal to DecisionStack
       DECSTACK.push_back(new Literal(var, '=', val));
 
@@ -1096,13 +1099,14 @@ int Formula::NonChronoBacktrack(int level)
   Literal * atom = chooseLiteral();
   cout<<"Chose literal"<<endl;
   addReason(atom->VAR, atom->VAL);
-  VARLIST[atom->VAR] -> CLAUSEID[atom->VAL] = CLAUSELIST.size();
+
 
   if(atom)
     {
       DECISIONS++;
       LEVEL++;
       cout<<"Decision : "<<atom->VAR<<(atom->EQUAL?"=":"!=")<<atom->VAL<<endl;
+      UNITCLAUSE = CLAUSELIST.size()-1;
       reduceTheory(atom->VAR, atom->EQUAL, atom->VAL);
       return NonChronoBacktrack(LEVEL);
     }
