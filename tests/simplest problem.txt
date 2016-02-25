@@ -1,6 +1,7 @@
 c The simplest possible case for debugging
-p cnf 2 2
+p cnf 2 3
 d 1 2
 d 2 2
 1=0 1!=1 0
-1=1 1!=0 0
+1!=0 1=1 0
+2=0 2=1 0

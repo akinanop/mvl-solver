@@ -45,7 +45,7 @@ public:
   bool SAT;
   int NumAtom;
   int NumUnAss;
-  int CLEVEL;
+  int LEVEL;
 
   //Zero Argument Constructor
   Clause();
