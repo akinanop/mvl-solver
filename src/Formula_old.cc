@@ -317,8 +317,10 @@ void Formula::checkUnit()
       //if clause is not SAT and has 1 unassigned literal
       //add the index i into Unitlist
       if((CLAUSELIST[i]->NumUnAss == 1) &&
-	 (!CLAUSELIST[i]->SAT))
+	 (!CLAUSELIST[i]->SAT)){
 	UNITLIST.push_back(i);
+  cout<<"Found unit: "<<i<<endl;}
+
     }
 }
 
@@ -719,7 +721,7 @@ int Formula::analyzeConflict()
 	  if(VARLIST[i]->ATOMLEVEL[j] != 0)
 	    VARLIST[i]->FLAG[j] = true;
 	  else
-	    VARLIST[i]->FLAG[j] = true; // CHECK!
+	    VARLIST[i]->FLAG[j] = false; // CHECK!
 	}
     }
 
@@ -783,7 +785,8 @@ int Formula::analyzeConflict()
 	    learnedClause->AddAtom(new Literal(DECSTACK[index]->VAR, '=',
 					       DECSTACK[index]->VAL));
 	  learnedClause->NumUnAss--;
-    cout<<"Adding clause to clauselist: "<<endl;
+    cout<<"Learned a clause: "<<endl;
+    learnedClause->Print();
 	  CLAUSELIST.push_back(learnedClause);
 	  csize = learnedClause->NumAtom;
 	  CID = CLAUSELIST.size()-1;
@@ -990,7 +993,7 @@ int Formula::NonChronoBacktrack(int level)
   // {
   //   reduceTheory(PURELITERAL->VAR, PURELITERAL->EQUAL, PURELITERAL->VAL);
   // }
-
+  checkUnit();
   //check unit literal
   if(!UNITLIST.empty())
     unitPropagation();
@@ -1036,6 +1039,7 @@ int Formula::NonChronoBacktrack(int level)
       LEVEL++;
       //cout<<"Decision : "<<atom->VAR<<(atom->EQUAL?"=":"!=")<<atom->VAL<<endl;
       reduceTheory(atom->VAR, atom->EQUAL, atom->VAL);
+      checkUnit();
       return NonChronoBacktrack(LEVEL);
 //       int result = NonChronoBacktrack(LEVEL);
 //       if(result == 0)
