@@ -65,12 +65,9 @@ void SolveFinite(CommandLine * cline, string type)
  else
     {
       //3. NonChronological Backtracking with Clause learning - "loop version"
-      result = fobj->NonChronoBacktrack(0);
-    //  result = fobj->NonChronoBacktrackLoop(0); // The function defined in Formula.cc
+    //  result = fobj->NonChronoBacktrack(0);
+      result = fobj->NonChronoBacktrackLoop(0); // The function defined in Formula.cc
     }
-
-
-
   // compute the search time
   difftime = fobj->TIME_E - fobj->TIME_S;
   totaltime += difftime;

@@ -752,7 +752,7 @@ int Formula::analyzeConflict()
 		      else
 			learnedClause->AddAtom(new Literal(tvar, '!', tval));
 		      learnedClause->NumUnAss--;
-          cout<< "learning a clause:"<<endl;
+          cout<< "Learning a clause:"<<endl;
           learnedClause -> Print();
 		    }
 		  else
@@ -1113,7 +1113,7 @@ int Formula::NonChronoBacktrackLoop(int level)
 	  //it's because once add the learnedclause it is supposed to be unit .. but in some
 	  //cases it doesnt .. it has more than two unassigned literals eg. 5=1 and 5!=0
 	  checkUnit();
-	  //cout<<"Unit clause : "<<(!UNITLIST.empty()?UNITLIST.front():-1)<<endl;
+	  cout<<"Unit clause : "<<(!UNITLIST.empty()?UNITLIST.front():-1)<<endl;
 	}
 
       //since all is fine, now need to choose a literal
@@ -1125,7 +1125,7 @@ int Formula::NonChronoBacktrackLoop(int level)
 	    {
 	      DECISIONS++;
 	      LEVEL++;
-	      //cout<<"Decision : "<<atom->VAR<<(atom->EQUAL?"=":"!=")<<atom->VAL<<endl;
+	      cout<<"Decision : "<<atom->VAR<<(atom->EQUAL?"=":"!=")<<atom->VAL<<endl;
 	      reduceTheory(atom->VAR, atom->EQUAL, atom->VAL);
 	    }
 	}
