@@ -4,7 +4,7 @@ Solver: Main.o Global.o GenBenFunc.o Boolean2Finite.o LinearEncode.o QuadraticEn
 
 # Compile source code
 Main.o: ~/Desktop/mvl-solver/src/Main.cc ~/Desktop/mvl-solver/src/Global.h ~/Desktop/mvl-solver/src/Formula_old.h
-	g++ -pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wswitch-default -Wundef -Werror -Wno-unused -g -c ~/Desktop/mvl-solver/src/Main.cc
+	g++ -pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow  -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wswitch-default -Wundef -Werror -Wno-unused -g -c ~/Desktop/mvl-solver/src/Main.cc
 
 Global.o: ~/Desktop/mvl-solver/src/Global.cc ~/Desktop/mvl-solver/src/Global.h
 	g++ -g -c ~/Desktop/mvl-solver/src/Global.cc
@@ -28,7 +28,7 @@ Variable.o: ~/Desktop/mvl-solver/src/Variable.cc ~/Desktop/mvl-solver/src/Variab
 	g++ -g -c ~/Desktop/mvl-solver/src/Variable.cc
 
 Formula_old.o:  ~/Desktop/mvl-solver/src/Formula_old.cc ~/Desktop/mvl-solver/src/Formula_old.h
-	g++ -pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -g -c ~/Desktop/mvl-solver/src/Formula_old.cc
+	g++ -pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow  -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -g -c ~/Desktop/mvl-solver/src/Formula_old.cc
 
 SolveFinite.o: ~/Desktop/mvl-solver/src/SolveFinite.cc ~/Desktop/mvl-solver/src/Formula_old.h
 	g++ -g -c ~/Desktop/mvl-solver/src/SolveFinite.cc

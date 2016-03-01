@@ -38,25 +38,15 @@ void SolveFinite(CommandLine * cline, string type)
   fobj->TIME_S = GetTime();
   fobj->TIME_E = GetTime();
   //call the algorithm
-  fobj->checkUnit();
+  // fobj->checkUnit(); // difined in in Formula.cc
 
-  // *** Extended DPLL Algorithm Options
+// 1. No need for chronological backtracking
 
  if(type == "ch")
-
  {
   result = 1;
-//  cout << "\n This solver doesn't support chronological backtracking"<<endl;
+  cout << "This solver doesn't support chronological backtracking"<<endl;
  }
-
-/* To simplify debugging, I remove chronological backtrcking for now
-
- {
-      // 1. Chronological Backtracking
-      result = fobj->ChronoBacktrack(0); // The function defined in Formula_old.cc
-    }
-
-*/
 
   // 2. NonChronological Backtracking with Clause learning
 
@@ -65,8 +55,8 @@ void SolveFinite(CommandLine * cline, string type)
  else
     {
       //3. NonChronological Backtracking with Clause learning - "loop version"
-    //  result = fobj->NonChronoBacktrack(0);
-      result = fobj->NonChronoBacktrackLoop(0); // The function defined in Formula.cc
+     // result = fobj->NonChronoBacktrack(0);
+    result = fobj->NonChronoBacktrackLoop(0); // The function defined in Formula.cc
     }
   // compute the search time
   difftime = fobj->TIME_E - fobj->TIME_S;
