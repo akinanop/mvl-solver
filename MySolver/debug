@@ -1,13 +1,19 @@
 
 **** Finite Domain Sat Solver - Hemal A Lal ****
-/home/LOGIC/nika/netshare/mvl-solver/tests/simple.txt 	0.0093	Decision : 1=0
+/home/LOGIC/nika/netshare/mvl-solver/tests/simple.txt 	0.0102	Decision : 1=0
 Reducing literal: 1=0 at level 1
+Set the reason for the literal: 
+-1
 Adding literal to the decision stack: 1=0
 Size of the decision stack: 1
+Set the reason for the literal: 1!1
+-1
 Adding literal to the decision stack: 1!1
 Size of the decision stack: 2
 Checking entailment...
 Unit clause: 0
+Set the reason for the literal: 
+1!=0 2!=1 
 Unit literal: 2!=1
 Reducing : 2!1 at level 1
 Adding literal to the decision stack: 2!1
@@ -15,28 +21,38 @@ Checking entailment...
 Entailment ..2=0
 Setting reason for the entailed literal 2=0: 0
 Reducing literal: 2=0 at level 1
+Set the reason for the literal: 
+1!=0 2!=1 
 Adding literal to the decision stack: 2=0
 Size of the decision stack: 4
 Checking entailment...
 Conflict : 3
 Conflict at level: 1
-Conflicting clause: 3
+Conflicting clause is: 
+1!=0 2!=0 
 Index: 3
-Atomlevel for 1 and 0 : 1
-Flag for 1 and 0 : 
-false
-Atomlevel for 1 and 1 : 1
-Flag for 1 and 1 : 
-false
-Atomlevel for 2 and 0 : 1
-Flag for 2 and 0 : 
-false
-Atomlevel for 2 and 1 : 1
-Flag for 2 and 1 : 
-false
-Next decstack literal: 2 and 0
-Next decstack literal: 2 and 1
-Next decstack literal: 1 and 1
+Atomlevel for variable 1 and value 0 : 1
+Atomlevel for variable 1 and value 1 : 1
+Atomlevel for variable 2 and value 0 : 1
+Atomlevel for variable 2 and value 1 : 1
+We are working with the clause: 
+1!=0 2!=0 
+Next decstack literal: 2=0
+Its reason is: 
+1!=0 2!=1 
+Decreasing numLit: -1
+We are working with the clause: 
+1!=0 2!=1 
+Next decstack literal: 2!=1
+Its reason is: 
+1!=0 2!=1 
+Decreasing numLit: -2
+We are working with the clause: 
+1!=0 2!=1 
+Next decstack literal: 1!=1
+Its reason is: 
+-1
+Decreasing numLit: -3
 A -1 0 4
 Learned a clause: 
 1!=0 
@@ -47,6 +63,8 @@ add .. 2=1
 Found unit: 4
 Unit clause : 4
 Unit clause: 4
+Set the reason for the literal: 
+1!=0 
 Unit literal: 1!=0
 Reducing : 1!0 at level 0
 Adding literal to the decision stack: 1!0
@@ -54,10 +72,14 @@ Checking entailment...
 Entailment ..1=1
 Setting reason for the entailed literal 1=1: 4
 Reducing literal: 1=1 at level 0
+Set the reason for the literal: 
+1!=0 
 Adding literal to the decision stack: 1=1
 Size of the decision stack: 2
 Checking entailment...
 Unit clause: 1
+Set the reason for the literal: 
+1!=1 2!=1 
 Unit literal: 2!=1
 Reducing : 2!1 at level 0
 Adding literal to the decision stack: 2!1
@@ -65,11 +87,13 @@ Checking entailment...
 Entailment ..2=0
 Setting reason for the entailed literal 2=0: 1
 Reducing literal: 2=0 at level 0
+Set the reason for the literal: 
+1!=1 2!=1 
 Adding literal to the decision stack: 2=0
 Size of the decision stack: 4
 Checking entailment...
 Conflict : 2
-0.1119	 0.1212	UNSAT
+0.1474	 0.1575	UNSAT
 
 Number of Decisions   : 1
 Number of Units       : 3

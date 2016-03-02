@@ -427,7 +427,8 @@ void Formula::reduceTheory(int var, bool equals, int val)
       VARLIST[var]->LEVEL = LEVEL;
 
       VARLIST[var]->CLAUSEID[val] = UNITCLAUSE;
-
+      cout<<"Set the reason for the literal: "<<endl;
+      if (UNITCLAUSE > -1) CLAUSELIST[UNITCLAUSE]->Print(); else cout<<-1<<endl;
       //Add literal to DecisionStack
     //  cout<<"Size of the decision stack: "<<DECSTACK.size()<<endl;
 
@@ -446,6 +447,8 @@ void Formula::reduceTheory(int var, bool equals, int val)
 	      VARLIST[var]->ATOMASSIGN[i] = -1;
 	      VARLIST[var]->ATOMLEVEL[i] = LEVEL;
 	      VARLIST[var]->CLAUSEID[i] = UNITCLAUSE;
+        cout<<"Set the reason for the literal "<<var<<(!equals?"=":"!")<<i<<endl;
+        if (UNITCLAUSE > -1) CLAUSELIST[UNITCLAUSE]->Print(); else cout<<-1<<endl;
         DECSTACK.push_back(new Literal(var, '!', i));
         cout<<"Adding literal to the decision stack: "<<var<<"!"<<i<<endl;
         cout<<"Size of the decision stack: "<<DECSTACK.size()<<endl;
@@ -460,6 +463,8 @@ void Formula::reduceTheory(int var, bool equals, int val)
 	      VARLIST[var]->ATOMASSIGN[i] = -1;
 	      VARLIST[var]->ATOMLEVEL[i] = LEVEL;
 	      VARLIST[var]->CLAUSEID[i] = UNITCLAUSE;
+        cout<<"Set the reason for the literal "<<var<<(!equals?"=":"!")<<i<<endl;
+        if (UNITCLAUSE > -1) CLAUSELIST[UNITCLAUSE]->Print(); else cout<<-1<<endl;
         DECSTACK.push_back(new Literal(var, '!', i));
         cout<<"Adding literal to the decision stack: "<<var<<"!"<<i<<endl;
         cout<<"Size of the decision stack: "<<DECSTACK.size()<<endl;
@@ -709,7 +714,8 @@ int Formula::analyzeConflict()
   //learnedClause
   Clause * learnedClause = new Clause();
   int CID = CONFLICTINGCLAUSE;
-  cout<<"Conflicting clause: "<<CID<<endl;
+  cout<<"Conflicting clause is: "<<endl;
+  CLAUSELIST[CID]->Print();
   int numLit = 0;
   int tlevel = LEVEL;
   int tvar = -1;
@@ -721,17 +727,17 @@ int Formula::analyzeConflict()
 
   int decsize = VARLIST.size(); // WE HAVE ADDITIONAL VARIABLE 0.
 
-  //ALL this seems to be unnecessary:
+  //ALL this seems to be unnecessary: TODO FIX
   // cout<<"decsize = "<<decsize<<endl;
- for(int i=0; i<decsize; i++) // WE HAVE ADDITIONAL VARIABLE 0, thus start with 1 not 0, doesn't matter
+  for(int i=0; i<decsize; i++) // WE HAVE ADDITIONAL VARIABLE 0, thus start with 1 not 0, doesn't matter
   // since dsize for var 0 is 0
     {
       int dsize = VARLIST[i]->DOMAINSIZE;
       for(int j=0; j<dsize; j++)
-	{ cout<<"Atomlevel for "<<i<<" and "<<j<<" : "<<VARLIST[i]->ATOMLEVEL[j]<<endl;
-    cout<<"Flag for "<<i<<" and "<<j<<" : "<<endl;
+	{ cout<<"Atomlevel for variable "<<i<<" and value "<<j<<" : "<<VARLIST[i]->ATOMLEVEL[j]<<endl;
+  /*  cout<<"Flag for "<<i<<" and "<<j<<" : "<<endl;
     if (VARLIST[i]->FLAG[j] == true) cout<<"true"<<endl;
-    else cout<<"false"<<endl;
+    else cout<<"false"<<endl; */
 	  if(VARLIST[i]->ATOMLEVEL[j] != 0)
 	    VARLIST[i]->FLAG[j] = true; //FLAG = array storing true if the literal is involved in conflict, default: false
 	  else // So here we setting all literals with non-0 level and var as involved in conflict, default level: -1
@@ -741,11 +747,14 @@ int Formula::analyzeConflict()
 
   while(1) //FIX this ??
     {
-      tvar = -1;
+    /*  tvar = -1;
       tval = -1;
-      tequal = false;
+      tequal = false; */
+
       if(CID > -1)
-	{
+	{ cout<<"We are working with the clause: "<<endl;
+   CLAUSELIST[CID]->Print();
+
 	  csize = CLAUSELIST[CID]->NumAtom;
 	  for(int i=0; i<csize; i++)
 	    {
@@ -755,12 +764,16 @@ int Formula::analyzeConflict()
 
         	     if(!VARLIST[tvar]->FLAG[tval]) // LITERAL NOT INVOLVED IN CONFLICT
         		{ cout<<"Setting conflict flags to true for "<<tvar<<" and "<<tval<<endl;
-        		  VARLIST[tvar]->FLAG[tval] = true; // Redundant - we set everuthing to true anyway - Why do we need flags??
-        		  if((VARLIST[tvar]->VAL != -1) &&
+        		  VARLIST[tvar]->FLAG[tval] = true; // Redundant - we set everything to true anyway - Why do we need flags??
+
+          	/*  Why do we need this???
+            if((VARLIST[tvar]->VAL != -1) &&
         		     (VARLIST[tvar]->CLAUSEID[tval] == VARLIST[tvar]->CLAUSEID[VARLIST[tvar]->VAL])){ // ????
         		    VARLIST[tvar]->FLAG[VARLIST[tvar]->VAL] = true;
                 cout<<"Setting conflict flags to true for "<<VARLIST[tvar]->VAL<<" and "<<VARLIST[tvar]->VAL<<endl;}
-                cout<<"Level of "<<tvar<<" and "<<tval<<" is "<<VARLIST[tvar]->ATOMLEVEL[tval]<<endl;
+                cout<<"Level of "<<tvar<<" and "<<tval<<" is "<<VARLIST[tvar]->ATOMLEVEL[tval]<<endl; */
+
+
         		  if(VARLIST[tvar]->ATOMLEVEL[tval] < tlevel)
         		    {
         		      if(tequal)
@@ -813,11 +826,13 @@ int Formula::analyzeConflict()
 								 learnedClause->ATOM_LIST[i]->EQUAL);
 
 
-	  //computing the backtrack level : CID
-	  CID = 0;
+	                //// computing the backtrack level : CID \\\
+
+	//  CID = 0;
 	  //if learned clause has only one literal then backtrack to level 0
 	  if(csize == 1)
-	    return CID;
+	    return 0;
+
 	  for(int i=0; i<csize; i++)
 	    {
 	      if((tlevel != VARLIST[learnedClause->ATOM_LIST[i]->VAR]
@@ -833,11 +848,14 @@ int Formula::analyzeConflict()
 	  tvar = DECSTACK[index]->VAR;
 	  tequal = DECSTACK[index]->EQUAL;
 	  tval = DECSTACK[index]->VAL;
-    cout<<"Next decstack literal: "<<tvar<<" and "<<tval<<endl;
+    cout<<"Next decstack literal: "<<tvar<<(tequal?"=":"!=")<<tval<<endl;
 	  index--;
 	  CID = VARLIST[tvar]->CLAUSEID[tval];
+    cout<<"Its reason is: "<<endl;
+    if (CID > -1) CLAUSELIST[CID]->Print(); else cout<<-1<<endl;
 	}
       numLit--;
+      cout<<"Decreasing numLit: "<<numLit<<endl;
     }
 
 
@@ -872,7 +890,8 @@ bool Formula::unitPropagation()
 	      if(VARLIST[lit_var]->ATOMASSIGN[lit_val] == 0)
 		{
 		  flag = true;
-		  //set the reason for this literal
+		  cout<<"Set the reason for the literal: "<<endl;
+      if (unit_clause > -1) CLAUSELIST[unit_clause]->Print(); else cout<<-1<<endl;
 		  VARLIST[lit_var]->CLAUSEID[lit_val] = unit_clause;
 		}
 	    }
