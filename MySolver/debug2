@@ -1,0 +1,388 @@
+
+**** Finite Domain Sat Solver - Hemal A Lal ****
+/home/LOGIC/nika/netshare/mvl-solver/tests/UNSAT/counterexample2.txt 	0.0114	Decision : 1=0
+Reducing literal: 1=0 at level 1
+Adding literal to the decision stack: 1=0
+Size of the decision stack: 1
+Adding literal to the decision stack: 1!1
+Size of the decision stack: 2
+Adding literal to the decision stack: 1!2
+Size of the decision stack: 3
+Checking entailment...
+Unit clause: 0
+Unit literal: 2!=0
+Reducing : 2!0 at level 1
+Adding literal to the decision stack: 2!0
+Checking entailment...
+Unit clause: 1
+Unit literal: 3!=0
+Reducing : 3!0 at level 1
+Adding literal to the decision stack: 3!0
+Checking entailment...
+Unit clause: 2
+Unit literal: 4!=0
+Reducing : 4!0 at level 1
+Adding literal to the decision stack: 4!0
+Checking entailment...
+Decision : 2=1
+Reducing literal: 2=1 at level 2
+Adding literal to the decision stack: 2=1
+Size of the decision stack: 7
+Adding literal to the decision stack: 2!2
+Size of the decision stack: 8
+Checking entailment...
+Unit clause: 12
+Unit literal: 3!=1
+Reducing : 3!1 at level 2
+Adding literal to the decision stack: 3!1
+Checking entailment...
+Entailment ..3=2
+Setting reason for the entailed literal 3=2: 12
+Reducing literal: 3=2 at level 2
+Adding literal to the decision stack: 3=2
+Size of the decision stack: 10
+Checking entailment...
+Unit clause: 19
+Unit literal: 4!=2
+Reducing : 4!2 at level 2
+Adding literal to the decision stack: 4!2
+Checking entailment...
+Entailment ..4=1
+Setting reason for the entailed literal 4=1: 19
+Reducing literal: 4=1 at level 2
+Adding literal to the decision stack: 4=1
+Size of the decision stack: 12
+Checking entailment...
+Conflict : 13
+Conflict at level: 2
+Conflicting clause: 13
+Index: 11
+Atomlevel for 1 and 0 : 1
+Flag for 1 and 0 : 
+false
+Atomlevel for 1 and 1 : 1
+Flag for 1 and 1 : 
+false
+Atomlevel for 1 and 2 : 1
+Flag for 1 and 2 : 
+false
+Atomlevel for 2 and 0 : 1
+Flag for 2 and 0 : 
+false
+Atomlevel for 2 and 1 : 2
+Flag for 2 and 1 : 
+false
+Atomlevel for 2 and 2 : 2
+Flag for 2 and 2 : 
+false
+Atomlevel for 3 and 0 : 1
+Flag for 3 and 0 : 
+false
+Atomlevel for 3 and 1 : 2
+Flag for 3 and 1 : 
+false
+Atomlevel for 3 and 2 : 2
+Flag for 3 and 2 : 
+false
+Atomlevel for 4 and 0 : 1
+Flag for 4 and 0 : 
+false
+Atomlevel for 4 and 1 : 2
+Flag for 4 and 1 : 
+false
+Atomlevel for 4 and 2 : 2
+Flag for 4 and 2 : 
+false
+Next decstack literal: 4 and 1
+Next decstack literal: 4 and 2
+Next decstack literal: 3 and 2
+Next decstack literal: 3 and 1
+Next decstack literal: 2 and 2
+A -1 6 12
+Learned a clause: 
+2!=1 
+add .. 1!0
+add .. 1=1
+add .. 1=2
+add .. 2=0
+add .. 2!1
+add .. 2=2
+add .. 3=0
+add .. 3=1
+add .. 3!2
+add .. 4=0
+add .. 4!1
+add .. 4=2
+Found unit: 21
+Unit clause : 21
+Unit clause: 21
+Unit literal: 2!=1
+Reducing : 2!1 at level 0
+Adding literal to the decision stack: 2!1
+Checking entailment...
+Decision : 1=1
+Reducing literal: 1=1 at level 1
+Adding literal to the decision stack: 1=1
+Size of the decision stack: 2
+Adding literal to the decision stack: 1!0
+Size of the decision stack: 3
+Adding literal to the decision stack: 1!2
+Size of the decision stack: 4
+Checking entailment...
+Unit clause: 9
+Unit literal: 3!=1
+Reducing : 3!1 at level 1
+Adding literal to the decision stack: 3!1
+Checking entailment...
+Unit clause: 11
+Unit literal: 4!=1
+Reducing : 4!1 at level 1
+Adding literal to the decision stack: 4!1
+Checking entailment...
+Decision : 2=2
+Reducing literal: 2=2 at level 2
+Adding literal to the decision stack: 2=2
+Size of the decision stack: 7
+Adding literal to the decision stack: 2!0
+Size of the decision stack: 8
+Checking entailment...
+Unit clause: 17
+Unit literal: 3!=2
+Reducing : 3!2 at level 2
+Adding literal to the decision stack: 3!2
+Checking entailment...
+Entailment ..3=0
+Setting reason for the entailed literal 3=0: 17
+Reducing literal: 3=0 at level 2
+Adding literal to the decision stack: 3=0
+Size of the decision stack: 10
+Checking entailment...
+Unit clause: 5
+Unit literal: 4!=0
+Reducing : 4!0 at level 2
+Adding literal to the decision stack: 4!0
+Checking entailment...
+Entailment ..4=2
+Setting reason for the entailed literal 4=2: 5
+Reducing literal: 4=2 at level 2
+Adding literal to the decision stack: 4=2
+Size of the decision stack: 12
+Checking entailment...
+Conflict : 18
+Conflict at level: 2
+Conflicting clause: 18
+Index: 11
+Atomlevel for 1 and 0 : 1
+Flag for 1 and 0 : 
+true
+Atomlevel for 1 and 1 : 1
+Flag for 1 and 1 : 
+true
+Atomlevel for 1 and 2 : 1
+Flag for 1 and 2 : 
+true
+Atomlevel for 2 and 0 : 2
+Flag for 2 and 0 : 
+true
+Atomlevel for 2 and 1 : 0
+Flag for 2 and 1 : 
+true
+Atomlevel for 2 and 2 : 2
+Flag for 2 and 2 : 
+true
+Atomlevel for 3 and 0 : 2
+Flag for 3 and 0 : 
+true
+Atomlevel for 3 and 1 : 1
+Flag for 3 and 1 : 
+true
+Atomlevel for 3 and 2 : 2
+Flag for 3 and 2 : 
+true
+Atomlevel for 4 and 0 : 2
+Flag for 4 and 0 : 
+true
+Atomlevel for 4 and 1 : 1
+Flag for 4 and 1 : 
+true
+Atomlevel for 4 and 2 : 2
+Flag for 4 and 2 : 
+true
+Next decstack literal: 4 and 2
+Next decstack literal: 4 and 0
+Next decstack literal: 3 and 0
+Next decstack literal: 3 and 2
+Next decstack literal: 2 and 0
+A -1 6 12
+Learned a clause: 
+2!=2 
+add .. 1=0
+add .. 1!1
+add .. 1=2
+add .. 2=0
+add .. 2!2
+add .. 3!0
+add .. 3=1
+add .. 3=2
+add .. 4=0
+add .. 4=1
+add .. 4!2
+Found unit: 22
+Unit clause : 22
+Unit clause: 22
+Unit literal: 2!=2
+Reducing : 2!2 at level 0
+Adding literal to the decision stack: 2!2
+Checking entailment...
+Entailment ..2=0
+Setting reason for the entailed literal 2=0: 22
+Reducing literal: 2=0 at level 0
+Adding literal to the decision stack: 2=0
+Size of the decision stack: 3
+Checking entailment...
+Unit clause: 0
+Unit literal: 1!=0
+Reducing : 1!0 at level 0
+Adding literal to the decision stack: 1!0
+Checking entailment...
+Unit clause: 3
+Unit literal: 3!=0
+Reducing : 3!0 at level 0
+Adding literal to the decision stack: 3!0
+Checking entailment...
+Unit clause: 4
+Unit literal: 4!=0
+Reducing : 4!0 at level 0
+Adding literal to the decision stack: 4!0
+Checking entailment...
+Unit clause: 6
+Unit clause: 7
+Decision : 1=1
+Reducing literal: 1=1 at level 1
+Adding literal to the decision stack: 1=1
+Size of the decision stack: 7
+Adding literal to the decision stack: 1!2
+Size of the decision stack: 8
+Checking entailment...
+Unit clause: 9
+Unit literal: 3!=1
+Reducing : 3!1 at level 1
+Adding literal to the decision stack: 3!1
+Checking entailment...
+Entailment ..3=2
+Setting reason for the entailed literal 3=2: 9
+Reducing literal: 3=2 at level 1
+Adding literal to the decision stack: 3=2
+Size of the decision stack: 10
+Checking entailment...
+Unit clause: 19
+Unit literal: 4!=2
+Reducing : 4!2 at level 1
+Adding literal to the decision stack: 4!2
+Checking entailment...
+Entailment ..4=1
+Setting reason for the entailed literal 4=1: 19
+Reducing literal: 4=1 at level 1
+Adding literal to the decision stack: 4=1
+Size of the decision stack: 12
+Checking entailment...
+Conflict : 11
+Conflict at level: 1
+Conflicting clause: 11
+Index: 11
+Atomlevel for 1 and 0 : 0
+Flag for 1 and 0 : 
+true
+Atomlevel for 1 and 1 : 1
+Flag for 1 and 1 : 
+true
+Atomlevel for 1 and 2 : 1
+Flag for 1 and 2 : 
+true
+Atomlevel for 2 and 0 : 0
+Flag for 2 and 0 : 
+true
+Atomlevel for 2 and 1 : 0
+Flag for 2 and 1 : 
+false
+Atomlevel for 2 and 2 : 0
+Flag for 2 and 2 : 
+true
+Atomlevel for 3 and 0 : 0
+Flag for 3 and 0 : 
+true
+Atomlevel for 3 and 1 : 1
+Flag for 3 and 1 : 
+true
+Atomlevel for 3 and 2 : 1
+Flag for 3 and 2 : 
+true
+Atomlevel for 4 and 0 : 0
+Flag for 4 and 0 : 
+true
+Atomlevel for 4 and 1 : 1
+Flag for 4 and 1 : 
+true
+Atomlevel for 4 and 2 : 1
+Flag for 4 and 2 : 
+true
+Next decstack literal: 4 and 1
+Next decstack literal: 4 and 2
+Next decstack literal: 3 and 2
+Next decstack literal: 3 and 1
+Next decstack literal: 1 and 2
+A -1 6 12
+Learned a clause: 
+1!=1 
+add .. 1!1
+add .. 1=2
+add .. 3=1
+add .. 3!2
+add .. 4!1
+add .. 4=2
+Found unit: 23
+Unit clause : 23
+Unit clause: 23
+Unit literal: 1!=1
+Reducing : 1!1 at level 0
+Adding literal to the decision stack: 1!1
+Checking entailment...
+Entailment ..1=2
+Setting reason for the entailed literal 1=2: 23
+Reducing literal: 1=2 at level 0
+Adding literal to the decision stack: 1=2
+Size of the decision stack: 8
+Checking entailment...
+Unit clause: 14
+Unit literal: 3!=2
+Reducing : 3!2 at level 0
+Adding literal to the decision stack: 3!2
+Checking entailment...
+Entailment ..3=1
+Setting reason for the entailed literal 3=1: 14
+Reducing literal: 3=1 at level 0
+Adding literal to the decision stack: 3=1
+Size of the decision stack: 10
+Checking entailment...
+Unit clause: 10
+Unit literal: 4!=1
+Reducing : 4!1 at level 0
+Adding literal to the decision stack: 4!1
+Checking entailment...
+Entailment ..4=2
+Setting reason for the entailed literal 4=2: 10
+Reducing literal: 4=2 at level 0
+Adding literal to the decision stack: 4=2
+Size of the decision stack: 12
+Checking entailment...
+Conflict : 16
+0.6853	 0.6967	UNSAT
+
+Number of Decisions   : 5
+Number of Units       : 21
+Number of Backtracks  : 3
+Number of Entails     : 10
+Number of Levels      : 0
+Number of Variables   : 4
+Number of Clauses     : 24
+
