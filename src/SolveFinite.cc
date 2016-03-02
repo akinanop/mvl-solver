@@ -15,7 +15,7 @@ using namespace std;
 
 //**********************************************************************//
 //Function Definitions
-//SolveFinite
+//SolveFinite: fn to read input and build corresponding objects for solving, calls the cdpll algo
 //This function calls the finite domain solver and tries to find a model for
 //the problem if the problem is satisfiable
 void SolveFinite(CommandLine * cline, string type)
@@ -38,7 +38,7 @@ void SolveFinite(CommandLine * cline, string type)
   fobj->TIME_S = GetTime();
   fobj->TIME_E = GetTime();
   //call the algorithm
-  fobj->checkUnit();
+  // fobj->checkUnit(); // move this check to the algo
 
   // *** Extended DPLL Algorithm Options
 
@@ -46,27 +46,21 @@ void SolveFinite(CommandLine * cline, string type)
 
  {
   result = 1;
-//  cout << "\n This solver doesn't support chronological backtracking"<<endl;
+  cout << "\n This solver doesn't support chronological backtracking"<<endl;
  }
 
-/* To simplify debugging, I remove chronological backtrcking for now
-
+/* To simplify code, I remove chronological backtracking for now
  {
       // 1. Chronological Backtracking
-      result = fobj->ChronoBacktrack(0); // The function defined in Formula_old.cc
+      result = fobj->ChronoBacktrack(0); // The function defined in FDSolver/Formula.cc
     }
-
 */
-
   // 2. NonChronological Backtracking with Clause learning
-
-
-//  else  result = fobj->NonChronoBacktrack(0);
  else
     {
       //3. NonChronological Backtracking with Clause learning - "loop version"
-    //  result = fobj->NonChronoBacktrack(0);
-      result = fobj->NonChronoBacktrackLoop(0); // The function defined in Formula.cc
+    //  result = fobj->NonChronoBacktrack(0); "recursive version"
+      result = fobj->NonChronoBacktrack(0); // The function defined in Formula.cc
     }
   // compute the search time
   difftime = fobj->TIME_E - fobj->TIME_S;
