@@ -385,7 +385,7 @@ Literal * Formula::chooseLiteral()
   int tvar = -1;
   int tval = -1;
   int tmax = -1;
-  UNITCLAUSE = -1;
+
   for(int i=0; i<size; i++)
     {
       if(!VARLIST[i]->SAT)
@@ -406,6 +406,16 @@ Literal * Formula::chooseLiteral()
 	    }
 	}
     }
+    Clause * chooseClause = new Clause();
+    chooseClause -> LEVEL = LEVEL;
+    chooseClause -> AddAtom(new Literal(tvar,'=',tval));
+    chooseClause -> AddAtom(new Literal(tvar,'!',tval));
+    CLAUSELIST.push_back(chooseClause);
+    cout<<"Clause list: "<<CLAUSELIST.size()<<endl;
+    VARLIST[tvar] -> CLAUSEID[tval] = CLAUSELIST.size()-1;
+    UNITCLAUSE = VARLIST[tvar] -> CLAUSEID[tval];
+    cout<<"Setting the reason for the literal "<<tvar<<"="<<tval<<endl;
+    chooseClause -> Print();
   return (tvar != -1 ? new Literal(tvar, tval) : NULL);
 }
 
@@ -471,14 +481,7 @@ void Formula::reduceTheory(int var, bool equals, int val)
 	    }
 	}
 
-  if(checkEntail(var))
-{
-ENTAILS++;
-cout<<"Entailment .."<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
-cout<<"Setting reason for the entailed literal "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<": "<<UNITCLAUSE<<endl;
-VARLIST[ENTAILLITERAL->VAR]->CLAUSEID[ENTAILLITERAL->VAL] = UNITCLAUSE;
-reduceTheory(ENTAILLITERAL->VAR, true, ENTAILLITERAL->VAL);
-}
+
 
     }
   else
@@ -499,14 +502,35 @@ reduceTheory(ENTAILLITERAL->VAR, true, ENTAILLITERAL->VAL);
       DECSTACK.push_back(new Literal(var, '!', val));
 
       //check Entailment on this variable
+
+
       if(checkEntail(var))
+    {
+    ENTAILS++;
+    cout<<"Entailment... "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
+    Clause * entailClause = new Clause();
+    entailClause -> LEVEL = LEVEL;
+    for (int i=0; i < VARLIST[ENTAILLITERAL->VAR]->DOMAINSIZE; i++){
+      entailClause -> AddAtom(new Literal(ENTAILLITERAL->VAR,'=',i));
+    }
+    CLAUSELIST.push_back(entailClause);
+    VARLIST[ENTAILLITERAL->VAR]->CLAUSEID[ENTAILLITERAL->VAL] = CLAUSELIST.size()-1;
+    cout<<"Setting reason for the entailed literal "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<": "<<endl;
+    entailClause -> Print();
+    reduceTheory(ENTAILLITERAL->VAR, true, ENTAILLITERAL->VAL);
+
+
+    }
+
+/*      if(checkEntail(var))
 	{
 	  ENTAILS++;
 	  cout<<"Entailment .."<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
     cout<<"Setting reason for the entailed literal "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<": "<<UNITCLAUSE<<endl;
 	  VARLIST[ENTAILLITERAL->VAR]->CLAUSEID[ENTAILLITERAL->VAL] = UNITCLAUSE;
 	  reduceTheory(ENTAILLITERAL->VAR, true, ENTAILLITERAL->VAL);
-	}
+	} */
+
     }
 
 
@@ -756,11 +780,13 @@ int Formula::analyzeConflict()
    CLAUSELIST[CID]->Print();
 
 	  csize = CLAUSELIST[CID]->NumAtom;
+
 	  for(int i=0; i<csize; i++)
 	    {
 	      tvar = CLAUSELIST[CID]->ATOM_LIST[i]->VAR;
 	      tval = CLAUSELIST[CID]->ATOM_LIST[i]->VAL;
 	      tequal = CLAUSELIST[CID]->ATOM_LIST[i]->EQUAL;
+
 
         	     if(!VARLIST[tvar]->FLAG[tval]) // LITERAL NOT INVOLVED IN CONFLICT
         		{ cout<<"Setting conflict flags to true for "<<tvar<<" and "<<tval<<endl;
@@ -776,6 +802,7 @@ int Formula::analyzeConflict()
 
         		  if(VARLIST[tvar]->ATOMLEVEL[tval] < tlevel)
         		    {
+
         		      if(tequal)
         			learnedClause->AddAtom(new Literal(tvar, '=', tval));
         		      else
@@ -801,7 +828,8 @@ int Formula::analyzeConflict()
 	  index--;
 	}
 
-
+  cout<<"Index: "<<index<<endl;
+ // CORRECT RESOLUTION HERE
       if(numLit == 1 || CID == -1)
 	{ cout<<"A"<<" "<< CID<< " "<< index<<" "<<DECSTACK.size()<<endl;
 	  while(VARLIST[DECSTACK[index]->VAR]->ATOMLEVEL[DECSTACK[index]->VAL] != tlevel)
@@ -851,6 +879,7 @@ int Formula::analyzeConflict()
     cout<<"Next decstack literal: "<<tvar<<(tequal?"=":"!=")<<tval<<endl;
 	  index--;
 	  CID = VARLIST[tvar]->CLAUSEID[tval];
+    cout<<"CID: "<<CID<<endl;
     cout<<"Its reason is: "<<endl;
     if (CID > -1) CLAUSELIST[CID]->Print(); else cout<<-1<<endl;
 	}
