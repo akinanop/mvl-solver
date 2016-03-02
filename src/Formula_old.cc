@@ -431,9 +431,9 @@ void Formula::reduceTheory(int var, bool equals, int val)
       //Add literal to DecisionStack
     //  cout<<"Size of the decision stack: "<<DECSTACK.size()<<endl;
 
-      cout<<"Adding literal to the decision stack: "<<var<<"="<<val<<endl;
 
       DECSTACK.push_back(new Literal(var, '=', val));
+      cout<<"Adding literal to the decision stack: "<<var<<"="<<val<<endl;
       cout<<"Size of the decision stack: "<<DECSTACK.size()<<endl;
       //foreach domain value x from dom(v) which is not assigned
       //assign it
@@ -446,6 +446,9 @@ void Formula::reduceTheory(int var, bool equals, int val)
 	      VARLIST[var]->ATOMASSIGN[i] = -1;
 	      VARLIST[var]->ATOMLEVEL[i] = LEVEL;
 	      VARLIST[var]->CLAUSEID[i] = UNITCLAUSE;
+        DECSTACK.push_back(new Literal(var, '!', i));
+        cout<<"Adding literal to the decision stack: "<<var<<"!"<<i<<endl;
+        cout<<"Size of the decision stack: "<<DECSTACK.size()<<endl;
 	    }
 	}
       for(int i=val+1; i<VARLIST[var]->DOMAINSIZE && !CONFLICT; i++)
@@ -457,6 +460,9 @@ void Formula::reduceTheory(int var, bool equals, int val)
 	      VARLIST[var]->ATOMASSIGN[i] = -1;
 	      VARLIST[var]->ATOMLEVEL[i] = LEVEL;
 	      VARLIST[var]->CLAUSEID[i] = UNITCLAUSE;
+        DECSTACK.push_back(new Literal(var, '!', i));
+        cout<<"Adding literal to the decision stack: "<<var<<"!"<<i<<endl;
+        cout<<"Size of the decision stack: "<<DECSTACK.size()<<endl;
 	    }
 	}
 
@@ -464,6 +470,7 @@ void Formula::reduceTheory(int var, bool equals, int val)
 {
 ENTAILS++;
 cout<<"Entailment .."<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
+cout<<"Setting reason for the entailed literal "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<": "<<UNITCLAUSE<<endl;
 VARLIST[ENTAILLITERAL->VAR]->CLAUSEID[ENTAILLITERAL->VAL] = UNITCLAUSE;
 reduceTheory(ENTAILLITERAL->VAR, true, ENTAILLITERAL->VAL);
 }
@@ -491,6 +498,7 @@ reduceTheory(ENTAILLITERAL->VAR, true, ENTAILLITERAL->VAL);
 	{
 	  ENTAILS++;
 	  cout<<"Entailment .."<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
+    cout<<"Setting reason for the entailed literal "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<": "<<UNITCLAUSE<<endl;
 	  VARLIST[ENTAILLITERAL->VAR]->CLAUSEID[ENTAILLITERAL->VAL] = UNITCLAUSE;
 	  reduceTheory(ENTAILLITERAL->VAR, true, ENTAILLITERAL->VAL);
 	}
@@ -711,19 +719,25 @@ int Formula::analyzeConflict()
   cout<<"Index: "<<index<<endl;
   int csize = -1;
 
-  int decsize = VARLIST.size()-1; // PROBLEM: WE HAVE ADDITIONAL VARIABLE 0
-  cout<<"decsize = "<<decsize<<endl;
-  for(int i=0; i<decsize; i++)
+  int decsize = VARLIST.size(); // WE HAVE ADDITIONAL VARIABLE 0.
+
+  //ALL this seems to be unnecessary:
+  // cout<<"decsize = "<<decsize<<endl;
+ for(int i=0; i<decsize; i++) // WE HAVE ADDITIONAL VARIABLE 0, thus start with 1 not 0, doesn't matter
+  // since dsize for var 0 is 0
     {
       int dsize = VARLIST[i]->DOMAINSIZE;
       for(int j=0; j<dsize; j++)
-	{
+	{ cout<<"Atomlevel for "<<i<<" and "<<j<<" : "<<VARLIST[i]->ATOMLEVEL[j]<<endl;
+    cout<<"Flag for "<<i<<" and "<<j<<" : "<<endl;
+    if (VARLIST[i]->FLAG[j] == true) cout<<"true"<<endl;
+    else cout<<"false"<<endl;
 	  if(VARLIST[i]->ATOMLEVEL[j] != 0)
-	    VARLIST[i]->FLAG[j] = true;
-	  else
-	    VARLIST[i]->FLAG[j] = false; // CHECK!
+	    VARLIST[i]->FLAG[j] = true; //FLAG = array storing true if the literal is involved in conflict, default: false
+	  else // So here we setting all literals with non-0 level and var as involved in conflict, default level: -1
+	    VARLIST[i]->FLAG[j] = false; // CHECK this!
 	}
-    }
+}
 
   while(1) //FIX this ??
     {
@@ -739,40 +753,43 @@ int Formula::analyzeConflict()
 	      tval = CLAUSELIST[CID]->ATOM_LIST[i]->VAL;
 	      tequal = CLAUSELIST[CID]->ATOM_LIST[i]->EQUAL;
 
-	      if(!VARLIST[tvar]->FLAG[tval])
-		{
-		  VARLIST[tvar]->FLAG[tval] = true;  //CHECK!
-		  if((VARLIST[tvar]->VAL != -1) &&
-		     (VARLIST[tvar]->CLAUSEID[tval] == VARLIST[tvar]->CLAUSEID[VARLIST[tvar]->VAL]))
-		    VARLIST[tvar]->FLAG[VARLIST[tvar]->VAL] = true;
-		  if(VARLIST[tvar]->ATOMLEVEL[tval] < tlevel)
-		    {
-		      if(tequal)
-			learnedClause->AddAtom(new Literal(tvar, '=', tval));
-		      else
-			learnedClause->AddAtom(new Literal(tvar, '!', tval));
-		      learnedClause->NumUnAss--;
-          cout<< "Learning a clause:"<<endl;
-          learnedClause -> Print();
-		    }
-		  else
-		    {
-		      numLit++;
-		    }
-		}
+        	     if(!VARLIST[tvar]->FLAG[tval]) // LITERAL NOT INVOLVED IN CONFLICT
+        		{ cout<<"Setting conflict flags to true for "<<tvar<<" and "<<tval<<endl;
+        		  VARLIST[tvar]->FLAG[tval] = true; // Redundant - we set everuthing to true anyway - Why do we need flags??
+        		  if((VARLIST[tvar]->VAL != -1) &&
+        		     (VARLIST[tvar]->CLAUSEID[tval] == VARLIST[tvar]->CLAUSEID[VARLIST[tvar]->VAL])){ // ????
+        		    VARLIST[tvar]->FLAG[VARLIST[tvar]->VAL] = true;
+                cout<<"Setting conflict flags to true for "<<VARLIST[tvar]->VAL<<" and "<<VARLIST[tvar]->VAL<<endl;}
+                cout<<"Level of "<<tvar<<" and "<<tval<<" is "<<VARLIST[tvar]->ATOMLEVEL[tval]<<endl;
+        		  if(VARLIST[tvar]->ATOMLEVEL[tval] < tlevel)
+        		    {
+        		      if(tequal)
+        			learnedClause->AddAtom(new Literal(tvar, '=', tval));
+        		      else
+        			learnedClause->AddAtom(new Literal(tvar, '!', tval));
+        		      learnedClause->NumUnAss--;
+                  cout<< "Learning a clause:"<<endl;
+                  learnedClause -> Print();
+        		    }
+        		  else
+        		    {
+        		      numLit++;
+                  cout<<"Increased numLit counter, numLit: "<<numLit<<endl;
+        		    }
+        		}
 	    }
 	}
+
+// Why do we need this?
+
       while((index > -1) && (!VARLIST[DECSTACK[index]->VAR]->FLAG[DECSTACK[index]->VAL]) && (CID != -1))
 	{
 	  cout<<"reducing index "<<index<<endl;
 	  index--;
 	}
 
-  cout<<index<<endl;
-//  int bar = DECSTACK[index]->VAR;;
 
-
-      if((numLit == 1 || CID == -1)&& index > -1)
+      if(numLit == 1 || CID == -1)
 	{ cout<<"A"<<" "<< CID<< " "<< index<<" "<<DECSTACK.size()<<endl;
 	  while(VARLIST[DECSTACK[index]->VAR]->ATOMLEVEL[DECSTACK[index]->VAL] != tlevel)
 	    {
@@ -813,10 +830,10 @@ int Formula::analyzeConflict()
 	}
       else
 	{
-    cout<<"OO"<<endl;
 	  tvar = DECSTACK[index]->VAR;
 	  tequal = DECSTACK[index]->EQUAL;
 	  tval = DECSTACK[index]->VAL;
+    cout<<"Next decstack literal: "<<tvar<<" and "<<tval<<endl;
 	  index--;
 	  CID = VARLIST[tvar]->CLAUSEID[tval];
 	}
@@ -843,7 +860,7 @@ bool Formula::unitPropagation()
       UNITS++;
       unit_clause = UNITLIST.front();
       UNITCLAUSE = unit_clause;
-      //cout<<"unit c : "<<unit_clause<<endl;
+      cout<<"Unit clause: "<<unit_clause<<endl;
       UNITLIST.pop_front();
       if(!CLAUSELIST[unit_clause]->SAT)
 	{
@@ -861,7 +878,7 @@ bool Formula::unitPropagation()
 	    }
 	  if(flag)
 	    {
-	      //cout<<"Unit : "<<lit_var<<(lit_equal?"=":"!=")<<lit_val<<endl;
+	      cout<<"Unit literal: "<<lit_var<<(lit_equal?"=":"!=")<<lit_val<<endl;
 	      reduceTheory(lit_var, lit_equal, lit_val);
 	      flag = false;
 	    }
