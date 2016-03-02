@@ -1,0 +1,72 @@
+
+**** Finite Domain Sat Solver - Hemal A Lal ****
+/home/LOGIC/nika/netshare/mvl-solver/tests/simple.txt 	0.0062	Checking if there is a unit clause...
+Checking satisfiability...
+Checking satisfiability...
+Decision literal: 1=0
+Setting the reason for the decision literal 1=0
+1=0 1!=0 
+Reducing literal: 1=0 at level 1
+The reason for the literal: 
+1=0 1!=0 
+Adding literal to the decision stack: 1=0
+Size of the decision stack: 1
+Set the reason for the literal 1!1
+1=0 1!=0 
+Checking if there is a unit clause...
+Found a unit clause: 0
+Found a unit clause: 3
+Checking satisfiability...
+Unit propagation... 
+Unit literal: 2!=1
+Set the reason for this literal: 
+1!=0 2!=1 
+Reducing: 2!1 at level 1
+Adding literal to the decision stack: 2!1
+Checking entailment...
+Entailment... 2=0
+Setting reason for the entailed literal 2=0: 
+2=0 2=1 
+Reducing literal: 2=0 at level 1
+The reason for the literal: 
+1!=0 2!=1 
+Adding literal to the decision stack: 2=0
+Size of the decision stack: 3
+Conflict : 3
+Checking satisfiability...
+There is a conflict at level: 1
+Conflict at level: 1
+Conflicting clause is: 
+1!=0 2!=0 
+Index: 2
+Atomlevel for variable 1 and value 0 : 1
+Atomlevel for variable 1 and value 1 : 1
+Atomlevel for variable 2 and value 0 : 1
+Atomlevel for variable 2 and value 1 : 1
+We are working with the clause: 
+1!=0 2!=0 
+Index: 2
+Next decstack literal: 2=0
+CID: 0
+Its reason is: 
+1!=0 2!=1 
+Decreasing numLit: -1
+We are working with the clause: 
+1!=0 2!=1 
+Index: 1
+Next decstack literal: 2!=1
+CID: 0
+Its reason is: 
+1!=0 2!=1 
+Decreasing numLit: -2
+We are working with the clause: 
+1!=0 2!=1 
+Index: 0
+Next decstack literal: 1=0
+CID: 4
+Its reason is: 
+1=0 1!=0 
+Decreasing numLit: -3
+We are working with the clause: 
+1=0 1!=0 
+Index: -1

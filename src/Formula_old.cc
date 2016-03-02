@@ -278,16 +278,13 @@ bool Formula::verifyModel()
 
 //checkSat
 bool Formula::checkSat()
-{
+{ cout<<"Checking satisfiability..."<<endl;
   int size = CLAUSELIST.size();
   for(int i=0; i<size; i++)
     {
       //if clause is not SAT return false
-      if(!CLAUSELIST[i]->SAT)
-	{
-	  // cout<<"Unsatisfied clause #:"<<i<<endl;
-	  return false;
-	}
+      if(!CLAUSELIST[i]->SAT) return false;
+	  // cout<<"Unsatisfied clause # "<<i<<endl;
     }
   return true;
 }
@@ -309,7 +306,7 @@ int Formula::checkConflict()
 
 //checkUnit
 void Formula::checkUnit()
-{
+{ cout<<"Checking if there is a unit clause..."<<endl;
   int size = CLAUSELIST.size();
   UNITLIST.clear();
   for(int i=0; i<size; i++)
@@ -319,7 +316,7 @@ void Formula::checkUnit()
       if((CLAUSELIST[i]->NumUnAss == 1) &&
 	 (!CLAUSELIST[i]->SAT)){
 	UNITLIST.push_back(i);
-  cout<<"Found unit: "<<i<<endl;}
+  cout<<"Found a unit clause: "<<i<<endl;}
 
     }
 }
@@ -367,7 +364,6 @@ bool Formula::checkEntail(int var)
       ENTAILLITERAL = new Literal(var, domainvalue);
       return true;
     }
-  cout<<"No entailment for the variable "<<var<<endl;
   return false;
 }
 
@@ -386,7 +382,7 @@ Literal * Formula::chooseLiteral()
   int tvar = -1;
   int tval = -1;
   int tmax = -1;
-  UNITCLAUSE = -1;
+
   for(int i=0; i<size; i++)
     {
       if(!VARLIST[i]->SAT)
@@ -407,7 +403,20 @@ Literal * Formula::chooseLiteral()
 	    }
 	}
     }
-  return (tvar != -1 ? new Literal(tvar, tval) : NULL);
+
+ if (tvar != -1){
+    cout<<"Decision literal: "<<tvar<<"="<<tval<<endl;
+    Clause * chooseClause = new Clause();
+    chooseClause -> LEVEL = LEVEL;
+    chooseClause -> AddAtom(new Literal(tvar,'=',tval));
+    chooseClause -> AddAtom(new Literal(tvar,'!',tval));
+    CLAUSELIST.push_back(chooseClause);
+    // cout<<"Clause list: "<<CLAUSELIST.size()<<endl;
+    VARLIST[tvar] -> CLAUSEID[tval] = CLAUSELIST.size()-1;
+    UNITCLAUSE = VARLIST[tvar] -> CLAUSEID[tval];
+    cout<<"Setting the reason for the decision literal "<<tvar<<"="<<tval<<endl;
+    chooseClause -> Print();
+    return new Literal(tvar, tval); } else return NULL;
 }
 
 //reduceTheory
@@ -427,80 +436,97 @@ void Formula::reduceTheory(int var, bool equals, int val)
       VARLIST[var]->SAT = true;
       VARLIST[var]->LEVEL = LEVEL;
 
-      cout<<"Setting reason for "<<var<<"="<<val<<": "<<UNITCLAUSE<<endl;
       VARLIST[var]->CLAUSEID[val] = UNITCLAUSE;
-
+      cout<<"The reason for the literal: "<<endl;
+      if (UNITCLAUSE > -1) CLAUSELIST[UNITCLAUSE]->Print(); else cout<<-1<<endl;
       //Add literal to DecisionStack
     //  cout<<"Size of the decision stack: "<<DECSTACK.size()<<endl;
 
-      cout<<"Adding literal to the decision stack: "<<var<<"="<<val<<endl;
-
       DECSTACK.push_back(new Literal(var, '=', val));
+      cout<<"Adding literal to the decision stack: "<<var<<"="<<val<<endl;
       cout<<"Size of the decision stack: "<<DECSTACK.size()<<endl;
       //foreach domain value x from dom(v) which is not assigned
       //assign it
       for(int i=0; i<val && !CONFLICT; i++)
 	{
 	  if(VARLIST[var]->ATOMASSIGN[i] == 0)
-	    { cout<<"Reducing literal: "<<var<<"!"<<i<<endl;
+	    {
 	      satisfyClauses(var, !equals, i);
 	      removeLiteral(var, equals, i);
 	      VARLIST[var]->ATOMASSIGN[i] = -1;
 	      VARLIST[var]->ATOMLEVEL[i] = LEVEL;
-        cout<<"Setting reason for "<<var<<"!"<<i<<": "<<UNITCLAUSE<<endl;
 	      VARLIST[var]->CLAUSEID[i] = UNITCLAUSE;
+        cout<<"Set the reason for the literal "<<var<<(!equals?"=":"!")<<i<<endl;
+        if (UNITCLAUSE > -1) CLAUSELIST[UNITCLAUSE]->Print(); else cout<<-1<<endl;
+      //  DECSTACK.push_back(new Literal(var, '!', i));
+      //  cout<<"Adding literal to the decision stack: "<<var<<"!"<<i<<endl;
+    //    cout<<"Size of the decision stack: "<<DECSTACK.size()<<endl;
 	    }
 	}
       for(int i=val+1; i<VARLIST[var]->DOMAINSIZE && !CONFLICT; i++)
 	{
 	  if(VARLIST[var]->ATOMASSIGN[i] == 0)
-	    { cout<<"Reducing literal: "<<var<<"!"<<i<<endl;
+	    {
 	      satisfyClauses(var, !equals, i);
 	      removeLiteral(var, equals, i);
 	      VARLIST[var]->ATOMASSIGN[i] = -1;
 	      VARLIST[var]->ATOMLEVEL[i] = LEVEL;
-        cout<<"Setting reason for "<<var<<"!"<<i<<": "<<UNITCLAUSE<<endl;
 	      VARLIST[var]->CLAUSEID[i] = UNITCLAUSE;
+        cout<<"Set the reason for the literal "<<var<<(!equals?"=":"!")<<i<<endl;
+        if (UNITCLAUSE > -1) CLAUSELIST[UNITCLAUSE]->Print(); else cout<<-1<<endl;
+      //  DECSTACK.push_back(new Literal(var, '!', i));
+    //    cout<<"Adding literal to the decision stack: "<<var<<"!"<<i<<endl;
+    //    cout<<"Size of the decision stack: "<<DECSTACK.size()<<endl;
 	    }
 	}
 
-/*  if(checkEntail(var))
-{
-ENTAILS++;
-cout<<"Entailment .."<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
-VARLIST[ENTAILLITERAL->VAR]->CLAUSEID[ENTAILLITERAL->VAL] = UNITCLAUSE;
-reduceTheory(ENTAILLITERAL->VAR, true, ENTAILLITERAL->VAL);
-} */
+
 
     }
   else
     {
-      cout<<"Reducing : "<<var<<"!"<<val<<" at level "<<LEVEL<<endl;
+      cout<<"Reducing: "<<var<<"!"<<val<<" at level "<<LEVEL<<endl;
       //first satisfy all clauses with negate literal, and remove
       //literal from claues
       satisfyClauses(var, equals, val);
       removeLiteral(var, !equals, val);
       VARLIST[var]->ATOMASSIGN[val] = -1;
       VARLIST[var]->ATOMLEVEL[val] = LEVEL;
-
       VARLIST[var]->CLAUSEID[val] = UNITCLAUSE;
-
       //Add literal to DecisionStack
       cout<<"Adding literal to the decision stack: "<<var<<"!"<<val<<endl;
-
       DECSTACK.push_back(new Literal(var, '!', val));
+      //check Entailment on this variable
+      if(checkEntail(var))
+    {
+    ENTAILS++;
+    cout<<"Entailment... "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
+    Clause * entailClause = new Clause();
+    entailClause -> LEVEL = LEVEL;
+    for (int i=0; i < VARLIST[ENTAILLITERAL->VAR]->DOMAINSIZE; i++){
+      entailClause -> AddAtom(new Literal(ENTAILLITERAL->VAR,'=',i));
+    }
+    CLAUSELIST.push_back(entailClause);
+    VARLIST[ENTAILLITERAL->VAR]->CLAUSEID[ENTAILLITERAL->VAL] = CLAUSELIST.size()-1;
+    cout<<"Setting reason for the entailed literal "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<": "<<endl;
+    entailClause -> Print();
+    reduceTheory(ENTAILLITERAL->VAR, true, ENTAILLITERAL->VAL);
 
 
     }
 
-    //check Entailment on this variable
-    if(checkEntail(var))
-{
-  ENTAILS++;
-  cout<<"Entailment .."<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
-  VARLIST[ENTAILLITERAL->VAR]->CLAUSEID[ENTAILLITERAL->VAL] = UNITCLAUSE;
-  reduceTheory(ENTAILLITERAL->VAR, true, ENTAILLITERAL->VAL);
-}
+/*      if(checkEntail(var))
+	{
+	  ENTAILS++;
+	  cout<<"Entailment .."<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
+    cout<<"Setting reason for the entailed literal "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<": "<<UNITCLAUSE<<endl;
+	  VARLIST[ENTAILLITERAL->VAR]->CLAUSEID[ENTAILLITERAL->VAL] = UNITCLAUSE;
+	  reduceTheory(ENTAILLITERAL->VAR, true, ENTAILLITERAL->VAL);
+	} */
+
+    }
+
+
 }
 
 //satisfyClauses
@@ -621,7 +647,7 @@ void Formula::undoTheory(int level)
     }
   //undo the decision stack
   int decsize = DECSTACK.size();
-  for(int i=decsize-1; i>-1; i--) // Why -1 here ???
+  for(int i=decsize-1; i>-1; i--)
     {
       if(VARLIST[DECSTACK[i]->VAR]->ATOMASSIGN[DECSTACK[i]->VAL] == 0)
 	{
@@ -699,13 +725,15 @@ inline void Formula::addLiteral(int var, bool equals, int val)
 
 //anaylzeConflict: TODO FIX the mistake here: THE LEARNED CLAUSES ARE NOT entailed
 // BY THE THEORY
+
 int Formula::analyzeConflict()
 {
   cout<<"Conflict at level: "<<LEVEL<<endl;
   //learnedClause
   Clause * learnedClause = new Clause();
   int CID = CONFLICTINGCLAUSE;
-  cout<<"Conflicting clause: "<<CID<<endl;
+  cout<<"Conflicting clause is: "<<endl;
+  CLAUSELIST[CID]->Print();
   int numLit = 0;
   int tlevel = LEVEL;
   int tvar = -1;
@@ -714,69 +742,45 @@ int Formula::analyzeConflict()
   int index = DECSTACK.size()-1; // WHY INDEX HERE???
   cout<<"Index: "<<index<<endl;
   int csize = -1;
+  Literal * lastFalse;
+  list <int> lastIndex;
 
-  int decsize = VARLIST.size()-1; // PROBLEM: WE HAVE ADDITIONAL VARIABLE 0
-  cout<<"decsize = "<<decsize<<endl;
-  for(int i=0; i<decsize; i++)
-    {
-      int dsize = VARLIST[i]->DOMAINSIZE;
-      for(int j=0; j<dsize; j++)
-	{
-	  if(VARLIST[i]->ATOMLEVEL[j] != 0)
-	    VARLIST[i]->FLAG[j] = true;
-	  else
-	    VARLIST[i]->FLAG[j] = false; // CHECK!
-	}
-    }
 
-  while(1) //FIX this ??
-    {
-      tvar = -1;
-      tval = -1;
-      tequal = false;
-      if(CID > -1)
-	{
+  // Resolve CID and latest falsified literal + reason
+
+  //Find latest falsified literal
+
+//   resolve(CID, DECSTACK[index],DECSTACK[index]->CLAUSEID[DECSTACK[index]->VAL])
+
+ cout<<"We are working with the clause: "<<endl;
+ CLAUSELIST[CID]->Print();
 	  csize = CLAUSELIST[CID]->NumAtom;
 	  for(int i=0; i<csize; i++)
-	    {
+	    { Literal * lit = CLAUSELIST[CID]->getAtom(i);
+        for (int j=DECSTACK.size(); j>-1; j--){
+          if(lit == DECSTACK[j]) lastIndex[i] = j;
+        }
+      }
+
+
 	      tvar = CLAUSELIST[CID]->ATOM_LIST[i]->VAR;
 	      tval = CLAUSELIST[CID]->ATOM_LIST[i]->VAL;
 	      tequal = CLAUSELIST[CID]->ATOM_LIST[i]->EQUAL;
 
-	      if(!VARLIST[tvar]->FLAG[tval])
-		{
-		  VARLIST[tvar]->FLAG[tval] = true;  //CHECK!
-		  if((VARLIST[tvar]->VAL != -1) &&
-		     (VARLIST[tvar]->CLAUSEID[tval] == VARLIST[tvar]->CLAUSEID[VARLIST[tvar]->VAL]))
-		    VARLIST[tvar]->FLAG[VARLIST[tvar]->VAL] = true;
-		  if(VARLIST[tvar]->ATOMLEVEL[tval] < tlevel)
-		    {
-		      if(tequal)
-			learnedClause->AddAtom(new Literal(tvar, '=', tval));
-		      else
-			learnedClause->AddAtom(new Literal(tvar, '!', tval));
-		      learnedClause->NumUnAss--;
-          cout<< "Learning a clause:"<<endl;
-          learnedClause -> Print();
-		    }
-		  else
-		    {
-		      numLit++;
-		    }
-		}
-	    }
-	}
+
+
+// Why do we need this?
+
       while((index > -1) && (!VARLIST[DECSTACK[index]->VAR]->FLAG[DECSTACK[index]->VAL]) && (CID != -1))
 	{
 	  cout<<"reducing index "<<index<<endl;
 	  index--;
 	}
 
-  cout<<index<<endl;
-//  int bar = DECSTACK[index]->VAR;;
-
-      if((numLit == 1 || CID == -1)&& index > -1)
-	{ cout<<"CID: "<<" "<< CID<< ", index: "<< index<<", decsize: "<<DECSTACK.size()<<endl;
+  cout<<"Index: "<<index<<endl;
+ // CORRECT RESOLUTION HERE
+      if(numLit == 1 || CID == -1)
+	{ cout<<"A"<<" "<< CID<< " "<< index<<" "<<DECSTACK.size()<<endl;
 	  while(VARLIST[DECSTACK[index]->VAR]->ATOMLEVEL[DECSTACK[index]->VAL] != tlevel)
 	    {
 	      index++;
@@ -797,11 +801,15 @@ int Formula::analyzeConflict()
 	    VARLIST[learnedClause->ATOM_LIST[i]->VAR]->AddRecord(CID,
 								 learnedClause->ATOM_LIST[i]->VAL,
 								 learnedClause->ATOM_LIST[i]->EQUAL);
-	  //computing the backtrack level : CID
-	  CID = 0;
+
+
+	                //// computing the backtrack level : CID \\\
+
+	//  CID = 0;
 	  //if learned clause has only one literal then backtrack to level 0
 	  if(csize == 1)
-	    return CID;
+	    return 0;
+
 	  for(int i=0; i<csize; i++)
 	    {
 	      if((tlevel != VARLIST[learnedClause->ATOM_LIST[i]->VAR]
@@ -814,15 +822,18 @@ int Formula::analyzeConflict()
 	}
       else
 	{
-    cout<<"else, CID: "<<" "<< CID<< ", index: "<< index<<", decsize: "<<DECSTACK.size()<<endl;
 	  tvar = DECSTACK[index]->VAR;
 	  tequal = DECSTACK[index]->EQUAL;
 	  tval = DECSTACK[index]->VAL;
+    cout<<"Next decstack literal: "<<tvar<<(tequal?"=":"!=")<<tval<<endl;
 	  index--;
-    CID = VARLIST[tvar]->CLAUSEID[tval];
-    // cout<<CID<<endl;
+	  CID = VARLIST[tvar]->CLAUSEID[tval];
+    cout<<"CID: "<<CID<<endl;
+    cout<<"Its reason is: "<<endl;
+    if (CID > -1) CLAUSELIST[CID]->Print(); else cout<<-1<<endl;
 	}
       numLit--;
+      cout<<"Decreasing numLit: "<<numLit<<endl;
     }
 
 
@@ -845,8 +856,8 @@ bool Formula::unitPropagation()
       UNITS++;
       unit_clause = UNITLIST.front();
       UNITCLAUSE = unit_clause;
-      //cout<<"unit c : "<<unit_clause<<endl;
-      UNITLIST.pop_front();
+      cout<<"Unit propagation... "<<endl;
+      UNITLIST.pop_front(); // Delete first element
       if(!CLAUSELIST[unit_clause]->SAT)
 	{
 	  for(int i=0; i<CLAUSELIST[unit_clause]->NumAtom && !flag; i++)
@@ -854,16 +865,19 @@ bool Formula::unitPropagation()
 	      lit_var = CLAUSELIST[unit_clause]->ATOM_LIST[i]->VAR;
 	      lit_equal = CLAUSELIST[unit_clause]->ATOM_LIST[i]->EQUAL;
 	      lit_val = CLAUSELIST[unit_clause]->ATOM_LIST[i]->VAL;
+
 	      if(VARLIST[lit_var]->ATOMASSIGN[lit_val] == 0)
 		{
 		  flag = true;
-		  //set the reason for this literal
+
 		  VARLIST[lit_var]->CLAUSEID[lit_val] = unit_clause;
 		}
 	    }
 	  if(flag)
 	    {
-	      //cout<<"Unit : "<<lit_var<<(lit_equal?"=":"!=")<<lit_val<<endl;
+	      cout<<"Unit literal: "<<lit_var<<(lit_equal?"=":"!=")<<lit_val<<endl;
+        cout<<"Set the reason for this literal: "<<endl;
+        if (unit_clause > -1) CLAUSELIST[unit_clause]->Print(); else cout<<-1<<endl;
 	      reduceTheory(lit_var, lit_equal, lit_val);
 	      flag = false;
 	    }
@@ -879,89 +893,6 @@ bool Formula::unitPropagation()
     }
 }
 
-//ChronoBacktrack
-int Formula::ChronoBacktrack(int level)
-{
-  //start of finite domain extended dpll
-  // return 0 : if theory satisfied
-  // return 1 : if time out
-  // return 2 : if conflict and later used as unsatisfied
-
-  //set LEVEL
-  LEVEL = level;
-
-  //check if theory satisfied or not
-  if(checkSat())
-    return 0;
-
-  //check if time out
-  TIME_E = GetTime();
-  if((TIME_E - TIME_S) > TIMELIMIT)
-    return 1;
-
-  //check if entailed literal
-  // if(checkEntail())
-  // {
-  //   ENTAILS++;
-  //   reduceTheory(ENTAILLITERAL->VAR, ENTAILLITERAL->EQUAL, ENTAILLITERAL->VAL);
-  // }
-
-  //check if pure literal
-  // if(checkPureLiteral())
-  // {
-  //   reduceTheory(PURELITERAL->VAR, PURELITERAL->EQUAL, PURELITERAL->VAL);
-  // }
-
-  //check unit literal
-  if(!UNITLIST.empty())
-    unitPropagation();
-  //check if theory satisfied or not
-  if(checkSat())
-    return 0;
-
-  //check if time out
-  TIME_E = GetTime();
-  if((TIME_E - TIME_S) > TIMELIMIT)
-    return 1;
-
-  //check if conflict
-  if(CONFLICT)
-    {
-      BACKTRACKS++;
-      CONFLICT = false;
-      undoTheory(LEVEL-1);
-      LEVEL = LEVEL-1;
-      return 2;
-    }
-
-  //since all is fine, now need to choose a literal
-  //to branch on
-  Literal * atom = chooseLiteral();
-  if(atom)
-    {
-      DECISIONS++;
-      LEVEL++;
-      reduceTheory(atom->VAR, atom->EQUAL, atom->VAL);
-      int result = ChronoBacktrack(LEVEL);
-      if(result == 0)
-	return 0;
-      else if(result == 1)
-	return 1;
-      else if((result == 2) && (LEVEL != 0))
-	{
-	  reduceTheory(atom->VAR, !atom->EQUAL, atom->VAL);
-	  return ChronoBacktrack(LEVEL);
-	}
-      else
-	return 2;
-    }
-  else
-    {
-      cout<<"No Branch Atom selected"<<endl;
-    }
-  return 0;
-}
-
 //\\====================NON-CHRONOLOGICAL BACKTRACK=============================
 
 int Formula::NonChronoBacktrack(int level)
@@ -970,33 +901,20 @@ int Formula::NonChronoBacktrack(int level)
   // return 0 : if theory satisfied
   // return 1 : if time out
   // return 2 : if CONFLICT and later used as unsatisfied
-
+  checkUnit();
   //set LEVEL
   LEVEL = level;
 
-  //check if theory satisfied or not
+  //Check if theory satisfied
   if(checkSat())
     return 0;
 
-  //check if time out
+  //Check if time out
   TIME_E = GetTime();
   if((TIME_E - TIME_S) > TIMELIMIT)
     return 1;
 
-  //check if entailed literal
-  // if(checkEntail())
-  // {
-  //   ENTAILS++;
-  //   reduceTheory(ENTAILLITERAL->VAR, ENTAILLITERAL->EQUAL, ENTAILLITERAL->VAL);
-  // }
-
-  //check if pure literal
-  // if(checkPureLiteral())
-  // {
-  //   reduceTheory(PURELITERAL->VAR, PURELITERAL->EQUAL, PURELITERAL->VAL);
-  // }
-  checkUnit();
-  //check unit literal
+  // If there is a unit clause, propagate
   if(!UNITLIST.empty())
     unitPropagation();
 
@@ -1011,132 +929,29 @@ int Formula::NonChronoBacktrack(int level)
 
   //check if conflict
   if(CONFLICT)
-    {
-//       LEVEL = analyzeConflict();
-//       BACKTRACKS++;
-//       CONFLICT = false;
-//       undoTheory(LEVEL);
-//       checkUnit();
-//      return 2;
+    { cout << "There is a conflict at level: " << LEVEL << endl;
       if(LEVEL == 0)
 	return 2;
       LEVEL = analyzeConflict();
+      cout << "We are backtracking to the level: " << LEVEL << endl;
       BACKTRACKS++;
       CONFLICT = false;
       undoTheory(LEVEL);
-      //this is what is happening .. we're learning the same clause after a while
-      //it's because once add the learnedclause it is supposed to be unit .. but in some
-      //cases it doesnt .. it has more than two unassigned literals eg. 5=1 and 5!=0
       checkUnit();
-      //cout<<"Unit clause : "<<(!UNITLIST.empty()?UNITLIST.front():-1)<<endl;
       return NonChronoBacktrack(LEVEL);
     }
 
-  //since all is fine, now need to choose a literal
-  //to branch on
+  //When there is no conflict, choose a literal to branch on
   Literal * atom = chooseLiteral();
   if(atom)
     {
       DECISIONS++;
       LEVEL++;
-      //cout<<"Decision : "<<atom->VAR<<(atom->EQUAL?"=":"!=")<<atom->VAL<<endl;
       reduceTheory(atom->VAR, atom->EQUAL, atom->VAL);
-      checkUnit();
       return NonChronoBacktrack(LEVEL);
-//       int result = NonChronoBacktrack(LEVEL);
-//       if(result == 0)
-// 	return 0;
-//       else if(result == 1)
-// 	return 1;
-//       else if((result == 2) && (LEVEL != 0))
-// 	{
-// 	  //reduceTheory(atom->VAR, !atom->EQUAL, atom->VAL);
-// 	  LEVEL = analyzeConflict();
-// 	  BACKTRACKS++;
-// 	  CONFLICT = false;
-// 	  undoTheory(LEVEL);
-// 	  checkUnit();
-// 	  return NonChronoBacktrack(LEVEL);
-// 	}
-//       else
-// 	return 2;
     }
   return 0;
-}
 
-
-//NonChronoBacktrack
-int Formula::NonChronoBacktrackLoop(int level)
-{
-  //start of finite domain extended dpll
-  // return 0 : if theory satisfied
-  // return 1 : if time out
-  // return 2 : if conflict and later used as unsatisfied
-
-
-
-  //set LEVEL
-  LEVEL = level;
-
-  while(true)
-    { // Checking for unit literals
-      checkUnit();
-      cout<<"Unit clause : "<<(!UNITLIST.empty()?UNITLIST.front():-1)<<endl;
-
-      for(int i = 0; i < VARLIST.size();i++) checkEntail(VARLIST[i]->VAR);
-      //check if theory satisfied or not
-      if(checkSat())
-	return 0;
-      //check if time out
-      //TIME_E = GetTime();
-      //if((TIME_E - TIME_S) > TIMELIMIT)
-      else if((GetTime() - TIME_S) > TIMELIMIT)
-	return 1;
-
-      //check unit literal
-      else if(!UNITLIST.empty())
-	{
-	  unitPropagation();
-
-	  //check if theory satisfied or not
-	  if(checkSat())
-	    return 0;
-
-	  //check if time out
-	  TIME_E = GetTime();
-	  if((TIME_E - TIME_S) > TIMELIMIT)
-	    return 1;
-	}
-      //check if conflict
-      else if(CONFLICT)
-	{
-	  if(LEVEL == 0)
-	    return 2;
-	  LEVEL = analyzeConflict();
-	  BACKTRACKS++;
-	  CONFLICT = false;
-	  undoTheory(LEVEL);
-	  //this is what is happening .. we're learning the same clause after a while
-	  //it's because once add the learnedclause it is supposed to be unit .. but in some
-	  //cases it doesnt .. it has more than two unassigned literals eg. 5=1 and 5!=0
-	//  checkUnit();
-	}
-
-      //since all is fine, now need to choose a literal
-      //to branch on
-      else
-	{
-	  Literal * atom = chooseLiteral();
-	  if(atom)
-	    {
-	      DECISIONS++;
-	      LEVEL++;
-	      cout<<"Decision : "<<atom->VAR<<(atom->EQUAL?"=":"!=")<<atom->VAL<<endl;
-	      reduceTheory(atom->VAR, atom->EQUAL, atom->VAL);
-	    }
-	}
-    }
-  return 0;
 }
 //End Formula
 //**********************************************************************//

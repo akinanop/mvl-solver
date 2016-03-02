@@ -1,0 +1,597 @@
+
+**** Finite Domain Sat Solver - Hemal A Lal ****
+/home/LOGIC/nika/netshare/mvl-solver/tests/UNSAT/counterexample2.txt 	0.0098	Clause list: 22
+Setting the reason for the literal 1=0
+1=0 1!=0 
+Decision : 1=0
+Reducing literal: 1=0 at level 1
+Set the reason for the literal: 
+1=0 1!=0 
+Adding literal to the decision stack: 1=0
+Size of the decision stack: 1
+Set the reason for the literal 1!1
+1=0 1!=0 
+Adding literal to the decision stack: 1!1
+Size of the decision stack: 2
+Set the reason for the literal 1!2
+1=0 1!=0 
+Adding literal to the decision stack: 1!2
+Size of the decision stack: 3
+Unit clause: 0
+Set the reason for the literal: 
+1!=0 2!=0 
+Unit literal: 2!=0
+Reducing : 2!0 at level 1
+Adding literal to the decision stack: 2!0
+Checking entailment...
+Unit clause: 1
+Set the reason for the literal: 
+1!=0 3!=0 
+Unit literal: 3!=0
+Reducing : 3!0 at level 1
+Adding literal to the decision stack: 3!0
+Checking entailment...
+Unit clause: 2
+Set the reason for the literal: 
+1!=0 4!=0 
+Unit literal: 4!=0
+Reducing : 4!0 at level 1
+Adding literal to the decision stack: 4!0
+Checking entailment...
+Clause list: 23
+Setting the reason for the literal 2=1
+2=1 2!=1 
+Decision : 2=1
+Reducing literal: 2=1 at level 2
+Set the reason for the literal: 
+2=1 2!=1 
+Adding literal to the decision stack: 2=1
+Size of the decision stack: 7
+Set the reason for the literal 2!2
+2=1 2!=1 
+Adding literal to the decision stack: 2!2
+Size of the decision stack: 8
+Unit clause: 12
+Set the reason for the literal: 
+2!=1 3!=1 
+Unit literal: 3!=1
+Reducing : 3!1 at level 2
+Adding literal to the decision stack: 3!1
+Checking entailment...
+Entailment... 3=2
+Setting reason for the entailed literal 3=2: 
+3=0 3=1 3=2 
+Reducing literal: 3=2 at level 2
+Set the reason for the literal: 
+2!=1 3!=1 
+Adding literal to the decision stack: 3=2
+Size of the decision stack: 10
+Unit clause: 19
+Set the reason for the literal: 
+3!=2 4!=2 
+Unit literal: 4!=2
+Reducing : 4!2 at level 2
+Adding literal to the decision stack: 4!2
+Checking entailment...
+Entailment... 4=1
+Setting reason for the entailed literal 4=1: 
+4=0 4=1 4=2 
+Reducing literal: 4=1 at level 2
+Set the reason for the literal: 
+3!=2 4!=2 
+Adding literal to the decision stack: 4=1
+Size of the decision stack: 12
+Conflict : 13
+Conflict at level: 2
+Conflicting clause is: 
+2!=1 4!=1 
+Index: 11
+Atomlevel for variable 1 and value 0 : 1
+Atomlevel for variable 1 and value 1 : 1
+Atomlevel for variable 1 and value 2 : 1
+Atomlevel for variable 2 and value 0 : 1
+Atomlevel for variable 2 and value 1 : 2
+Atomlevel for variable 2 and value 2 : 2
+Atomlevel for variable 3 and value 0 : 1
+Atomlevel for variable 3 and value 1 : 2
+Atomlevel for variable 3 and value 2 : 2
+Atomlevel for variable 4 and value 0 : 1
+Atomlevel for variable 4 and value 1 : 2
+Atomlevel for variable 4 and value 2 : 2
+We are working with the clause: 
+2!=1 4!=1 
+Index: 11
+Next decstack literal: 4=1
+CID: 19
+Its reason is: 
+3!=2 4!=2 
+Decreasing numLit: -1
+We are working with the clause: 
+3!=2 4!=2 
+Index: 10
+Next decstack literal: 4!=2
+CID: 19
+Its reason is: 
+3!=2 4!=2 
+Decreasing numLit: -2
+We are working with the clause: 
+3!=2 4!=2 
+Index: 9
+Next decstack literal: 3=2
+CID: 12
+Its reason is: 
+2!=1 3!=1 
+Decreasing numLit: -3
+We are working with the clause: 
+2!=1 3!=1 
+Index: 8
+Next decstack literal: 3!=1
+CID: 12
+Its reason is: 
+2!=1 3!=1 
+Decreasing numLit: -4
+We are working with the clause: 
+2!=1 3!=1 
+Index: 7
+Next decstack literal: 2!=2
+CID: 22
+Its reason is: 
+2=1 2!=1 
+Decreasing numLit: -5
+We are working with the clause: 
+2=1 2!=1 
+Index: 6
+Next decstack literal: 2=1
+CID: 22
+Its reason is: 
+2=1 2!=1 
+Decreasing numLit: -6
+We are working with the clause: 
+2=1 2!=1 
+Index: 5
+Next decstack literal: 4!=0
+CID: 2
+Its reason is: 
+1!=0 4!=0 
+Decreasing numLit: -7
+We are working with the clause: 
+1!=0 4!=0 
+Index: 4
+Next decstack literal: 3!=0
+CID: 1
+Its reason is: 
+1!=0 3!=0 
+Decreasing numLit: -8
+We are working with the clause: 
+1!=0 3!=0 
+Index: 3
+Next decstack literal: 2!=0
+CID: 0
+Its reason is: 
+1!=0 2!=0 
+Decreasing numLit: -9
+We are working with the clause: 
+1!=0 2!=0 
+Index: 2
+Next decstack literal: 1!=2
+CID: 21
+Its reason is: 
+1=0 1!=0 
+Decreasing numLit: -10
+We are working with the clause: 
+1=0 1!=0 
+Index: 1
+A 21 1 12
+Learned a clause: 
+2!=1 
+add .. 1!0
+add .. 1=1
+add .. 1=2
+add .. 2=0
+add .. 2!1
+add .. 2=2
+add .. 3=0
+add .. 3=1
+add .. 3!2
+add .. 4=0
+add .. 4!1
+add .. 4=2
+Found unit: 25
+Unit clause : 25
+Unit clause: 25
+Set the reason for the literal: 
+2!=1 
+Unit literal: 2!=1
+Reducing : 2!1 at level 0
+Adding literal to the decision stack: 2!1
+Checking entailment...
+Clause list: 27
+Setting the reason for the literal 1=1
+1=1 1!=1 
+Decision : 1=1
+Reducing literal: 1=1 at level 1
+Set the reason for the literal: 
+1=1 1!=1 
+Adding literal to the decision stack: 1=1
+Size of the decision stack: 2
+Set the reason for the literal 1!0
+1=1 1!=1 
+Adding literal to the decision stack: 1!0
+Size of the decision stack: 3
+Set the reason for the literal 1!2
+1=1 1!=1 
+Adding literal to the decision stack: 1!2
+Size of the decision stack: 4
+Unit clause: 9
+Set the reason for the literal: 
+1!=1 3!=1 
+Unit literal: 3!=1
+Reducing : 3!1 at level 1
+Adding literal to the decision stack: 3!1
+Checking entailment...
+Unit clause: 11
+Set the reason for the literal: 
+1!=1 4!=1 
+Unit literal: 4!=1
+Reducing : 4!1 at level 1
+Adding literal to the decision stack: 4!1
+Checking entailment...
+Clause list: 28
+Setting the reason for the literal 2=2
+2=2 2!=2 
+Decision : 2=2
+Reducing literal: 2=2 at level 2
+Set the reason for the literal: 
+2=2 2!=2 
+Adding literal to the decision stack: 2=2
+Size of the decision stack: 7
+Set the reason for the literal 2!0
+2=2 2!=2 
+Adding literal to the decision stack: 2!0
+Size of the decision stack: 8
+Unit clause: 17
+Set the reason for the literal: 
+2!=2 3!=2 
+Unit literal: 3!=2
+Reducing : 3!2 at level 2
+Adding literal to the decision stack: 3!2
+Checking entailment...
+Entailment... 3=0
+Setting reason for the entailed literal 3=0: 
+3=0 3=1 3=2 
+Reducing literal: 3=0 at level 2
+Set the reason for the literal: 
+2!=2 3!=2 
+Adding literal to the decision stack: 3=0
+Size of the decision stack: 10
+Unit clause: 5
+Set the reason for the literal: 
+3!=0 4!=0 
+Unit literal: 4!=0
+Reducing : 4!0 at level 2
+Adding literal to the decision stack: 4!0
+Checking entailment...
+Entailment... 4=2
+Setting reason for the entailed literal 4=2: 
+4=0 4=1 4=2 
+Reducing literal: 4=2 at level 2
+Set the reason for the literal: 
+3!=0 4!=0 
+Adding literal to the decision stack: 4=2
+Size of the decision stack: 12
+Conflict : 18
+Conflict at level: 2
+Conflicting clause is: 
+2!=2 4!=2 
+Index: 11
+Atomlevel for variable 1 and value 0 : 1
+Atomlevel for variable 1 and value 1 : 1
+Atomlevel for variable 1 and value 2 : 1
+Atomlevel for variable 2 and value 0 : 2
+Atomlevel for variable 2 and value 1 : 0
+Atomlevel for variable 2 and value 2 : 2
+Atomlevel for variable 3 and value 0 : 2
+Atomlevel for variable 3 and value 1 : 1
+Atomlevel for variable 3 and value 2 : 2
+Atomlevel for variable 4 and value 0 : 2
+Atomlevel for variable 4 and value 1 : 1
+Atomlevel for variable 4 and value 2 : 2
+We are working with the clause: 
+2!=2 4!=2 
+Index: 11
+Next decstack literal: 4=2
+CID: 5
+Its reason is: 
+3!=0 4!=0 
+Decreasing numLit: -1
+We are working with the clause: 
+3!=0 4!=0 
+Index: 10
+Next decstack literal: 4!=0
+CID: 5
+Its reason is: 
+3!=0 4!=0 
+Decreasing numLit: -2
+We are working with the clause: 
+3!=0 4!=0 
+Index: 9
+Next decstack literal: 3=0
+CID: 17
+Its reason is: 
+2!=2 3!=2 
+Decreasing numLit: -3
+We are working with the clause: 
+2!=2 3!=2 
+Index: 8
+Next decstack literal: 3!=2
+CID: 17
+Its reason is: 
+2!=2 3!=2 
+Decreasing numLit: -4
+We are working with the clause: 
+2!=2 3!=2 
+Index: 7
+Next decstack literal: 2!=0
+CID: 27
+Its reason is: 
+2=2 2!=2 
+Decreasing numLit: -5
+We are working with the clause: 
+2=2 2!=2 
+Index: 6
+Next decstack literal: 2=2
+CID: 27
+Its reason is: 
+2=2 2!=2 
+Decreasing numLit: -6
+We are working with the clause: 
+2=2 2!=2 
+Index: 5
+Next decstack literal: 4!=1
+CID: 11
+Its reason is: 
+1!=1 4!=1 
+Decreasing numLit: -7
+We are working with the clause: 
+1!=1 4!=1 
+Index: 4
+Next decstack literal: 3!=1
+CID: 9
+Its reason is: 
+1!=1 3!=1 
+Decreasing numLit: -8
+We are working with the clause: 
+1!=1 3!=1 
+Index: 3
+Next decstack literal: 1!=2
+CID: 26
+Its reason is: 
+1=1 1!=1 
+Decreasing numLit: -9
+We are working with the clause: 
+1=1 1!=1 
+Index: 2
+A 26 2 12
+Learned a clause: 
+2!=2 
+add .. 1=0
+add .. 1!1
+add .. 1=2
+add .. 2=0
+add .. 2!2
+add .. 3!0
+add .. 3=1
+add .. 3=2
+add .. 4=0
+add .. 4=1
+add .. 4!2
+Found unit: 30
+Unit clause : 30
+Unit clause: 30
+Set the reason for the literal: 
+2!=2 
+Unit literal: 2!=2
+Reducing : 2!2 at level 0
+Adding literal to the decision stack: 2!2
+Checking entailment...
+Entailment... 2=0
+Setting reason for the entailed literal 2=0: 
+2=0 2=1 2=2 
+Reducing literal: 2=0 at level 0
+Set the reason for the literal: 
+2!=2 
+Adding literal to the decision stack: 2=0
+Size of the decision stack: 3
+Unit clause: 0
+Set the reason for the literal: 
+1!=0 2!=0 
+Unit literal: 1!=0
+Reducing : 1!0 at level 0
+Adding literal to the decision stack: 1!0
+Checking entailment...
+Unit clause: 3
+Set the reason for the literal: 
+2!=0 3!=0 
+Unit literal: 3!=0
+Reducing : 3!0 at level 0
+Adding literal to the decision stack: 3!0
+Checking entailment...
+Unit clause: 4
+Set the reason for the literal: 
+2!=0 4!=0 
+Unit literal: 4!=0
+Reducing : 4!0 at level 0
+Adding literal to the decision stack: 4!0
+Checking entailment...
+Unit clause: 6
+Unit clause: 7
+Clause list: 33
+Setting the reason for the literal 1=1
+1=1 1!=1 
+Decision : 1=1
+Reducing literal: 1=1 at level 1
+Set the reason for the literal: 
+1=1 1!=1 
+Adding literal to the decision stack: 1=1
+Size of the decision stack: 7
+Set the reason for the literal 1!2
+1=1 1!=1 
+Adding literal to the decision stack: 1!2
+Size of the decision stack: 8
+Unit clause: 9
+Set the reason for the literal: 
+1!=1 3!=1 
+Unit literal: 3!=1
+Reducing : 3!1 at level 1
+Adding literal to the decision stack: 3!1
+Checking entailment...
+Entailment... 3=2
+Setting reason for the entailed literal 3=2: 
+3=0 3=1 3=2 
+Reducing literal: 3=2 at level 1
+Set the reason for the literal: 
+1!=1 3!=1 
+Adding literal to the decision stack: 3=2
+Size of the decision stack: 10
+Unit clause: 19
+Set the reason for the literal: 
+3!=2 4!=2 
+Unit literal: 4!=2
+Reducing : 4!2 at level 1
+Adding literal to the decision stack: 4!2
+Checking entailment...
+Entailment... 4=1
+Setting reason for the entailed literal 4=1: 
+4=0 4=1 4=2 
+Reducing literal: 4=1 at level 1
+Set the reason for the literal: 
+3!=2 4!=2 
+Adding literal to the decision stack: 4=1
+Size of the decision stack: 12
+Conflict : 11
+Conflict at level: 1
+Conflicting clause is: 
+1!=1 4!=1 
+Index: 11
+Atomlevel for variable 1 and value 0 : 0
+Atomlevel for variable 1 and value 1 : 1
+Atomlevel for variable 1 and value 2 : 1
+Atomlevel for variable 2 and value 0 : 0
+Atomlevel for variable 2 and value 1 : 0
+Atomlevel for variable 2 and value 2 : 0
+Atomlevel for variable 3 and value 0 : 0
+Atomlevel for variable 3 and value 1 : 1
+Atomlevel for variable 3 and value 2 : 1
+Atomlevel for variable 4 and value 0 : 0
+Atomlevel for variable 4 and value 1 : 1
+Atomlevel for variable 4 and value 2 : 1
+We are working with the clause: 
+1!=1 4!=1 
+Index: 11
+Next decstack literal: 4=1
+CID: 19
+Its reason is: 
+3!=2 4!=2 
+Decreasing numLit: -1
+We are working with the clause: 
+3!=2 4!=2 
+Index: 10
+Next decstack literal: 4!=2
+CID: 19
+Its reason is: 
+3!=2 4!=2 
+Decreasing numLit: -2
+We are working with the clause: 
+3!=2 4!=2 
+Index: 9
+Next decstack literal: 3=2
+CID: 9
+Its reason is: 
+1!=1 3!=1 
+Decreasing numLit: -3
+We are working with the clause: 
+1!=1 3!=1 
+Index: 8
+Next decstack literal: 3!=1
+CID: 9
+Its reason is: 
+1!=1 3!=1 
+Decreasing numLit: -4
+We are working with the clause: 
+1!=1 3!=1 
+Index: 7
+Next decstack literal: 1!=2
+CID: 32
+Its reason is: 
+1=1 1!=1 
+Decreasing numLit: -5
+We are working with the clause: 
+1=1 1!=1 
+Index: 6
+A 32 6 12
+Learned a clause: 
+1!=1 
+add .. 1!1
+add .. 1=2
+add .. 3=1
+add .. 3!2
+add .. 4!1
+add .. 4=2
+Found unit: 35
+Unit clause : 35
+Unit clause: 35
+Set the reason for the literal: 
+1!=1 
+Unit literal: 1!=1
+Reducing : 1!1 at level 0
+Adding literal to the decision stack: 1!1
+Checking entailment...
+Entailment... 1=2
+Setting reason for the entailed literal 1=2: 
+1=0 1=1 1=2 
+Reducing literal: 1=2 at level 0
+Set the reason for the literal: 
+1!=1 
+Adding literal to the decision stack: 1=2
+Size of the decision stack: 8
+Unit clause: 14
+Set the reason for the literal: 
+1!=2 3!=2 
+Unit literal: 3!=2
+Reducing : 3!2 at level 0
+Adding literal to the decision stack: 3!2
+Checking entailment...
+Entailment... 3=1
+Setting reason for the entailed literal 3=1: 
+3=0 3=1 3=2 
+Reducing literal: 3=1 at level 0
+Set the reason for the literal: 
+1!=2 3!=2 
+Adding literal to the decision stack: 3=1
+Size of the decision stack: 10
+Unit clause: 10
+Set the reason for the literal: 
+3!=1 4!=1 
+Unit literal: 4!=1
+Reducing : 4!1 at level 0
+Adding literal to the decision stack: 4!1
+Checking entailment...
+Entailment... 4=2
+Setting reason for the entailed literal 4=2: 
+4=0 4=1 4=2 
+Reducing literal: 4=2 at level 0
+Set the reason for the literal: 
+3!=1 4!=1 
+Adding literal to the decision stack: 4=2
+Size of the decision stack: 12
+Conflict : 16
+0.6400	 0.6498	UNSAT
+
+Number of Decisions   : 5
+Number of Units       : 21
+Number of Backtracks  : 3
+Number of Entails     : 10
+Number of Levels      : 0
+Number of Variables   : 4
+Number of Clauses     : 39
+
