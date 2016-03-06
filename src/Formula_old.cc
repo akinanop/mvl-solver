@@ -726,14 +726,14 @@ inline void Formula::addLiteral(int var, bool equals, int val)
 //anaylzeConflict: TODO FIX the mistake here: THE LEARNED CLAUSES ARE NOT entailed
 // BY THE THEORY
 
-int Formula::analyzeConflict()
+int Formula::analyzeConflict(Clause * conflict)
 {
   cout<<"Conflict at level: "<<LEVEL<<endl;
   //learnedClause
   Clause * learnedClause = new Clause();
-  int CID = CONFLICTINGCLAUSE;
+  int CID = conflict;
   cout<<"Conflicting clause is: "<<endl;
-  CLAUSELIST[CID]->Print();
+  CLAUSELIST[conflict]->Print();
   int numLit = 0;
   int tlevel = LEVEL;
   int tvar = -1;
@@ -932,7 +932,7 @@ int Formula::NonChronoBacktrack(int level)
     { cout << "There is a conflict at level: " << LEVEL << endl;
       if(LEVEL == 0)
 	return 2;
-      LEVEL = analyzeConflict();
+      LEVEL = analyzeConflict(CLAUSELIST[CONFLICTINGCLAUSE]);
       cout << "We are backtracking to the level: " << LEVEL << endl;
       BACKTRACKS++;
       CONFLICT = false;

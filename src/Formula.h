@@ -121,7 +121,7 @@ public:
   void addLiteral(int var, bool equals, int val);
   //analyzeConflict : finds the conflict, learns and creates a conflict clause,
   //add's the clause to theory and returns a backtrack level
-  int analyzeConflict();
+  int analyzeConflict(Clause * clause);
   //unitPropagation : does BCP in Finite Domain, returns true if no conflict
   //else returns false
   bool unitPropagation();
