@@ -283,8 +283,9 @@ bool Formula::checkSat()
   for(int i=0; i<size; i++)
     {
       //if clause is not SAT return false
-      if(!CLAUSELIST[i]->SAT) return false;
-	  // cout<<"Unsatisfied clause # "<<i<<endl;
+      if(!CLAUSELIST[i]->SAT) {	   cout<<"Unsatisfied clause # "<<i<<endl;
+      CLAUSELIST[i]->Print();
+     return false; }
     }
   return true;
 }
@@ -411,6 +412,12 @@ Literal * Formula::chooseLiteral()
     chooseClause -> AddAtom(new Literal(tvar,'=',tval));
     chooseClause -> AddAtom(new Literal(tvar,'!',tval));
     CLAUSELIST.push_back(chooseClause);
+  /*  int csize = chooseClause->NumAtom;
+    int CID = CLAUSELIST.size()-1;
+    for(int i=0; i<csize; i++){
+      VARLIST[chooseClause->ATOM_LIST[i]->VAR]->AddRecord(CID,
+                 chooseClause->ATOM_LIST[i]->VAL,
+                 chooseClause->ATOM_LIST[i]->EQUAL); } */
     // cout<<"Clause list: "<<CLAUSELIST.size()<<endl;
     VARLIST[tvar] -> CLAUSEID[tval] = CLAUSELIST.size()-1;
     UNITCLAUSE = VARLIST[tvar] -> CLAUSEID[tval];
@@ -507,6 +514,13 @@ void Formula::reduceTheory(int var, bool equals, int val)
       entailClause -> AddAtom(new Literal(ENTAILLITERAL->VAR,'=',i));
     }
     CLAUSELIST.push_back(entailClause);
+  /*  int csize = entailClause->NumAtom;
+    int CID = CLAUSELIST.size()-1;
+    for(int i=0; i<csize; i++){
+      VARLIST[entailClause->ATOM_LIST[i]->VAR]->AddRecord(CID,
+                 entailClause->ATOM_LIST[i]->VAL,
+                 entailClause->ATOM_LIST[i]->EQUAL); } */
+
     VARLIST[ENTAILLITERAL->VAR]->CLAUSEID[ENTAILLITERAL->VAL] = CLAUSELIST.size()-1;
     cout<<"Setting reason for the entailed literal "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<": "<<endl;
     entailClause -> Print();
@@ -808,7 +822,8 @@ Clause * Formula::analyzeConflict(Clause * clause)
                  clause->ATOM_LIST[i]->EQUAL);
     return clause;
 }
-  Clause * resolvent = new Clause();
+//  Clause * resolvent = new Clause();
+  //resolvent -> LEVEL = LEVEL;
 //  cout<<"Conflict at level: "<<LEVEL<<endl;
   //learnedClause
 //  cout<<"Conflicting clause is: "<<endl;
@@ -839,11 +854,11 @@ Clause * Formula::analyzeConflict(Clause * clause)
         }*/
   cout<<"lastIndex is: "<<lastIndex<<endl;
   lastFalse = DECSTACK[lastIndex];
-  resolvent = resolve(clause, new Literal(DECSTACK[lastIndex]->VAR,(DECSTACK[lastIndex]->EQUAL?'!':'='),DECSTACK[lastIndex]->VAL),CLAUSELIST[VARLIST[DECSTACK[lastIndex] ->VAR]-> CLAUSEID[DECSTACK[lastIndex]->VAL]]);
+  clause = resolve(clause, new Literal(DECSTACK[lastIndex]->VAR,(DECSTACK[lastIndex]->EQUAL?'!':'='),DECSTACK[lastIndex]->VAL),CLAUSELIST[VARLIST[DECSTACK[lastIndex] ->VAR]-> CLAUSEID[DECSTACK[lastIndex]->VAL]]);
   // lastFalse->Print();
   // CLAUSELIST[VARLIST[DECSTACK[lastIndex] ->VAR]-> CLAUSEID[DECSTACK[lastIndex]->VAL]]->Print();
 
-  return analyzeConflict(resolvent);
+  return analyzeConflict(clause);
 
     }
 
