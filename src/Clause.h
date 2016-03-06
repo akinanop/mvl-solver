@@ -81,6 +81,8 @@ public:
   bool isUnit();
   //isEmpty : returns true if NumUnAss == 0
   bool isEmpty();
+  //hasAtom
+//  bool HasAtom(Literal * atom);
 };
 // End of Code
 //

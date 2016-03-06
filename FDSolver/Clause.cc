@@ -46,6 +46,9 @@ void Clause::AddAtom(Literal * atom)
   NumUnAss++;
 }
 
+//check if clause contains a certain literal
+
+
 //Print
 void Clause::Print()
 {
@@ -59,7 +62,7 @@ void Clause::Print()
 
 //Accessor functions
 //getAtom
-inline Literal * Clause::getAtom(int index)
+inline Literal * Clause::getAtom(int inde
 {
   return ATOM_LIST[index];
 }
@@ -69,6 +72,7 @@ inline bool Clause::getSAT()
 {
   return SAT;
 }
+
 
 //setSAT
 inline void Clause::setSAT(bool flag)
