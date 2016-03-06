@@ -759,156 +759,92 @@ Clause * Formula::resolve(Clause * clause, Literal * literal, Clause * reason)
 //anaylzeConflict: TODO FIX the mistake here: THE LEARNED CLAUSES ARE NOT entailed
 // BY THE THEORY
 
-int Formula::analyzeConflict(Clause * clause)
+bool Formula::Potent(Clause * clause)
 {
-  cout<<"Conflict at level: "<<LEVEL<<endl;
-  //learnedClause
-  Clause * learnedClause = new Clause();
-  int CID = clause;
-  cout<<"Conflicting clause is: "<<endl;
-  CLAUSELIST[CID]->Print();
-  int numLit = 0;
-  int tlevel = LEVEL;
-  int tvar = -1;
-  int tval = -1;
-  int tequal = false;
-  int index = DECSTACK.size()-1; // WHY INDEX HERE???
-  cout<<"Index: "<<index<<endl;
-  int csize = -1;
-  Literal * lastFalse;
-  int lastIndex = index;
+  int counter = 0;
+  for (int i = 0; i < clause->ATOM_LIST.size(); i++)
+  {
+    if (VARLIST[clause->ATOM_LIST[i]->VAR]
+    ->ATOMLEVEL[clause->ATOM_LIST[i]->VAL] == LEVEL) counter++;
+    else counter = counter;
+  }
 
+  if(counter != 1) return false;
+  else return true;
 
-  // Resolve CID and latest falsified literal + reason
+}
 
-
-//   resolve(CID, DECSTACK[lastIndex],DECSTACK[lastIndex]->CLAUSEID[DECSTACK[index]->VAL])
-
- cout<<"We are working with the clause: "<<endl;
- CLAUSELIST[CID]->Print();
-
- //Find latest falsified literal
-  csize = CLAUSELIST[CID]->NumAtom;
-  cout<<"csize: "<<csize<<endl;
- cout<<"decsize: "<<DECSTACK.size()<<endl;
-  /*    for (int j=DECSTACK.size()-1; j>-1; j--)
-      { cout<<"j: "<<j<<endl;
-        for(int i=0; i<csize; i++)
-          { cout<<"i: "<<i<<endl;
-            Literal * lit = CLAUSELIST[CID]->ATOM_LIST[i];
-            lit -> Print();
-            if(lit->VAL == DECSTACK[j]->VAL && lit->VAR == DECSTACK[j]->VAR) lastIndex = j; break;
-          }
-        }*/
-  cout<<"lastIndex is: "<<lastIndex<<endl;
-  lastFalse = DECSTACK[lastIndex];
-  learnedClause = resolve(CLAUSELIST[CID], new Literal(DECSTACK[lastIndex]->VAR,(DECSTACK[lastIndex]->EQUAL?'!':'='),DECSTACK[lastIndex]->VAL),CLAUSELIST[VARLIST[DECSTACK[lastIndex] ->VAR]-> CLAUSEID[DECSTACK[lastIndex]->VAL]]);
-  lastFalse->Print();
-  CLAUSELIST[VARLIST[DECSTACK[lastIndex] ->VAR]-> CLAUSEID[DECSTACK[lastIndex]->VAL]]->Print();
-
-  learnedClause->NumUnAss--;
-  cout<<"Learned a clause: "<<endl;
-  learnedClause->Print();
-  CLAUSELIST.push_back(learnedClause);
-  csize = learnedClause->NumAtom;
-  CID = CLAUSELIST.size()-1;
-  for(int i=0; i<csize; i++)
-    VARLIST[learnedClause->ATOM_LIST[i]->VAR]->AddRecord(CID,
-               learnedClause->ATOM_LIST[i]->VAL,
-               learnedClause->ATOM_LIST[i]->EQUAL);
-
-  //// computing the backtrack level : CID \\\
-
-  csize = learnedClause->NumAtom;
-  CID = 0;
+int Formula::backtrackLevel(Clause * learnedClause)
+{ int tlevel = LEVEL;
+  int csize = learnedClause->NumAtom;
+  int CID = 0;
   //if learned clause has only one literal then backtrack to level 0
   if(csize == 1)
   return 0;
 
   for(int i=0; i<csize; i++)
   {
-  if((tlevel != VARLIST[learnedClause->ATOM_LIST[i]->VAR]
+  if((tlevel!= VARLIST[learnedClause->ATOM_LIST[i]->VAR]
   ->ATOMLEVEL[learnedClause->ATOM_LIST[i]->VAL]) &&
   (CID < VARLIST[learnedClause->ATOM_LIST[i]->VAR]
   ->ATOMLEVEL[learnedClause->ATOM_LIST[i]->VAL]))
   CID = VARLIST[learnedClause->ATOM_LIST[i]->VAR]->ATOMLEVEL[learnedClause->ATOM_LIST[i]->VAL];
   }
   return CID;
+}
 
-/*
-
-	      tvar = CLAUSELIST[CID]->ATOM_LIST[i]->VAR;
-	      tval = CLAUSELIST[CID]->ATOM_LIST[i]->VAL;
-	      tequal = CLAUSELIST[CID]->ATOM_LIST[i]->EQUAL;
-
-
-
-// Why do we need this?
-
-      while((index > -1) && (!VARLIST[DECSTACK[index]->VAR]->FLAG[DECSTACK[index]->VAL]) && (CID != -1))
-	{
-	  cout<<"reducing index "<<index<<endl;
-	  index--;
-	}
-
-  cout<<"Index: "<<index<<endl;
- // CORRECT RESOLUTION HERE
-      if(numLit == 1 || CID == -1)
-	{ cout<<"A"<<" "<< CID<< " "<< index<<" "<<DECSTACK.size()<<endl;
-	  while(VARLIST[DECSTACK[index]->VAR]->ATOMLEVEL[DECSTACK[index]->VAL] != tlevel)
-	    {
-	      index++;
-	    }
-	  if(DECSTACK[index]->EQUAL)
-	    learnedClause->AddAtom(new Literal(DECSTACK[index]->VAR, '!',
-					       DECSTACK[index]->VAL));
-	  else
-	    learnedClause->AddAtom(new Literal(DECSTACK[index]->VAR, '=',
-					       DECSTACK[index]->VAL));
-	  learnedClause->NumUnAss--;
+Clause * Formula::analyzeConflict(Clause * clause)
+{
+  if (Potent(clause)) {
+    clause->NumUnAss--;
     cout<<"Learned a clause: "<<endl;
-    learnedClause->Print();
-	  CLAUSELIST.push_back(learnedClause);
-	  csize = learnedClause->NumAtom;
-	  CID = CLAUSELIST.size()-1;
-	  for(int i=0; i<csize; i++)
-	    VARLIST[learnedClause->ATOM_LIST[i]->VAR]->AddRecord(CID,
-								 learnedClause->ATOM_LIST[i]->VAL,
-								 learnedClause->ATOM_LIST[i]->EQUAL);
+    clause->Print();
+    CLAUSELIST.push_back(clause);
+    int csize = clause->NumAtom;
+    int CID = CLAUSELIST.size()-1;
+    for(int i=0; i<csize; i++)
+      VARLIST[clause->ATOM_LIST[i]->VAR]->AddRecord(CID,
+                 clause->ATOM_LIST[i]->VAL,
+                 clause->ATOM_LIST[i]->EQUAL);
+    return clause;
+}
+  Clause * resolvent = new Clause();
+//  cout<<"Conflict at level: "<<LEVEL<<endl;
+  //learnedClause
+//  cout<<"Conflicting clause is: "<<endl;
+//  clause->Print();
+  int numLit = 0;
+  int tlevel = LEVEL;
+  int csize = -1;
+  Literal * lastFalse;
+  int lastIndex = DECSTACK.size()-1;
 
+  // Resolve CID and latest falsified literal + reason
 
-	                //// computing the backtrack level : CID \\\
+ cout<<"We are working with the clause: "<<endl;
+ clause->Print();
 
-	//  CID = 0;
-	  //if learned clause has only one literal then backtrack to level 0
-	  if(csize == 1)
-	    return 0;
+ //Find latest falsified literal
+  csize = clause->NumAtom;
+//  cout<<"csize: "<<csize<<endl;
+//  cout<<"decsize: "<<DECSTACK.size()<<endl;
+  /*    for (int j=DECSTACK.size()-1; j>-1; j--)
+      { cout<<"j: "<<j<<endl;
+        for(int i=0; i<csize; i++)
+          { cout<<"i: "<<i<<endl;
+            Literal * lit = clause->ATOM_LIST[i];
+            lit -> Print();
+            if(lit->VAL == DECSTACK[j]->VAL && lit->VAR == DECSTACK[j]->VAR) lastIndex = j; break;
+          }
+        }*/
+  cout<<"lastIndex is: "<<lastIndex<<endl;
+  lastFalse = DECSTACK[lastIndex];
+  resolvent = resolve(clause, new Literal(DECSTACK[lastIndex]->VAR,(DECSTACK[lastIndex]->EQUAL?'!':'='),DECSTACK[lastIndex]->VAL),CLAUSELIST[VARLIST[DECSTACK[lastIndex] ->VAR]-> CLAUSEID[DECSTACK[lastIndex]->VAL]]);
+  // lastFalse->Print();
+  // CLAUSELIST[VARLIST[DECSTACK[lastIndex] ->VAR]-> CLAUSEID[DECSTACK[lastIndex]->VAL]]->Print();
 
-	  for(int i=0; i<csize; i++)
-	    {
-	      if((tlevel != VARLIST[learnedClause->ATOM_LIST[i]->VAR]
-		  ->ATOMLEVEL[learnedClause->ATOM_LIST[i]->VAL]) &&
-		 (CID < VARLIST[learnedClause->ATOM_LIST[i]->VAR]
-		  ->ATOMLEVEL[learnedClause->ATOM_LIST[i]->VAL]))
-		CID = VARLIST[learnedClause->ATOM_LIST[i]->VAR]->ATOMLEVEL[learnedClause->ATOM_LIST[i]->VAL];
-	    }
-	  return CID;
-	}
-      else
-	{
-	  tvar = DECSTACK[index]->VAR;
-	  tequal = DECSTACK[index]->EQUAL;
-	  tval = DECSTACK[index]->VAL;
-    cout<<"Next decstack literal: "<<tvar<<(tequal?"=":"!=")<<tval<<endl;
-	  index--;
-	  CID = VARLIST[tvar]->CLAUSEID[tval];
-    cout<<"CID: "<<CID<<endl;
-    cout<<"Its reason is: "<<endl;
-    if (CID > -1) CLAUSELIST[CID]->Print(); else cout<<-1<<endl;
-	}
-      numLit--;
-      cout<<"Decreasing numLit: "<<numLit<<endl;
-        return 0; */
+  return analyzeConflict(resolvent);
+
     }
 
 
@@ -1008,7 +944,7 @@ int Formula::NonChronoBacktrack(int level)
     { cout << "There is a conflict at level: " << LEVEL << endl;
       if(LEVEL == 0)
 	return 2;
-      LEVEL = analyzeConflict();
+      LEVEL = backtrackLevel(analyzeConflict(CLAUSELIST[CONFLICTINGCLAUSE]));
       cout << "We are backtracking to the level: " << LEVEL << endl;
       BACKTRACKS++;
       CONFLICT = false;
