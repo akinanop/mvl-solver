@@ -1,6 +1,6 @@
 
 **** Finite Domain Sat Solver - Hemal A Lal ****
-/home/LOGIC/nika/netshare/mvl-solver/tests/simple.txt 	0.0121	Checking if there is a unit clause...
+/home/nika/Desktop/mvl-solver/tests/simple.txt 	0.0001	Checking if there is a unit clause...
 Checking satisfiability...
 Checking satisfiability...
 Decision literal: 1=0
@@ -37,18 +37,11 @@ Size of the decision stack: 4
 Conflict : 1
 Checking satisfiability...
 There is a conflict at level: 1
-Conflict at level: 1
-Conflicting clause is: 
-1!=0 2!=1 
-Index: 3
 We are working with the clause: 
 1!=0 2!=1 
-csize: 2
-decsize: 4
 lastIndex is: 3
 Resolvent: 
 1!=0 
-2=11!=0 2!=0 
 Learned a clause: 
 1!=0 
 We are backtracking to the level: 0
@@ -94,7 +87,7 @@ Size of the decision stack: 4
 Conflict : 3
 Checking satisfiability...
 There is a conflict at level: 0
-0.1568	 0.1689	UNSAT
+0.0002	 0.0003	UNSAT
 
 Number of Decisions   : 1
 Number of Units       : 3
