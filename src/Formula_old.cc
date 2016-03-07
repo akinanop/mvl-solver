@@ -433,14 +433,14 @@ void Formula::reduceTheory(int var, bool equals, int val)
     {
       cout<<"Reducing literal: "<<var<<"="<<val<<" at level "<<LEVEL<<endl;
       //first satisfy all clauses with literal, and remove
-      //negate literal from claues
+      //negate literal from clasues
       satisfyClauses(var, equals, val);
       removeLiteral(var, !equals, val);
       VARLIST[var]->ATOMASSIGN[val] = 1;
       VARLIST[var]->ATOMLEVEL[val] = LEVEL;
 
       VARLIST[var]->VAL = val;
-      VARLIST[var]->SAT = true;
+      VARLIST[var]->SAT = true; // means variable is assigned
       VARLIST[var]->LEVEL = LEVEL;
 
       VARLIST[var]->CLAUSEID[val] = UNITCLAUSE;
@@ -524,21 +524,11 @@ void Formula::reduceTheory(int var, bool equals, int val)
     VARLIST[ENTAILLITERAL->VAR]->CLAUSEID[ENTAILLITERAL->VAL] = CLAUSELIST.size()-1;
     cout<<"Setting reason for the entailed literal "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<": "<<endl;
     entailClause -> Print();
+    UNITCLAUSE = CLAUSELIST.size()-1;
     reduceTheory(ENTAILLITERAL->VAR, true, ENTAILLITERAL->VAL);
 
-
     }
-
-/*      if(checkEntail(var))
-	{
-	  ENTAILS++;
-	  cout<<"Entailment .."<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
-    cout<<"Setting reason for the entailed literal "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<": "<<UNITCLAUSE<<endl;
-	  VARLIST[ENTAILLITERAL->VAR]->CLAUSEID[ENTAILLITERAL->VAL] = UNITCLAUSE;
-	  reduceTheory(ENTAILLITERAL->VAR, true, ENTAILLITERAL->VAL);
-	} */
-
-    }
+}
 
 
 }
@@ -554,7 +544,6 @@ inline void Formula::satisfyClauses(int var, bool equals, int val)
     current = VARLIST[var]->ATOMRECPOS[val];
   else
     current = VARLIST[var]->ATOMRECNEG[val];
-
   //for every clause that contains this literal, satisfy it
   //and update the counts of the literals
   while(current)
@@ -831,7 +820,6 @@ Clause * Formula::analyzeConflict(Clause * clause)
   int numLit = 0;
   int tlevel = LEVEL;
   int csize = -1;
-  Literal * lastFalse;
   int lastIndex = DECSTACK.size()-1;
 
   // Resolve CID and latest falsified literal + reason
@@ -853,16 +841,28 @@ Clause * Formula::analyzeConflict(Clause * clause)
           }
         }*/
   cout<<"lastIndex is: "<<lastIndex<<endl;
-  lastFalse = DECSTACK[lastIndex];
-  clause = resolve(clause, new Literal(DECSTACK[lastIndex]->VAR,(DECSTACK[lastIndex]->EQUAL?'!':'='),DECSTACK[lastIndex]->VAL),CLAUSELIST[VARLIST[DECSTACK[lastIndex] ->VAR]-> CLAUSEID[DECSTACK[lastIndex]->VAL]]);
-  // lastFalse->Print();
-  // CLAUSELIST[VARLIST[DECSTACK[lastIndex] ->VAR]-> CLAUSEID[DECSTACK[lastIndex]->VAL]]->Print();
-
+  Literal * lastFalse = maxLit(clause);
+  cout<<"Last falsified literal:"<<endl;
+  lastFalse->Print();
+  cout<<"It's reason: "<<endl;
+  CLAUSELIST[VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]]->Print();
+  clause = resolve(clause,lastFalse,CLAUSELIST[VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]]);
   return analyzeConflict(clause);
 
     }
 
-
+Literal * Formula::maxLit(Clause * clause)
+{ int index = 0;
+  int clindex = 0;
+  int decisions = DECSTACK.size();
+  for(int i=0; i<clause->NumAtom; i++)
+  { Literal * current = clause->ATOM_LIST[i];
+    for(int j=decisions-1; j<decisions && j > -1; j--)
+    { if(current->VAR == DECSTACK[j]->VAR && current->VAL == DECSTACK[j]->VAL && current->EQUAL != DECSTACK[j]->EQUAL && index < j) {index = j; clindex = i;}
+    }
+  }
+  return clause->ATOM_LIST[clindex];
+}
 
 
 
@@ -928,7 +928,7 @@ int Formula::NonChronoBacktrack(int level)
   // return 0 : if theory satisfied
   // return 1 : if time out
   // return 2 : if CONFLICT and later used as unsatisfied
-  checkUnit();
+
   //set LEVEL
   LEVEL = level;
 
@@ -942,17 +942,15 @@ int Formula::NonChronoBacktrack(int level)
     return 1;
 
   // If there is a unit clause, propagate
-  if(!UNITLIST.empty())
+  checkUnit();
+  if(!UNITLIST.empty()){
     unitPropagation();
-
-  //check if theory satisfied or not
-  if(checkSat())
-    return 0;
-
-  //check if time out
-  TIME_E = GetTime();
-  if((TIME_E - TIME_S) > TIMELIMIT)
-    return 1;
+    if(checkSat())
+      return 0;
+    TIME_E = GetTime();
+    if((TIME_E - TIME_S) > TIMELIMIT)
+        return 1;
+}
 
   //check if conflict
   if(CONFLICT)

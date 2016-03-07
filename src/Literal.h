@@ -35,35 +35,30 @@ public:
   //VAR = variable name
   //VAL = value assigned to variable
   //EQUAL = is the atom = (true) or ! (false)
-
+ // INDEX = point (# of previous decisions) when literal was falsified
   int VAR;
   int VAL;
   bool EQUAL;
-
+  int INDEX;
   //Zero argument constructor
-  Literal() { VAR = -1; VAL = -1; EQUAL = true;}
+  Literal() { VAR = -1; VAL = -1; EQUAL = true; INDEX = -1;}
   //Two argument constructor
-  Literal(int vr, int vl) { VAR = vr; VAL = vl; EQUAL = true; }
+  Literal(int vr, int vl) { VAR = vr; VAL = vl; EQUAL = true; INDEX = -1;}
   //Three argument constructor
   Literal(int vr, char ch, int vl)
-  {
+  { INDEX = -1;
     VAR = vr; VAL = vl;
     if(ch == '=') EQUAL = true;
     else EQUAL = false;
   }
-
-//  Literal(int vr, int vl, int REASON){
-
-//  VAR = vr; VAL = vl; EQUAL = true; REASON = REASON;
-
-//  }
 
   //Print : function to print the atom
   void Print()
   {
     cout<<VAR;
     if(EQUAL) cout<<"="; else cout<<"!=";
-    cout<<VAL;
+    cout<<VAL<<endl;
+    cout<<INDEX;
   }
 
 };

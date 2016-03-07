@@ -1,8 +1,9 @@
 
 **** Finite Domain Sat Solver - Hemal A Lal ****
-/home/nika/Desktop/mvl-solver/tests/simple.txt 	0.0001	Checking if there is a unit clause...
-Checking satisfiability...
-Checking satisfiability...
+/home/LOGIC/nika/netshare/mvl-solver/tests/simple.txt 	0.0051	Checking satisfiability...
+Unsatisfied clause # 0
+1!=0 2!=0 
+Checking if there is a unit clause...
 Decision literal: 1=0
 Setting the reason for the decision literal 1=0
 1=0 1!=0 
@@ -15,10 +16,12 @@ Set the reason for the literal 1!1
 1=0 1!=0 
 Adding literal to the decision stack: 1!1
 Size of the decision stack: 2
+Checking satisfiability...
+Unsatisfied clause # 0
+1!=0 2!=0 
 Checking if there is a unit clause...
 Found a unit clause: 0
 Found a unit clause: 1
-Checking satisfiability...
 Unit propagation... 
 Unit literal: 2!=0
 Set the reason for this literal: 
@@ -31,15 +34,28 @@ Setting reason for the entailed literal 2=1:
 2=0 2=1 
 Reducing literal: 2=1 at level 1
 The reason for the literal: 
-1!=0 2!=0 
+2=0 2=1 
 Adding literal to the decision stack: 2=1
 Size of the decision stack: 4
 Conflict : 1
 Checking satisfiability...
+Unsatisfied clause # 1
+1!=0 2!=1 
 There is a conflict at level: 1
 We are working with the clause: 
 1!=0 2!=1 
 lastIndex is: 3
+Last falsified literal:
+2!=1It's reason: 
+2=0 2=1 
+Resolvent: 
+1!=0 2=0 
+We are working with the clause: 
+1!=0 2=0 
+lastIndex is: 3
+Last falsified literal:
+2=0It's reason: 
+1!=0 2!=0 
 Resolvent: 
 1!=0 
 Learned a clause: 
@@ -51,9 +67,11 @@ add .. 2=0
 add .. 2!1
 Checking if there is a unit clause...
 Found a unit clause: 6
+Checking satisfiability...
+Unsatisfied clause # 0
+1!=0 2!=0 
 Checking if there is a unit clause...
 Found a unit clause: 6
-Checking satisfiability...
 Unit propagation... 
 Unit literal: 1!=0
 Set the reason for this literal: 
@@ -66,7 +84,7 @@ Setting reason for the entailed literal 1=1:
 1=0 1=1 
 Reducing literal: 1=1 at level 0
 The reason for the literal: 
-1!=0 
+1=0 1=1 
 Adding literal to the decision stack: 1=1
 Size of the decision stack: 2
 Unit propagation... 
@@ -81,13 +99,15 @@ Setting reason for the entailed literal 2=0:
 2=0 2=1 
 Reducing literal: 2=0 at level 0
 The reason for the literal: 
-1!=1 2!=1 
+2=0 2=1 
 Adding literal to the decision stack: 2=0
 Size of the decision stack: 4
 Conflict : 3
 Checking satisfiability...
+Unsatisfied clause # 3
+1!=1 2!=0 
 There is a conflict at level: 0
-0.0002	 0.0003	UNSAT
+0.2083	 0.2134	UNSAT
 
 Number of Decisions   : 1
 Number of Units       : 3

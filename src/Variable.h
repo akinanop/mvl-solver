@@ -65,6 +65,7 @@ public:
   //FLAG = array storing true if the literal is involved in conflict
   //CLAUSEID = array storing the clause id which cause this literal to be
   //           implied
+
   int VAR;
   int VAL;
   int DOMAINSIZE;
@@ -78,7 +79,6 @@ public:
   int * CLAUSEID;
   VARRECORD ** ATOMRECPOS;
   VARRECORD ** ATOMRECNEG;
-
   //public variables and functions
 public:
   //Zero argument constructor
