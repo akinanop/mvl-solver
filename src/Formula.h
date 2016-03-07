@@ -72,7 +72,7 @@ public:
   bool CONFLICT;
   int CONFLICTINGCLAUSE;
   vector <Literal *> DECSTACK;
-
+  Clause * REASON;
   //public variables and functions
   //Zero argument constructor
   Formula();
@@ -131,10 +131,12 @@ public:
   Literal * maxLit(Clause * clause);
   //unitPropagation : does BCP in Finite Domain, returns true if no conflict
   //else returns false
-  bool unitPropagation();
+  //bool unitPropagation();
+// find unit literal in the unit clause
+  Literal * unitLiteral(Clause * clause);
   //NonChronoBacktrack : Extended DPLL algorithm with clause learning and
   //non chronological backtracking, returns backtrack level
-  int NonChronoBacktrack(int level);
+  int NonChronoBacktrack();
 
   int NonChronoBacktrackLoop(int level);
   //ChronoBacktrack : Extended DPLL algorithm without any learning

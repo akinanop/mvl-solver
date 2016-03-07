@@ -1,6 +1,6 @@
 
 **** Finite Domain Sat Solver - Hemal A Lal ****
-/home/LOGIC/nika/netshare/mvl-solver/tests/UNSAT/pgn3 	0.0108	Checking satisfiability...
+/home/LOGIC/nika/netshare/mvl-solver/tests/UNSAT/pgn3 	0.0101	Checking satisfiability...
 Unsatisfied clause # 0
 2!=0 1!=0 
 Checking if there is a unit clause...
@@ -31,6 +31,7 @@ Adding literal to the decision stack: 2!0
 Checking entailment...
 Entailment... 2=1
 Setting reason for the entailed literal 2=1: 
+2=0 2=1 
 Reducing literal: 2=1 at level 1
 The reason for the literal: 
 2=0 2=1 
@@ -45,6 +46,7 @@ Adding literal to the decision stack: 3!1
 Checking entailment...
 Entailment... 3=0
 Setting reason for the entailed literal 3=0: 
+3=0 3=1 
 Reducing literal: 3=0 at level 1
 The reason for the literal: 
 3=0 3=1 
@@ -86,6 +88,7 @@ Resolvent:
 Learned a clause: 
 1!=0 
 We are backtracking to the level: 0
+# of backtracks so far: 1
 add .. 1!0
 add .. 1=1
 add .. 2=0
@@ -108,6 +111,7 @@ Adding literal to the decision stack: 1!0
 Checking entailment...
 Entailment... 1=1
 Setting reason for the entailed literal 1=1: 
+1=0 1=1 
 Reducing literal: 1=1 at level 0
 The reason for the literal: 
 1=0 1=1 
@@ -122,6 +126,7 @@ Adding literal to the decision stack: 2!1
 Checking entailment...
 Entailment... 2=0
 Setting reason for the entailed literal 2=0: 
+2=0 2=1 
 Reducing literal: 2=0 at level 0
 The reason for the literal: 
 2=0 2=1 
@@ -136,6 +141,7 @@ Adding literal to the decision stack: 3!0
 Checking entailment...
 Entailment... 3=1
 Setting reason for the entailed literal 3=1: 
+3=0 3=1 
 Reducing literal: 3=1 at level 0
 The reason for the literal: 
 3=0 3=1 
@@ -146,7 +152,7 @@ Checking satisfiability...
 Unsatisfied clause # 4
 3!=1 1!=1 
 There is a conflict at level: 0
-0.2241	 0.2348	UNSAT
+0.2078	 0.2179	UNSAT
 
 Number of Decisions   : 1
 Number of Units       : 5
