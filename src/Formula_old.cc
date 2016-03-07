@@ -508,7 +508,7 @@ void Formula::reduceTheory(int var, bool equals, int val)
     {
     ENTAILS++;
     cout<<"Entailment... "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
-    Clause * entailClause = new Clause();
+/*    Clause * entailClause = new Clause();
     entailClause -> LEVEL = LEVEL;
     for (int i=0; i < VARLIST[ENTAILLITERAL->VAR]->DOMAINSIZE; i++){
       entailClause -> AddAtom(new Literal(ENTAILLITERAL->VAR,'=',i));
@@ -521,10 +521,11 @@ void Formula::reduceTheory(int var, bool equals, int val)
                  entailClause->ATOM_LIST[i]->VAL,
                  entailClause->ATOM_LIST[i]->EQUAL); } */
 
-    VARLIST[ENTAILLITERAL->VAR]->CLAUSEID[ENTAILLITERAL->VAL] = CLAUSELIST.size()-1;
+    VARLIST[ENTAILLITERAL->VAR]->CLAUSEID[ENTAILLITERAL->VAL] = UNITCLAUSE; //CLAUSELIST.size()-1;
     cout<<"Setting reason for the entailed literal "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<": "<<endl;
-    entailClause -> Print();
-    UNITCLAUSE = CLAUSELIST.size()-1;
+  //  entailClause -> Print();
+  // CLAUSELIST[UNITCLAUSE]->Print();
+  //  UNITCLAUSE = CLAUSELIST.size()-1;
     reduceTheory(ENTAILLITERAL->VAR, true, ENTAILLITERAL->VAL);
 
     }
@@ -753,6 +754,8 @@ Clause * Formula::resolve(Clause * clause, Literal * literal, Clause * reason)
     if (reason->ATOM_LIST[i]->VAR != literal->VAR && !HasAtom(resolvent,reason->ATOM_LIST[i])) resolvent->AddAtom(reason->ATOM_LIST[i]);
 
     else if (reason->ATOM_LIST[i]->VAL != literal->VAL && reason->ATOM_LIST[i]->EQUAL != literal->EQUAL && !HasAtom(resolvent,reason->ATOM_LIST[i])) resolvent->AddAtom(reason->ATOM_LIST[i]);
+
+    else if (reason->ATOM_LIST[i]->VAL != literal->VAL && reason->ATOM_LIST[i]->EQUAL == literal->EQUAL && reason->ATOM_LIST[i]->EQUAL ==  false && !HasAtom(resolvent,reason->ATOM_LIST[i])) resolvent->AddAtom(reason->ATOM_LIST[i]);
   }
  cout<<"Resolvent: "<<endl;
  resolvent->Print();
@@ -778,22 +781,24 @@ bool Formula::Potent(Clause * clause)
 }
 
 int Formula::backtrackLevel(Clause * learnedClause)
-{ int tlevel = LEVEL;
+{ int max = -1;
   int csize = learnedClause->NumAtom;
-  int CID = 0;
+
+
   //if learned clause has only one literal then backtrack to level 0
-  if(csize == 1)
-  return 0;
+//  if(csize == 1)
+  //return 0;
 
   for(int i=0; i<csize; i++)
   {
-  if((tlevel!= VARLIST[learnedClause->ATOM_LIST[i]->VAR]
+  if((LEVEL > VARLIST[learnedClause->ATOM_LIST[i]->VAR]
   ->ATOMLEVEL[learnedClause->ATOM_LIST[i]->VAL]) &&
-  (CID < VARLIST[learnedClause->ATOM_LIST[i]->VAR]
+  (max < VARLIST[learnedClause->ATOM_LIST[i]->VAR]
   ->ATOMLEVEL[learnedClause->ATOM_LIST[i]->VAL]))
-  CID = VARLIST[learnedClause->ATOM_LIST[i]->VAR]->ATOMLEVEL[learnedClause->ATOM_LIST[i]->VAL];
+  max = VARLIST[learnedClause->ATOM_LIST[i]->VAR]->ATOMLEVEL[learnedClause->ATOM_LIST[i]->VAL];
   }
-  return CID;
+  if(max != -1) return max;
+  else return LEVEL-1;
 }
 
 Clause * Formula::analyzeConflict(Clause * clause)
@@ -811,44 +816,19 @@ Clause * Formula::analyzeConflict(Clause * clause)
                  clause->ATOM_LIST[i]->EQUAL);
     return clause;
 }
-//  Clause * resolvent = new Clause();
-  //resolvent -> LEVEL = LEVEL;
-//  cout<<"Conflict at level: "<<LEVEL<<endl;
-  //learnedClause
-//  cout<<"Conflicting clause is: "<<endl;
-//  clause->Print();
-  int numLit = 0;
-  int tlevel = LEVEL;
-  int csize = -1;
-  int lastIndex = DECSTACK.size()-1;
 
-  // Resolve CID and latest falsified literal + reason
+  // Resolve clause and reason of its latest falsified literal
 
  cout<<"We are working with the clause: "<<endl;
  clause->Print();
-
- //Find latest falsified literal
-  csize = clause->NumAtom;
-//  cout<<"csize: "<<csize<<endl;
-//  cout<<"decsize: "<<DECSTACK.size()<<endl;
-  /*    for (int j=DECSTACK.size()-1; j>-1; j--)
-      { cout<<"j: "<<j<<endl;
-        for(int i=0; i<csize; i++)
-          { cout<<"i: "<<i<<endl;
-            Literal * lit = clause->ATOM_LIST[i];
-            lit -> Print();
-            if(lit->VAL == DECSTACK[j]->VAL && lit->VAR == DECSTACK[j]->VAR) lastIndex = j; break;
-          }
-        }*/
-  cout<<"lastIndex is: "<<lastIndex<<endl;
-  Literal * lastFalse = maxLit(clause);
+  int csize = clause->NumAtom;
+  Literal * lastFalse = maxLit(clause); //Find latest falsified literal
   cout<<"Last falsified literal:"<<endl;
   lastFalse->Print();
   cout<<"It's reason: "<<endl;
   CLAUSELIST[VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]]->Print();
   clause = resolve(clause,lastFalse,CLAUSELIST[VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]]);
   return analyzeConflict(clause);
-
     }
 
 Literal * Formula::maxLit(Clause * clause)
@@ -960,6 +940,7 @@ int Formula::NonChronoBacktrack(int level)
       LEVEL = backtrackLevel(analyzeConflict(CLAUSELIST[CONFLICTINGCLAUSE]));
       cout << "We are backtracking to the level: " << LEVEL << endl;
       BACKTRACKS++;
+      cout << "# of backtracks so far: "<<BACKTRACKS<<endl;
       CONFLICT = false;
       undoTheory(LEVEL);
       checkUnit();
