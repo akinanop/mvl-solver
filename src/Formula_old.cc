@@ -428,7 +428,6 @@ Literal * Formula::chooseLiteral()
     chooseClause -> Print();
     return new Literal(tvar, tval); } else return NULL;
 }
-
 //reduceTheory
 void Formula::reduceTheory(int var, bool equals, int val)
 {
@@ -885,7 +884,7 @@ int Formula::NonChronoBacktrack()
 while(true){
   //Check if theory satisfied
   if(checkSat())
-    return 0;
+    return 0; // add PrintModel(); - from DECSTACK
   //Check if time out
   TIME_E = GetTime();
   if((TIME_E - TIME_S) > TIMELIMIT)
@@ -895,8 +894,8 @@ while(true){
     { cout << "There is a conflict at level: " << LEVEL << endl;
       if(LEVEL == 0)
 	return 2;
-
-      LEVEL = backtrackLevel(analyzeConflict(CLAUSELIST[CONFLICTINGCLAUSE]));
+      // otherwise
+      LEVEL = backtrackLevel(analyzeConflict(CLAUSELIST[CONFLICTINGCLAUSE])); // learning a clause here
       cout << "We are backtracking to the level: " << LEVEL << endl;
       BACKTRACKS++;
       cout << "# of backtracks so far: "<<BACKTRACKS<<endl;
@@ -912,7 +911,7 @@ while(true){
       UNITLIST.pop_front();
       reduceTheory(unit->VAR, unit->EQUAL, unit->VAL);
     }
-    else {
+    else { // otherwise choose a literal and propagate - no need for separate unit propagation
   Literal * atom = chooseLiteral();
   if(atom)
     {
@@ -927,8 +926,6 @@ while(true){
       reduceTheory(atom->VAR, atom->EQUAL, atom->VAL);
     }
   }
-
 }
 }
 //End Formula
-//**********************************************************************//
