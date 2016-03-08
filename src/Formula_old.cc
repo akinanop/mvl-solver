@@ -320,8 +320,8 @@ void Formula::checkUnit()
       if((CLAUSELIST[i]->NumUnAss == 1) &&
 	 (!CLAUSELIST[i]->SAT)){
 	UNITLIST.push_back(i);
-  cout<<"Found a unit clause: "<<i<<endl;}
-    }
+  cout<<"Found a unit clause: "<<i<<endl;} else if ((CLAUSELIST[i]->NumUnAss == 0) && (!CLAUSELIST[i]->SAT)) CONFLICT = true;
+}
 }
 
 
@@ -866,8 +866,9 @@ for(int i=0; i<unit->NumAtom; i++)
     lit_equal = unit->ATOM_LIST[i]->EQUAL;
     lit_val = unit->ATOM_LIST[i]->VAL;
 
-    if (VARLIST[lit_var]->ATOMASSIGN[lit_val] == 0) { return new Literal(lit_var,lit_equal,lit_val);
-    cout<<"Unit literal is : "<<lit_var<<(lit_equal?"=":"!=")<<lit_val<<endl;
+    if (VARLIST[lit_var]->ATOMASSIGN[lit_val] == 0) { cout<<"Unit literal is : "<<lit_var<<(lit_equal?"=":"!=")<<lit_val<<endl;
+    return new Literal(lit_var,(lit_equal?'=':'!'),lit_val);
+
   }
 }
 
@@ -906,18 +907,19 @@ while(true){
     // If there is a unit clause, propagate
     checkUnit();
 
-    if(!UNITLIST.empty()){
+    if(!CONFLICT && !UNITLIST.empty()){
       int unit_clause = UNITLIST.front();
       UNITCLAUSE = unit_clause;
       CLAUSELIST[unit_clause]->Print();
       Literal * unit = unitLiteral(CLAUSELIST[unit_clause]);
     //  REASON = CLAUSELIST[UNITCLAUSE];
-  //  cout<<unit->VAL<<endl;
+      cout<<"Unit literal: "<<endl;
+      unit->Print();
       UNITLIST.pop_front();
        reduceTheory(unit->VAR, unit->EQUAL, unit->VAL);
 
     }
-    else { // otherwise choose a literal and propagate - no need for separate unit propagation
+    else if (!CONFLICT){ // otherwise choose a literal and propagate - no need for separate unit propagation
   Literal * atom = chooseLiteral();
   if(atom)
     {

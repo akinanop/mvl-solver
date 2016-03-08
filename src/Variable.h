@@ -22,6 +22,8 @@
 #include <fstream>
 #include <string>
 
+#include "Clause.h"
+
 using namespace std;
 //**************************************************************
 // VARRECORD
@@ -65,6 +67,7 @@ public:
   //FLAG = array storing true if the literal is involved in conflict
   //CLAUSEID = array storing the clause id which cause this literal to be
   //           implied
+  // REASONS = array of reasons for literals to be falsified
 
   int VAR;
   int VAL;
@@ -79,6 +82,7 @@ public:
   int * CLAUSEID;
   VARRECORD ** ATOMRECPOS;
   VARRECORD ** ATOMRECNEG;
+  vector<Clause *> REASONS;
   //public variables and functions
 public:
   //Zero argument constructor
