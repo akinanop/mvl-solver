@@ -453,7 +453,7 @@ void Formula::reduceTheory(int var, bool equals, int val)
       // VARLIST[var]->REASONS[val] = REASON;
       VARLIST[var]->CLAUSEID[val] = UNITCLAUSE;
       cout<<"The reason for the literal: "<<endl;
-      if (UNITCLAUSE > -1) CLAUSELIST[UNITCLAUSE]->Print(); else cout<<-1<<endl;
+      if (UNITCLAUSE > -1) CLAUSELIST[UNITCLAUSE]->Print(); else cout<<UNITCLAUSE<<endl;
       //Add literal to DecisionStack
     //  cout<<"Size of the decision stack: "<<DECSTACK.size()<<endl;
 
@@ -867,7 +867,7 @@ Literal * Formula::maxLit(Clause * clause)
   for(int i=0; i<clause->NumAtom; i++)
   { Literal * current = clause->ATOM_LIST[i];
     for(int j=decisions-1; j<decisions && j > -1; j--)
-    { if(current->VAR == DECSTACK[j]->VAR && current->VAL == DECSTACK[j]->VAL && current->EQUAL != DECSTACK[j]->EQUAL && index < j) {index = j; clindex = i;}
+    { if( ( current->VAR == DECSTACK[j]->VAR && current->VAL == DECSTACK[j]->VAL && current->EQUAL != DECSTACK[j]->EQUAL || current->VAR == DECSTACK[j]->VAR && current->VAL != DECSTACK[j]->VAL && current->EQUAL == DECSTACK[j]->EQUAL ) && index < j) {index = j; clindex = i;}
     }
   }
   cout<<"maxLit returns: "<<endl;
@@ -915,7 +915,19 @@ while(true){
   if((TIME_E - TIME_S) > TIMELIMIT)
     return 1;
   //check if conflict
-  CONFLICTINGCLAUSE = checkConflict();
+
+  while(!CONFLICT && !UNITLIST.empty()){
+    int unit_clause = UNITLIST.front();
+    UNITCLAUSE = unit_clause;
+    CLAUSELIST[unit_clause]->Print();
+    Literal * unit = unitLiteral(CLAUSELIST[unit_clause]);
+  //  REASON = CLAUSELIST[UNITCLAUSE];
+    cout<<"Unit literal: "<<endl;
+    unit->Print();
+    UNITLIST.pop_front();
+     reduceTheory(unit->VAR, unit->EQUAL, unit->VAL);
+
+  }
 
   if(CONFLICT)
     { cout << "There is a conflict at level: " << LEVEL << endl;
@@ -931,19 +943,9 @@ while(true){
     }
     // If there is a unit clause, propagate
 
-    if(!CONFLICT && !UNITLIST.empty()){
-      int unit_clause = UNITLIST.front();
-      UNITCLAUSE = unit_clause;
-      CLAUSELIST[unit_clause]->Print();
-      Literal * unit = unitLiteral(CLAUSELIST[unit_clause]);
-    //  REASON = CLAUSELIST[UNITCLAUSE];
-      cout<<"Unit literal: "<<endl;
-      unit->Print();
-      UNITLIST.pop_front();
-       reduceTheory(unit->VAR, unit->EQUAL, unit->VAL);
 
-    }
-    else if (!CONFLICT){ // otherwise choose a literal and propagate - no need for separate unit propagation
+
+    else { // otherwise choose a literal and propagate - no need for separate unit propagation
   Literal * atom = chooseLiteral();
   if(atom)
     {
