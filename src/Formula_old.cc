@@ -50,7 +50,7 @@ Formula::Formula(CommandLine * cline)
   CONFLICTINGCLAUSE = -1;
   DECSTACK.reserve(cline->NUM_VAR+1);
   REASON = NULL;
-
+//  ORIGINALFORMULA = cline->NUM_CLAUSE;
 }
 
 //BuildFunction
@@ -293,7 +293,7 @@ bool Formula::checkSat()
   return true;
 }
 
-//checkConflict
+//checkConflict: returns id of a conflicting clause
 int Formula::checkConflict()
 {
   int size = CLAUSELIST.size();
@@ -302,8 +302,10 @@ int Formula::checkConflict()
       //if clause is not SAT and has 0 unassigned literal
       //return index i
       if((CLAUSELIST[i]->NumUnAss == 0) &&
-	 (!CLAUSELIST[i]->SAT))
-	return i;
+	 (!CLAUSELIST[i]->SAT)){
+     CONFLICT = true;
+    CONFLICTINGCLAUSE = i;
+	return CONFLICTINGCLAUSE; }
     }
   return -1;
 }
@@ -419,10 +421,10 @@ Literal * Formula::chooseLiteral()
     CLAUSELIST.push_back(chooseClause);
     int csize = chooseClause->NumAtom;
     int CID = CLAUSELIST.size()-1;
-  /*  for(int i=0; i<csize; i++){
+    for(int i=0; i<csize; i++){
       VARLIST[chooseClause->ATOM_LIST[i]->VAR]->AddRecord(CID,
                  chooseClause->ATOM_LIST[i]->VAL,
-                 chooseClause->ATOM_LIST[i]->EQUAL); } */
+                 chooseClause->ATOM_LIST[i]->EQUAL); }
     // cout<<"Clause list: "<<CLAUSELIST.size()<<endl;
     VARLIST[tvar] -> CLAUSEID[tval] = CLAUSELIST.size()-1;
     UNITCLAUSE = VARLIST[tvar] -> CLAUSEID[tval];
@@ -707,7 +709,7 @@ inline void Formula::unsatisfyClauses(int var, bool equals, int val, int level)
   current = NULL;
 }
 
-//addLiteral
+//addLiteral : used when undoing the theory
 inline void Formula::addLiteral(int var, bool equals, int val)
 {
   cout<<"add .. "<<var<<(equals?"=":"!")<<val<<endl;
@@ -768,8 +770,7 @@ Clause * Formula::resolve(Clause * clause, Literal * literal, Clause * reason)
 
  return resolvent;
 }
-//anaylzeConflict: TODO FIX the mistake here: THE LEARNED CLAUSES ARE NOT entailed
-// BY THE THEORY
+
 
 bool Formula::Potent(Clause * clause)
 {
@@ -791,8 +792,8 @@ int Formula::backtrackLevel(Clause * learnedClause)
 
 
   //if learned clause has only one literal then backtrack to level 0
-//if(csize == 1)
-//  return 0;
+if(csize == 1)
+  return 0;
 
   for(int i=0; i<csize; i++)
   {
@@ -879,6 +880,7 @@ for(int i=0; i<unit->NumAtom; i++)
 
 int Formula::NonChronoBacktrack()
 { LEVEL = 0;
+  checkUnit();
   //start of finite domain extended dpll
   // return 0 : if theory satisfied
   // return 1 : if time out
@@ -892,6 +894,8 @@ while(true){
   if((TIME_E - TIME_S) > TIMELIMIT)
     return 1;
   //check if conflict
+  CONFLICTINGCLAUSE = checkConflict();
+
   if(CONFLICT)
     { cout << "There is a conflict at level: " << LEVEL << endl;
       if(LEVEL == 0)
@@ -905,7 +909,6 @@ while(true){
       undoTheory(LEVEL);
     }
     // If there is a unit clause, propagate
-    checkUnit();
 
     if(!CONFLICT && !UNITLIST.empty()){
       int unit_clause = UNITLIST.front();

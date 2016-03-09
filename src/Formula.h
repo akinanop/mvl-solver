@@ -73,6 +73,7 @@ public:
   int CONFLICTINGCLAUSE;
   vector <Literal *> DECSTACK;
   Clause * REASON;
+  // int ORIGINALFORMULA;
   //public variables and functions
   //Zero argument constructor
   Formula();
