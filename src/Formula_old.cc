@@ -412,7 +412,8 @@ Literal * Formula::chooseLiteral()
 
  if (tvar != -1){
     cout<<"Decision literal: "<<tvar<<"="<<tval<<endl;
-    Clause * chooseClause = new Clause();
+
+  /*  Clause * chooseClause = new Clause();
     chooseClause->NumUnAss = 0;
     chooseClause->SAT;
     chooseClause -> LEVEL = LEVEL;
@@ -429,7 +430,8 @@ Literal * Formula::chooseLiteral()
     VARLIST[tvar] -> CLAUSEID[tval] = CLAUSELIST.size()-1;
     UNITCLAUSE = VARLIST[tvar] -> CLAUSEID[tval];
     cout<<"Setting the reason for the decision literal "<<tvar<<"="<<tval<<endl;
-    chooseClause -> Print();
+    chooseClause -> Print(); */
+    UNITCLAUSE = -1;
     return new Literal(tvar, tval); } else return NULL;
 }
 //reduceTheory
@@ -516,7 +518,7 @@ if(checkEntail(var))
 {
 ENTAILS++;
 cout<<"Entailment... "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
-Clause * entailClause = new Clause();
+/* Clause * entailClause = new Clause();
 entailClause -> LEVEL = LEVEL;
 for (int i=0; i < VARLIST[ENTAILLITERAL->VAR]->DOMAINSIZE; i++){
 entailClause -> AddAtom(new Literal(ENTAILLITERAL->VAR,'=',i));
@@ -530,12 +532,11 @@ VARLIST[entailClause->ATOM_LIST[i]->VAR]->AddRecord(CID,
            entailClause->ATOM_LIST[i]->VAL,
            entailClause->ATOM_LIST[i]->EQUAL); } */
 
-VARLIST[ENTAILLITERAL->VAR]->CLAUSEID[ENTAILLITERAL->VAL] = CLAUSELIST.size()-1;
-cout<<"Setting reason for the entailed literal "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<": "<<endl;
-entailClause -> Print();
-// REASON = entailClause;
+VARLIST[ENTAILLITERAL->VAR]->CLAUSEID[ENTAILLITERAL->VAL] = -2;
+//cout<<"Setting reason for the entailed literal "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<": "<<endl;
+//// REASON = entailClause;
 // CLAUSELIST[UNITCLAUSE]->Print();
-UNITCLAUSE = CLAUSELIST.size()-1;
+UNITCLAUSE = -2;
 reduceTheory(ENTAILLITERAL->VAR, true, ENTAILLITERAL->VAL);
 
 }
@@ -832,8 +833,28 @@ Clause * Formula::analyzeConflict(Clause * clause)
   cout<<"Last falsified literal:"<<endl;
   lastFalse->Print();
   cout<<"It's reason: "<<endl;
-  CLAUSELIST[VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]]->Print();
-  clause = resolve(clause,lastFalse,CLAUSELIST[VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]]);
+  cout<<VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]<<endl;
+
+  // dealing with decision and entail reasons:
+  if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] == -1){
+     Clause * chooseClause = new Clause();
+      // chooseClause->NumUnAss = 0;
+      // chooseClause->SAT;
+      // chooseClause -> LEVEL = LEVEL;
+      chooseClause -> AddAtom(new Literal(lastFalse->VAR,'=',lastFalse->VAL));
+      chooseClause -> AddAtom(new Literal(lastFalse->VAR,'!',lastFalse->VAL));
+      clause = resolve(clause,lastFalse,chooseClause);
+  }
+  else if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] == -2){
+    Clause * entailClause = new Clause();
+    //entailClause -> LEVEL = LEVEL;
+    for (int i=0; i < VARLIST[lastFalse->VAR]->DOMAINSIZE; i++){
+    entailClause -> AddAtom(new Literal(lastFalse->VAR,'=',i));
+    }
+    entailClause->Print();
+    clause = resolve(clause,lastFalse,entailClause);
+  } else clause = resolve(clause,lastFalse,CLAUSELIST[VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]]);
+
   return analyzeConflict(clause);
     }
 
@@ -928,14 +949,15 @@ while(true){
     {
       DECISIONS++;
       LEVEL++;
-      Clause * chooseClause = new Clause();
+    /*  Clause * chooseClause = new Clause();
       chooseClause -> LEVEL = LEVEL;
       chooseClause -> SAT;
       chooseClause -> AddAtom(new Literal(atom->VAR,'=',atom->VAL));
       chooseClause -> AddAtom(new Literal(atom->VAR,'!',atom->VAL));
     //  REASON = chooseClause;
       CLAUSELIST.push_back(chooseClause); //decision...
-      UNITCLAUSE = CLAUSELIST.size()-1;
+      UNITCLAUSE = CLAUSELIST.size()-1; */
+      UNITCLAUSE = -1;
       reduceTheory(atom->VAR, atom->EQUAL, atom->VAL);
     }
   }
