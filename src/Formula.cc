@@ -439,7 +439,7 @@ void Formula::reduceTheory(int var, bool equals, int val)
 
   if(equals)
     {
-  //  cout<<"Reducing literal: "<<var<<"="<<val<<" at level "<<LEVEL<<endl;
+    cout<<"Reducing literal: "<<var<<"="<<val<<" at level "<<LEVEL<<endl;
       //first satisfy all clauses with literal, and remove
       //negate literal from clasues
       satisfyClauses(var, equals, val);
@@ -507,7 +507,7 @@ void Formula::reduceTheory(int var, bool equals, int val)
     }
   else
     {
-//      cout<<"Reducing: "<<var<<"!"<<val<<" at level "<<LEVEL<<endl;
+   cout<<"Reducing: "<<var<<"!"<<val<<" at level "<<LEVEL<<endl;
       //first satisfy all clauses with negate literal, and remove
       //literal from claues
       satisfyClauses(var, equals, val);
@@ -796,7 +796,8 @@ bool Formula::Potent(Clause * clause)
 }
 
 int Formula::backtrackLevel(Clause * learnedClause)
-{ int max = -1;
+{
+  int max = -1;
   int csize = learnedClause->NumAtom;
 
 
@@ -838,14 +839,16 @@ Clause * Formula::analyzeConflict(Clause * clause)
 // cout<<"We are working with the clause: "<<endl;
 // clause->Print();
   int csize = clause->NumAtom;
+  //cout<<csize<<endl;
   Literal * lastFalse = maxLit(clause); //Find latest falsified literal
-//  cout<<"Last falsified literal:"<<endl;
+// cout<<"Last falsified literal:"<<endl;
 //  lastFalse->Print();
 //  cout<<"It's reason: "<<endl;
 //  cout<<VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]<<endl;
 
   // dealing with decision and entail reasons:
   if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] == -1){
+
      Clause * chooseClause = new Clause();
       // chooseClause->NumUnAss = 0;
       // chooseClause->SAT;
@@ -860,10 +863,10 @@ Clause * Formula::analyzeConflict(Clause * clause)
     for (int i=0; i < VARLIST[lastFalse->VAR]->DOMAINSIZE; i++){
     entailClause -> AddAtom(new Literal(lastFalse->VAR,'=',i));
     }
-  //  entailClause->Print();
+
     clause = resolve(clause,lastFalse,entailClause);
   } else clause = resolve(clause,lastFalse,CLAUSELIST[VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]]);
-
+   clause->Print();
   return analyzeConflict(clause);
     }
 
@@ -932,6 +935,7 @@ int Formula::NonChronoBacktrack()
   // return 2 : if CONFLICT and later used as unsatisfied
 while(true){
   //Check if theory satisfied
+
   if(checkSat())
     return 0; // add PrintModel(); - from DECSTACK
   //Check if time out
@@ -939,6 +943,7 @@ while(true){
  if((TIME_E - TIME_S) > TIMELIMIT)
    return 1;
   //check if conflict
+
 for(int var=0; var<VARLIST.size();var++){ // not necessary here
   if(!CONFLICT && checkEntail(var))
   {
@@ -986,7 +991,8 @@ for(int var=0; var<VARLIST.size();var++){ // not necessary here
     { //cout << "There is a conflict at level: " << LEVEL << endl;
     //  cout<<"Conflicting clause: "<<  endl;
     //  CLAUSELIST[CONFLICTINGCLAUSE] -> Print();
-
+    cout<<CONFLICTINGCLAUSE<<endl;
+    CLAUSELIST[CONFLICTINGCLAUSE]->Print();
       if(LEVEL == 0)
 	return 2;
       // otherwise
