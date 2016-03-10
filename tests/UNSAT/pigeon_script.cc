@@ -9,7 +9,7 @@ using namespace std;
 
 int main(){
 
-  for(int pgn=6; pgn < 7; pgn++){
+  for(int pgn=5; pgn < 10; pgn++){
 
     int hole = pgn-1;
     ofstream file;
