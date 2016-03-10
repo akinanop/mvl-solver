@@ -1,9 +1,9 @@
 # Linking object files to create executable
-Solver: Main.o Global.o GenBenFunc.o Boolean2Finite.o LinearEncode.o QuadraticEncode.o Clause.o Variable.o Formula_old.o SolveFinite.o
-	g++ -o Solver Main.o Global.o GenBenFunc.o Boolean2Finite.o LinearEncode.o QuadraticEncode.o Clause.o Variable.o Formula_old.o SolveFinite.o
+Solver: Main.o Global.o GenBenFunc.o Boolean2Finite.o LinearEncode.o QuadraticEncode.o Clause.o Variable.o Formula.o SolveFinite.o
+	g++ -o Solver Main.o Global.o GenBenFunc.o Boolean2Finite.o LinearEncode.o QuadraticEncode.o Clause.o Variable.o Formula.o SolveFinite.o
 
 # Compile source code
-Main.o: ~/netshare/mvl-solver/src/Main.cc ~/netshare/mvl-solver/src/Global.h ~/netshare/mvl-solver/src/Formula_old.h
+Main.o: ~/netshare/mvl-solver/src/Main.cc ~/netshare/mvl-solver/src/Global.h ~/netshare/mvl-solver/src/Formula.h
 	g++ -pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow   -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wswitch-default -Wundef -Werror -Wno-unused -g -c ~/netshare/mvl-solver/src/Main.cc
 
 Global.o: ~/netshare/mvl-solver/src/Global.cc ~/netshare/mvl-solver/src/Global.h
@@ -27,10 +27,10 @@ Clause.o: ~/netshare/mvl-solver/src/Clause.cc ~/netshare/mvl-solver/src/Clause.h
 Variable.o: ~/netshare/mvl-solver/src/Variable.cc ~/netshare/mvl-solver/src/Variable.h
 	g++ -g -c ~/netshare/mvl-solver/src/Variable.cc
 
-Formula_old.o:  ~/netshare/mvl-solver/src/Formula_old.cc ~/netshare/mvl-solver/src/Formula_old.h
-	g++ -pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow   -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -g -c ~/netshare/mvl-solver/src/Formula_old.cc
+Formula.o:  ~/netshare/mvl-solver/src/Formula.cc ~/netshare/mvl-solver/src/Formula.h
+	g++ -pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow   -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wswitch-default -Wundef -Wno-unused -g -c ~/netshare/mvl-solver/src/Formula.cc
 
-SolveFinite.o: ~/netshare/mvl-solver/src/SolveFinite.cc ~/netshare/mvl-solver/src/Formula_old.h
+SolveFinite.o: ~/netshare/mvl-solver/src/SolveFinite.cc ~/netshare/mvl-solver/src/Formula.h
 	g++ -g -c ~/netshare/mvl-solver/src/SolveFinite.cc
 
 # Cleaning object files, exe, and temp files

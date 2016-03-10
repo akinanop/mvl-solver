@@ -439,7 +439,7 @@ void Formula::reduceTheory(int var, bool equals, int val)
 
   if(equals)
     {
-    //  cout<<"Reducing literal: "<<var<<"="<<val<<" at level "<<LEVEL<<endl;
+  //  cout<<"Reducing literal: "<<var<<"="<<val<<" at level "<<LEVEL<<endl;
       //first satisfy all clauses with literal, and remove
       //negate literal from clasues
       satisfyClauses(var, equals, val);
@@ -455,15 +455,19 @@ void Formula::reduceTheory(int var, bool equals, int val)
   //    cout<<"The reason for the literal: "<<endl;
     //  if (UNITCLAUSE > -1) CLAUSELIST[UNITCLAUSE]->Print(); else cout<<UNITCLAUSE<<endl;
       //Add literal to DecisionStack
-    //  cout<<"Size of the decision stack: "<<DECSTACK.size()<<endl;
+    // cout<<"Size of the decision stack: "<<DECSTACK.size()<<endl;
 
       DECSTACK.push_back(new Literal(var, '=', val));
+    //  cout<<"Size of the decision stack: "<<DECSTACK.size()<<endl;
+
     //  cout<<"Adding literal to the decision stack: "<<var<<"="<<val<<endl;
   //    cout<<"Size of the decision stack: "<<DECSTACK.size()<<endl;
       //foreach domain value x from dom(v) which is not assigned
       //assign it
+
       for(int i=0; i<val && !CONFLICT; i++)
 	{
+
 	  if(VARLIST[var]->ATOMASSIGN[i] == 0)
 	    {
 	      satisfyClauses(var, !equals, i);
@@ -473,7 +477,10 @@ void Formula::reduceTheory(int var, bool equals, int val)
 	      VARLIST[var]->CLAUSEID[i] = UNITCLAUSE;
   //      cout<<"Set the reason for the literal "<<var<<(!equals?"=":"!")<<i<<endl;
     //    if (UNITCLAUSE > -1) CLAUSELIST[UNITCLAUSE]->Print(); else cout<<-1<<endl;
+  //  cout<<"Size of the decision stack: "<<DECSTACK.size()<<endl;
+
       DECSTACK.push_back(new Literal(var, '!', i));
+
   //  cout<<"Adding literal to the decision stack: "<<var<<"!"<<i<<endl;
   //  cout<<"Size of the decision stack: "<<DECSTACK.size()<<endl;
 	    }
@@ -814,7 +821,7 @@ Clause * Formula::analyzeConflict(Clause * clause)
   if (Potent(clause) || clause->NumAtom == 1) {
   //   clause->NumUnAss = 1;
     cout<<"Learned a clause: "<<endl;
-    clause->Print();
+  //  clause->Print();
     CLAUSELIST.push_back(clause);
     int csize = clause->NumAtom;
     int CID = CLAUSELIST.size()-1;
@@ -928,11 +935,11 @@ while(true){
   if(checkSat())
     return 0; // add PrintModel(); - from DECSTACK
   //Check if time out
-  TIME_E = GetTime();
-  if((TIME_E - TIME_S) > TIMELIMIT)
-    return 1;
+ TIME_E = GetTime();
+ if((TIME_E - TIME_S) > TIMELIMIT)
+   return 1;
   //check if conflict
-for(int var=0; var<VARLIST.size();var++){
+for(int var=0; var<VARLIST.size();var++){ // not necessary here
   if(!CONFLICT && checkEntail(var))
   {
   ENTAILS++;
@@ -989,6 +996,7 @@ for(int var=0; var<VARLIST.size();var++){
       cout << "# of backtracks so far: "<<BACKTRACKS<<endl;
       CONFLICT = false;
       undoTheory(LEVEL);
+
       //checkUnit();
 
     }
