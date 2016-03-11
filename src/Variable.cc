@@ -53,7 +53,7 @@ Variable::Variable(int var, int domain)
       ATOMCNTPOS[i] = 0;
       ATOMCNTNEG[i] = 0;
       FLAG[i] = false;
-      CLAUSEID[i] = -1;
+      CLAUSEID[i] = -10;
       ATOMRECPOS[i] = NULL;
       ATOMRECNEG[i] = NULL;
     }

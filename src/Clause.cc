@@ -53,7 +53,7 @@ void Clause::Print()
   for(int i=0; i<NumAtom; i++)
     {
       ATOM_LIST[i]->Print();
-      cout<<" ";
+      // cout<<" ";
     }
   cout<<endl;
 }

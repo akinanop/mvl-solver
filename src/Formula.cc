@@ -451,7 +451,7 @@ void Formula::reduceTheory(int var, bool equals, int val)
       VARLIST[var]->SAT = true; // means variable is assigned
       VARLIST[var]->LEVEL = LEVEL;
       // VARLIST[var]->REASONS[val] = REASON;
-      VARLIST[var]->CLAUSEID[val] = UNITCLAUSE;
+    if(VARLIST[var]->CLAUSEID[val] == -10) VARLIST[var]->CLAUSEID[val] = UNITCLAUSE;
   //    cout<<"The reason for the literal: "<<endl;
     //  if (UNITCLAUSE > -1) CLAUSELIST[UNITCLAUSE]->Print(); else cout<<UNITCLAUSE<<endl;
       //Add literal to DecisionStack
@@ -474,7 +474,7 @@ void Formula::reduceTheory(int var, bool equals, int val)
 	      removeLiteral(var, equals, i);
 	      VARLIST[var]->ATOMASSIGN[i] = -1;
 	      VARLIST[var]->ATOMLEVEL[i] = LEVEL;
-	      VARLIST[var]->CLAUSEID[i] = UNITCLAUSE;
+	     if(VARLIST[var]->CLAUSEID[val] == -10) VARLIST[var]->CLAUSEID[i] = UNITCLAUSE;
   //      cout<<"Set the reason for the literal "<<var<<(!equals?"=":"!")<<i<<endl;
     //    if (UNITCLAUSE > -1) CLAUSELIST[UNITCLAUSE]->Print(); else cout<<-1<<endl;
   //  cout<<"Size of the decision stack: "<<DECSTACK.size()<<endl;
@@ -493,7 +493,7 @@ void Formula::reduceTheory(int var, bool equals, int val)
 	      removeLiteral(var, equals, i);
 	      VARLIST[var]->ATOMASSIGN[i] = -1;
 	      VARLIST[var]->ATOMLEVEL[i] = LEVEL;
-	      VARLIST[var]->CLAUSEID[i] = UNITCLAUSE;
+	      if(VARLIST[var]->CLAUSEID[val] == -10) VARLIST[var]->CLAUSEID[i] = UNITCLAUSE;
   //      cout<<"Set the reason for the literal "<<var<<(!equals?"=":"!")<<i<<endl;
       //  if (UNITCLAUSE > -1) CLAUSELIST[UNITCLAUSE]->Print(); else cout<<-1<<endl;
       DECSTACK.push_back(new Literal(var, '!', i));
@@ -514,7 +514,7 @@ void Formula::reduceTheory(int var, bool equals, int val)
       removeLiteral(var, !equals, val);
       VARLIST[var]->ATOMASSIGN[val] = -1;
       VARLIST[var]->ATOMLEVEL[val] = LEVEL;
-      VARLIST[var]->CLAUSEID[val] = UNITCLAUSE;
+     if(VARLIST[var]->CLAUSEID[val] == -10)  VARLIST[var]->CLAUSEID[val] = UNITCLAUSE;
       //Add literal to DecisionStack
   //    cout<<"Adding literal to the decision stack: "<<var<<"!"<<val<<endl;
       DECSTACK.push_back(new Literal(var, '!', val));
@@ -762,6 +762,7 @@ Clause * Formula::resolve(Clause * clause, Literal * literal, Clause * reason)
   {
     if (clause->ATOM_LIST[i]->VAR != literal->VAR ) resolvent->AddAtom(clause->ATOM_LIST[i]);
     else if (clause->ATOM_LIST[i]->VAL != literal->VAL && clause->ATOM_LIST[i]->EQUAL == literal->EQUAL) resolvent->AddAtom(clause->ATOM_LIST[i]);
+    else if (clause->ATOM_LIST[i]->VAL == literal->VAL && clause->ATOM_LIST[i]->EQUAL != literal->EQUAL) resolvent->AddAtom(clause->ATOM_LIST[i]);
     else if (clause->ATOM_LIST[i]->VAL != literal->VAL && clause->ATOM_LIST[i]->EQUAL != literal->EQUAL && !clause->ATOM_LIST[i]->EQUAL) resolvent->AddAtom(clause->ATOM_LIST[i]);
 
   }
@@ -817,12 +818,19 @@ if(csize == 1)
   else return LEVEL-1;
 }
 
+Literal * Formula::whyFalse(Literal * atom){
+  for(int i=0; i<DECSTACK.size();i++){
+    if(atom->VAR == DECSTACK[i]->VAR && atom->VAL == DECSTACK[i]->VAL && atom->EQUAL != DECSTACK[i]->EQUAL ) return DECSTACK[i];
+    else if(atom->VAR == DECSTACK[i]->VAR && atom->VAL != DECSTACK[i]->VAL && atom->EQUAL == DECSTACK[i]->EQUAL && atom->EQUAL) return DECSTACK[i];
+  }
+}
+
 Clause * Formula::analyzeConflict(Clause * clause)
 {
   if (Potent(clause) || clause->NumAtom == 1) {
   //   clause->NumUnAss = 1;
     cout<<"Learned a clause: "<<endl;
-  //  clause->Print();
+   clause->Print();
     CLAUSELIST.push_back(clause);
     int csize = clause->NumAtom;
     int CID = CLAUSELIST.size()-1;
@@ -840,11 +848,16 @@ Clause * Formula::analyzeConflict(Clause * clause)
 // clause->Print();
   int csize = clause->NumAtom;
   //cout<<csize<<endl;
-  Literal * lastFalse = maxLit(clause); //Find latest falsified literal
-// cout<<"Last falsified literal:"<<endl;
-//  lastFalse->Print();
-//  cout<<"It's reason: "<<endl;
-//  cout<<VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]<<endl;
+//  Literal * lastFalse = maxLit(clause); //Find latest falsified literal
+  // Find the reason:
+  Literal * max = maxLit(clause);
+  cout<<"Latest falsified literal: "<<endl;
+  max->Print();
+  Literal * lastFalse = whyFalse(max);
+  cout<<"Earliest contradicting literal: "<<endl;
+  lastFalse->Print();
+  cout<<"It's reason: "<<endl;
+  cout<<VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]<<endl;
 
   // dealing with decision and entail reasons:
   if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] == -1){
@@ -855,7 +868,7 @@ Clause * Formula::analyzeConflict(Clause * clause)
       // chooseClause -> LEVEL = LEVEL;
       chooseClause -> AddAtom(new Literal(lastFalse->VAR,'=',lastFalse->VAL));
       chooseClause -> AddAtom(new Literal(lastFalse->VAR,'!',lastFalse->VAL));
-      clause = resolve(clause,lastFalse,chooseClause);
+      clause = resolve(clause,max,chooseClause);
   }
   else if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] == -2){
     Clause * entailClause = new Clause();
@@ -864,8 +877,8 @@ Clause * Formula::analyzeConflict(Clause * clause)
     entailClause -> AddAtom(new Literal(lastFalse->VAR,'=',i));
     }
 
-    clause = resolve(clause,lastFalse,entailClause);
-  } else clause = resolve(clause,lastFalse,CLAUSELIST[VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]]);
+    clause = resolve(clause,max,entailClause);
+  } else clause = resolve(clause,max,CLAUSELIST[VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]]);
    clause->Print();
   return analyzeConflict(clause);
     }
@@ -988,11 +1001,10 @@ for(int var=0; var<VARLIST.size();var++){ // not necessary here
   }
 
   if(CONFLICT)
-    { //cout << "There is a conflict at level: " << LEVEL << endl;
-    //  cout<<"Conflicting clause: "<<  endl;
-    //  CLAUSELIST[CONFLICTINGCLAUSE] -> Print();
-    cout<<CONFLICTINGCLAUSE<<endl;
-    CLAUSELIST[CONFLICTINGCLAUSE]->Print();
+    { cout << "There is a conflict at level: " << LEVEL << endl;
+     cout<<"Conflicting clause: "<<  endl;
+     CLAUSELIST[CONFLICTINGCLAUSE] -> Print();
+
       if(LEVEL == 0)
 	return 2;
       // otherwise

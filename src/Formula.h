@@ -126,6 +126,8 @@ public:
   Clause * analyzeConflict(Clause * clause);
   bool Potent(Clause * clause);
   int backtrackLevel(Clause * clause);
+  //whyFalse: return the literal inconsistent with the input literal that was added to the interpretation earliest
+  Literal * whyFalse(Literal * literal);
   //resolve: Extended resolution
   Clause * resolve(Clause * clause, Literal * literal, Clause * reason);
   //maxLit: return the literal in C that was falsified last (?)

@@ -56,9 +56,8 @@ public:
   void Print()
   {
     cout<<VAR;
-    if(EQUAL) cout<<"="; else cout<<"!=";
-    cout<<VAL<<endl;
-    cout<<INDEX;
+    if(EQUAL) cout<<"="<<VAL<<endl; else cout<<"!="<<VAL<<endl;
+  //  cout<<INDEX;
   }
 
 };
