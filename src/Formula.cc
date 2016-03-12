@@ -312,23 +312,24 @@ int Formula::checkConflict()
 
 //checkUnit
 void Formula::checkUnit()
-{ // cout<<"Checking if there is a unit clause..."<<endl;
+{ cout<<"Checking if there is a unit clause..."<<endl;
   int size = CLAUSELIST.size();
 //  UNITLIST.clear();
   for(int i=0; i<size; i++)
     {//if clause is not SAT and has 1 unassigned literal
       //add the index i into Unitlist
-      if(((CLAUSELIST[i]->NumUnAss == 1) &&
-	 (!CLAUSELIST[i]->SAT) )|| CLAUSELIST[i] -> NumAtom == 1){
+      if( (CLAUSELIST[i]->NumUnAss == 1 &&
+	 !CLAUSELIST[i]->SAT ) || CLAUSELIST[i] -> NumAtom == 1 ){
+       cout<<"Found a unit clause: "<<i<<endl;
 	UNITLIST.push_back(i);
-  cout<<"Found a unit clause: "<<i<<endl;} else if ((CLAUSELIST[i]->NumUnAss == 0) && (!CLAUSELIST[i]->SAT)) CONFLICT = true;
+} else if ( CLAUSELIST[i]->NumUnAss == 0 && !CLAUSELIST[i]->SAT) CONFLICT = true;
 }
 }
 
 
 //checkEntail
 bool Formula::checkEntail(int var)
-{ // cout<<"Checking entailment..."<<endl;
+{  // cout<<"Checking entailment..."<<endl;
 
 /*  if(ENTAILLITERAL){
     delete ENTAILLITERAL;
@@ -367,6 +368,8 @@ bool Formula::checkEntail(int var)
   if(flag)
     {
       ENTAILLITERAL = new Literal(var, domainvalue);
+      cout<<"Entailment... "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
+
       return true;
     }
   return false;
@@ -525,7 +528,7 @@ void Formula::reduceTheory(int var, bool equals, int val)
 if(checkEntail(var))
 {
 ENTAILS++;
-//cout<<"Entailment... "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
+cout<<"Entailment... "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
 /* Clause * entailClause = new Clause();
 entailClause -> LEVEL = LEVEL;
 for (int i=0; i < VARLIST[ENTAILLITERAL->VAR]->DOMAINSIZE; i++){
@@ -656,7 +659,7 @@ void Formula::undoTheory(int level)
 		unsatisfyClauses(i, true, j, level);
 	      VARLIST[i]->ATOMLEVEL[j] = -1;
 	      VARLIST[i]->ATOMASSIGN[j] = 0;
-	      VARLIST[i]->CLAUSEID[j] = -1;
+	      VARLIST[i]->CLAUSEID[j] = -10;
 	    }
 	}
       if(VARLIST[i]->LEVEL > level)
@@ -773,6 +776,8 @@ Clause * Formula::resolve(Clause * clause, Literal * literal, Clause * reason)
 
     else if (reason->ATOM_LIST[i]->VAL != literal->VAL && reason->ATOM_LIST[i]->EQUAL != literal->EQUAL && !HasAtom(resolvent,reason->ATOM_LIST[i])) resolvent->AddAtom(reason->ATOM_LIST[i]);
 
+    else if (reason->ATOM_LIST[i]->VAL == literal->VAL && reason->ATOM_LIST[i]->EQUAL == literal->EQUAL && !HasAtom(resolvent,reason->ATOM_LIST[i])) resolvent->AddAtom(reason->ATOM_LIST[i]);
+
     else if (reason->ATOM_LIST[i]->VAL != literal->VAL && reason->ATOM_LIST[i]->EQUAL == literal->EQUAL && reason->ATOM_LIST[i]->EQUAL ==  false && !HasAtom(resolvent,reason->ATOM_LIST[i])) resolvent->AddAtom(reason->ATOM_LIST[i]);
   }
  //cout<<"Resolvent: "<<endl;
@@ -787,8 +792,7 @@ bool Formula::Potent(Clause * clause)
   int counter = 0;
   for (int i = 0; i < clause->NumAtom; i++)
   {
-    if (VARLIST[clause->ATOM_LIST[i]->VAR]
-    ->ATOMLEVEL[clause->ATOM_LIST[i]->VAL] == LEVEL) counter++;
+    if (VARLIST[clause->ATOM_LIST[i]->VAR]->LEVEL == LEVEL) counter++;
   }
 
   if(counter != 1) return false;
@@ -858,7 +862,7 @@ Clause * Formula::analyzeConflict(Clause * clause)
   lastFalse->Print();
   cout<<"It's reason: "<<endl;
   cout<<VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]<<endl;
-
+  if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] > -1) CLAUSELIST[VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]] -> Print();
   // dealing with decision and entail reasons:
   if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] == -1){
 
@@ -879,6 +883,7 @@ Clause * Formula::analyzeConflict(Clause * clause)
 
     clause = resolve(clause,max,entailClause);
   } else clause = resolve(clause,max,CLAUSELIST[VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]]);
+   cout<<"Resolvent:"<<endl;
    clause->Print();
   return analyzeConflict(clause);
     }
@@ -897,9 +902,9 @@ Literal * Formula::maxLit(Clause * clause)
     //  DECSTACK[j] -> Print();
 
   /*   if( ( current->VAR == DECSTACK[j]->VAR && current->VAL == DECSTACK[j]->VAL && VARLIST[current->VAR]->ATOMASSIGN[j] != VARLIST[DECSTACK[j]->VAR]->ATOMASSIGN[j]) && index < j) {index = j; clindex = i;} */
-        if(current->VAR == DECSTACK[j]->VAR && current->VAL == DECSTACK[j]->VAL && current->EQUAL != DECSTACK[j]->EQUAL && index < j) {index = j; clindex = i;}
-    //    cout<<"index: "<<index<<endl;
-      //  cout<<"clindex: "<<clindex<<endl;
+        if( ( (current->VAR == DECSTACK[j]->VAR && current->VAL == DECSTACK[j]->VAL && current->EQUAL != DECSTACK[j]->EQUAL) || (current->VAR == DECSTACK[j]->VAR && current->VAL != DECSTACK[j]->VAL && current->EQUAL == DECSTACK[j]->EQUAL)  ) && index <= j) {index = j; clindex = i;}
+    //   cout<<"index: "<<index<<endl;
+    //    cout<<"clindex: "<<clindex<<endl;
     }
   }
   // cout<<"maxLit returns: "<<endl;
@@ -940,15 +945,15 @@ for(int i=0; i<unit->NumAtom; i++)
 //\\====================NON-CHRONOLOGICAL BACKTRACK=============================
 
 int Formula::NonChronoBacktrack()
-{ // LEVEL = 0;
-  checkUnit();
+{
+  // LEVEL = 0;
   //start of finite domain extended dpll
   // return 0 : if theory satisfied
   // return 1 : if time out
   // return 2 : if CONFLICT and later used as unsatisfied
 while(true){
   //Check if theory satisfied
-
+ checkUnit();
   if(checkSat())
     return 0; // add PrintModel(); - from DECSTACK
   //Check if time out
@@ -985,18 +990,20 @@ for(int var=0; var<VARLIST.size();var++){ // not necessary here
 
   }
 }
+// checkUnit();
   while(!CONFLICT && !UNITLIST.empty()){
     int unit_clause = UNITLIST.front();
     UNITCLAUSE = unit_clause;
-  //  cout<<"Unit clause:"<<endl; CLAUSELIST[unit_clause]->Print();
+    cout<<"Unit clause:"<<endl; CLAUSELIST[unit_clause]->Print();
     Literal * unit = unitLiteral(CLAUSELIST[unit_clause]);
   //  REASON = CLAUSELIST[UNITCLAUSE];
-  //  cout<<"Unit literal: "<<endl;
+    cout<<"Unit literal: "<<endl;
     if(unit->VAR == -1 && unit->VAL == -1 && unit->EQUAL == false) cout<<"No units left."<<endl; else
-    { //unit->Print();
+    { unit->Print();
+     UNITLIST.pop_front();
      reduceTheory(unit->VAR, unit->EQUAL, unit->VAL);
-    UNITLIST.pop_front();}
 
+    }
 
   }
 
@@ -1015,7 +1022,7 @@ for(int var=0; var<VARLIST.size();var++){ // not necessary here
       CONFLICT = false;
       undoTheory(LEVEL);
 
-      //checkUnit();
+      checkUnit();
 
     }
     // If there is a unit clause, propagate

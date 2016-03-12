@@ -1,607 +1,417 @@
 
 **** Finite Domain Sat Solver - Hemal A Lal ****
-/home/LOGIC/nika/netshare/mvl-solver/tests/UNSAT/pgn7 	0.0059	Checking satisfiability...
+/home/LOGIC/nika/netshare/mvl-solver/tests/UNSAT/counterexample2.txt 	0.0062	Checking if there is a unit clause...
+Checking satisfiability...
 Unsatisfied clause # 0
+1!=0
 2!=0
--1 1!=0
--1 
+
 Decision literal: 1=0
+Reducing literal: 1=0 at level 1
+Checking if there is a unit clause...
+Found a unit clause: 0
+Found a unit clause: 1
+Found a unit clause: 2
 Checking satisfiability...
 Unsatisfied clause # 0
+1!=0
 2!=0
--1 1!=0
--1 
+
+Unit clause:
+1!=0
+2!=0
+
+Unit literal: 
+2!=0
+Reducing: 2!0 at level 1
+Unit clause:
+1!=0
+3!=0
+
+Unit literal: 
+3!=0
+Reducing: 3!0 at level 1
+Unit clause:
+1!=0
+4!=0
+
+Unit literal: 
+4!=0
+Reducing: 4!0 at level 1
+Unit clause:
+1!=0
+2!=0
+
+Unit literal: 
+No units left.
 Decision literal: 2=1
+Reducing literal: 2=1 at level 2
+Checking if there is a unit clause...
+Found a unit clause: 12
+Found a unit clause: 13
 Checking satisfiability...
-Unsatisfied clause # 23
+Unsatisfied clause # 10
 3!=1
--1 2!=1
--1 
-Decision literal: 3=2
-Checking satisfiability...
-Unsatisfied clause # 47
+4!=1
+
+Unit clause:
+2!=1
+3!=1
+
+Unit literal: 
+3!=1
+Reducing: 3!1 at level 2
+Entailment... 3=2
+Entailment... 3=2
+Reducing literal: 3=2 at level 2
+Unit clause:
+3!=2
 4!=2
--1 3!=2
--1 
-Decision literal: 4=3
-Checking satisfiability...
-Unsatisfied clause # 72
-5!=3
--1 4!=3
--1 
-Decision literal: 5=4
-Checking satisfiability...
-Unsatisfied clause # 98
-6!=4
--1 5!=4
--1 
+
+Unit literal: 
+4!=2
+Reducing: 4!2 at level 2
+Entailment... 4=1
+Entailment... 4=1
+Reducing literal: 4=1 at level 2
+There is a conflict at level: 2
+Conflicting clause: 
+2!=1
+4!=1
+
+Latest falsified literal: 
+4!=1
+Earliest contradicting literal: 
+4=1
+It's reason: 
+-2
+Resolvent:
+2!=1
+4=0
+4=2
+
+Latest falsified literal: 
+4=2
+Earliest contradicting literal: 
+4!=2
+It's reason: 
+19
+3!=2
+4!=2
+
+Resolvent:
+2!=1
+4=0
+3!=2
+
+Latest falsified literal: 
+4=0
+Earliest contradicting literal: 
+4!=0
+It's reason: 
+2
+1!=0
+4!=0
+
+Resolvent:
+2!=1
+3!=2
+1!=0
+
+Latest falsified literal: 
+3!=2
+Earliest contradicting literal: 
+3=2
+It's reason: 
+-2
+Resolvent:
+2!=1
+1!=0
+3=0
+3=1
+
+Latest falsified literal: 
+3=1
+Earliest contradicting literal: 
+3!=1
+It's reason: 
+12
+2!=1
+3!=1
+
+Resolvent:
+2!=1
+1!=0
+3=0
+
+Latest falsified literal: 
+3=0
+Earliest contradicting literal: 
+3!=0
+It's reason: 
+1
+1!=0
+3!=0
+
+Resolvent:
+2!=1
+1!=0
+
 Learned a clause: 
-7=0
--1 7=1
--1 7=2
--1 7=3
--1 5!=4
--1 6=0
--1 6=1
--1 6=2
--1 6=3
--1 
-We are backtracking to the level: 4
+2!=1
+1!=0
+
+We are backtracking to the level: 1
 # of backtracks so far: 1
+Checking if there is a unit clause...
+Checking if there is a unit clause...
 Checking satisfiability...
-Unsatisfied clause # 98
-6!=4
--1 5!=4
--1 
-No units left.
-Decision literal: 6=4
-Checking satisfiability...
-Unsatisfied clause # 104
-7!=4
--1 6!=4
--1 
+Unsatisfied clause # 10
+3!=1
+4!=1
+
+Unit clause:
+2!=1
+1!=0
+
+Unit literal: 
+2!=1
+Reducing: 2!1 at level 1
+Entailment... 2=2
+Entailment... 2=2
+Reducing literal: 2=2 at level 1
+Unit clause:
+2!=2
+3!=2
+
+Unit literal: 
+3!=2
+Reducing: 3!2 at level 1
+Entailment... 3=1
+Entailment... 3=1
+Reducing literal: 3=1 at level 1
+Unit clause:
+3!=1
+4!=1
+
+Unit literal: 
+4!=1
+Reducing: 4!1 at level 1
+Entailment... 4=2
+Entailment... 4=2
+Reducing literal: 4=2 at level 1
+There is a conflict at level: 1
+Conflicting clause: 
+2!=2
+4!=2
+
+Latest falsified literal: 
+4!=2
+Earliest contradicting literal: 
+4=2
+It's reason: 
+-2
+Resolvent:
+2!=2
+4=0
+4=1
+
+Latest falsified literal: 
+4=1
+Earliest contradicting literal: 
+4!=1
+It's reason: 
+10
+3!=1
+4!=1
+
+Resolvent:
+2!=2
+4=0
+3!=1
+
+Latest falsified literal: 
+4=0
+Earliest contradicting literal: 
+4!=0
+It's reason: 
+2
+1!=0
+4!=0
+
+Resolvent:
+2!=2
+3!=1
+1!=0
+
+Latest falsified literal: 
+3!=1
+Earliest contradicting literal: 
+3=1
+It's reason: 
+-2
+Resolvent:
+2!=2
+1!=0
+3=0
+3=2
+
+Latest falsified literal: 
+3=2
+Earliest contradicting literal: 
+3!=2
+It's reason: 
+17
+2!=2
+3!=2
+
+Resolvent:
+2!=2
+1!=0
+3=0
+
+Latest falsified literal: 
+3=0
+Earliest contradicting literal: 
+3!=0
+It's reason: 
+1
+1!=0
+3!=0
+
+Resolvent:
+2!=2
+1!=0
+
+Latest falsified literal: 
+2!=2
+Earliest contradicting literal: 
+2=2
+It's reason: 
+-2
+Resolvent:
+1!=0
+2=0
+2=1
+
+Latest falsified literal: 
+2=1
+Earliest contradicting literal: 
+2!=1
+It's reason: 
+21
+2!=1
+1!=0
+
+Resolvent:
+1!=0
+2=0
+
+Latest falsified literal: 
+2=0
+Earliest contradicting literal: 
+2!=0
+It's reason: 
+0
+1!=0
+2!=0
+
+Resolvent:
+1!=0
+
 Learned a clause: 
-7!=4
--1 6!=4
--1 
-We are backtracking to the level: 4
+1!=0
+
+We are backtracking to the level: 0
 # of backtracks so far: 2
+Checking if there is a unit clause...
+Found a unit clause: 22
+Checking if there is a unit clause...
+Found a unit clause: 22
 Checking satisfiability...
-Unsatisfied clause # 104
-7!=4
--1 6!=4
--1 
-Learned a clause: 
-6=0
--1 6=1
--1 6=2
--1 7=0
--1 7=1
--1 7=2
--1 5=0
--1 5=1
--1 5=2
--1 4!=3
--1 
-We are backtracking to the level: 3
-# of backtracks so far: 3
-Checking satisfiability...
-Unsatisfied clause # 72
-5!=3
--1 4!=3
--1 
-Decision literal: 5=3
-Checking satisfiability...
-Unsatisfied clause # 77
-6!=3
--1 5!=3
--1 
-Decision literal: 4=4
-Checking satisfiability...
-Unsatisfied clause # 97
-6!=4
--1 4!=4
--1 
-Learned a clause: 
-7=0
--1 7=1
--1 7=2
--1 7=3
--1 4!=4
--1 6=0
--1 6=1
--1 6=2
--1 6=3
--1 
-We are backtracking to the level: 4
-# of backtracks so far: 4
-Checking satisfiability...
-Unsatisfied clause # 97
-6!=4
--1 4!=4
--1 
-No units left.
-Decision literal: 6=5
-Checking satisfiability...
-Unsatisfied clause # 104
-7!=4
--1 6!=4
--1 
-Learned a clause: 
-6!=5
--1 4!=5
--1 
-We are backtracking to the level: 4
-# of backtracks so far: 5
-Checking satisfiability...
-Unsatisfied clause # 104
-7!=4
--1 6!=4
--1 
-Learned a clause: 
-6=0
--1 6=1
--1 6=2
--1 7=0
--1 7=1
--1 7=2
--1 4=0
--1 4=1
--1 4=2
--1 4=3
--1 5!=3
--1 
-We are backtracking to the level: 3
-# of backtracks so far: 6
-Checking satisfiability...
-Unsatisfied clause # 77
-6!=3
--1 5!=3
--1 
-Decision literal: 4=5
-Checking satisfiability...
-Unsatisfied clause # 83
-7!=3
--1 6!=3
--1 
-No units left.
-Decision literal: 6=4
-Checking satisfiability...
-Unsatisfied clause # 83
-7!=3
--1 6!=3
--1 
-Learned a clause: 
-6!=4
--1 5!=4
--1 
-We are backtracking to the level: 4
-# of backtracks so far: 7
-Checking satisfiability...
-Unsatisfied clause # 83
-7!=3
--1 6!=3
--1 
-Learned a clause: 
-6=0
--1 6=1
--1 6=2
--1 7=0
--1 7=1
--1 7=2
--1 4!=5
--1 5=0
--1 5=1
--1 5=2
--1 5=3
--1 
-We are backtracking to the level: 3
-# of backtracks so far: 8
-Checking satisfiability...
-Unsatisfied clause # 83
-7!=3
--1 6!=3
--1 
-No units left.
-Decision literal: 5=4
-Checking satisfiability...
-Unsatisfied clause # 83
-7!=3
--1 6!=3
--1 
-Learned a clause: 
-5!=4
--1 4!=4
--1 
-We are backtracking to the level: 3
-# of backtracks so far: 9
-Checking satisfiability...
-Unsatisfied clause # 83
-7!=3
--1 6!=3
--1 
-No units left.
-Decision literal: 6=5
-Checking satisfiability...
-Unsatisfied clause # 83
-7!=3
--1 6!=3
--1 
-Learned a clause: 
-6!=5
--1 5!=5
--1 
-We are backtracking to the level: 3
-# of backtracks so far: 10
-Checking satisfiability...
-Unsatisfied clause # 83
-7!=3
--1 6!=3
--1 
-Learned a clause: 
-6=0
--1 6=1
--1 7=0
--1 7=1
--1 5=0
--1 5=1
--1 4=0
--1 4=1
--1 3!=2
--1 
-We are backtracking to the level: 2
-# of backtracks so far: 11
-Checking satisfiability...
-Unsatisfied clause # 47
+Unsatisfied clause # 0
+1!=0
+2!=0
+
+Unit clause:
+1!=0
+
+Unit literal: 
+1!=0
+Reducing: 1!0 at level 0
+Unit clause:
+2!=2
 4!=2
--1 3!=2
--1 
-Decision literal: 4=4
-Checking satisfiability...
-Unsatisfied clause # 56
-6!=2
--1 5!=2
--1 
-Decision literal: 3=3
-Checking satisfiability...
-Unsatisfied clause # 56
-6!=2
--1 5!=2
--1 
-Decision literal: 5=5
-Checking satisfiability...
-Unsatisfied clause # 62
-7!=2
--1 6!=2
--1 
-Learned a clause: 
-7=0
--1 7=1
--1 7=3
--1 7=4
--1 5!=5
--1 6=0
--1 6=1
--1 6=3
--1 6=4
--1 
-We are backtracking to the level: 4
-# of backtracks so far: 12
-Checking satisfiability...
-Unsatisfied clause # 56
-6!=2
--1 5!=2
--1 
-No units left.
-Decision literal: 6=5
-Checking satisfiability...
-Unsatisfied clause # 56
-6!=2
--1 5!=2
--1 
-Learned a clause: 
-7!=5
--1 6!=5
--1 
-We are backtracking to the level: 4
-# of backtracks so far: 13
-Checking satisfiability...
-Unsatisfied clause # 56
-6!=2
--1 5!=2
--1 
-Learned a clause: 
-6=0
--1 6=1
--1 6=4
--1 7=0
--1 7=1
--1 7=4
--1 5=0
--1 5=1
--1 5=4
--1 3!=3
--1 
-We are backtracking to the level: 3
-# of backtracks so far: 14
-Checking satisfiability...
-Unsatisfied clause # 56
-6!=2
--1 5!=2
--1 
-No units left.
-Decision literal: 5=5
-Checking satisfiability...
-Unsatisfied clause # 56
-6!=2
--1 5!=2
--1 
-Learned a clause: 
-5!=5
--1 3!=5
--1 
-We are backtracking to the level: 3
-# of backtracks so far: 15
-Checking satisfiability...
-Unsatisfied clause # 56
-6!=2
--1 5!=2
--1 
-Decision literal: 5=3
-Checking satisfiability...
-Unsatisfied clause # 62
-7!=2
--1 6!=2
--1 
-Learned a clause: 
-7=0
--1 7=1
--1 7=4
--1 7=5
--1 5!=3
--1 6=0
--1 6=1
--1 6=4
--1 6=5
--1 
-We are backtracking to the level: 3
-# of backtracks so far: 16
-Checking satisfiability...
-Unsatisfied clause # 56
-6!=2
--1 5!=2
--1 
-No units left.
-Decision literal: 6=2
-Checking satisfiability...
-Unsatisfied clause # 56
-6!=2
--1 5!=2
--1 
-Learned a clause: 
-6!=2
--1 5!=2
--1 
-We are backtracking to the level: 3
-# of backtracks so far: 17
-Checking satisfiability...
-Unsatisfied clause # 56
-6!=2
--1 5!=2
--1 
-Learned a clause: 
-6=0
--1 6=1
--1 7=0
--1 7=1
--1 5=0
--1 5=1
--1 3=0
--1 3=1
--1 3=2
--1 4!=4
--1 
-We are backtracking to the level: 2
-# of backtracks so far: 18
-Checking satisfiability...
-Unsatisfied clause # 51
-5!=2
--1 4!=2
--1 
-Decision literal: 3=4
-Checking satisfiability...
-Unsatisfied clause # 51
-5!=2
--1 4!=2
--1 
-Decision literal: 4=5
-Checking satisfiability...
-Unsatisfied clause # 51
-5!=2
--1 4!=2
--1 
-Learned a clause: 
-6!=5
--1 4!=5
--1 
-We are backtracking to the level: 3
-# of backtracks so far: 19
-Checking satisfiability...
-Unsatisfied clause # 51
-5!=2
--1 4!=2
--1 
-Decision literal: 4=2
-Checking satisfiability...
-Unsatisfied clause # 51
-5!=2
--1 4!=2
--1 
-Learned a clause: 
+
+Unit literal: 
+2!=2
+Reducing: 2!2 at level 0
+Unit clause:
+2!=1
+4!=1
+
+Unit literal: 
+2!=1
+Reducing: 2!1 at level 0
+Entailment... 2=0
+Entailment... 2=0
+Reducing literal: 2=0 at level 0
+Unit clause:
+2!=0
+3!=0
+
+Unit literal: 
+3!=0
+Reducing: 3!0 at level 0
+Unit clause:
+2!=0
+4!=0
+
+Unit literal: 
+4!=0
+Reducing: 4!0 at level 0
+Unit clause:
+2!=0
+3!=0
+
+Unit literal: 
+3!=1
+Reducing: 3!1 at level 0
+Entailment... 3=2
+Entailment... 3=2
+Reducing literal: 3=2 at level 0
+Unit clause:
+1!=2
+3!=2
+
+Unit literal: 
+1!=2
+Reducing: 1!2 at level 0
+Entailment... 1=1
+Entailment... 1=1
+Reducing literal: 1=1 at level 0
+Unit clause:
+1!=1
+4!=1
+
+Unit literal: 
+4!=1
+Reducing: 4!1 at level 0
+Entailment... 4=2
+Entailment... 4=2
+Reducing literal: 4=2 at level 0
+There is a conflict at level: 0
+Conflicting clause: 
+3!=2
 4!=2
--1 7=0
--1 7=1
--1 7=4
--1 7=5
--1 5=0
--1 5=1
--1 5=4
--1 5=5
--1 
-We are backtracking to the level: 3
-# of backtracks so far: 20
-Checking satisfiability...
-Unsatisfied clause # 51
-5!=2
--1 4!=2
--1 
-Learned a clause: 
-7=0
--1 7=1
--1 6=0
--1 6=1
--1 4=0
--1 4=1
--1 4=4
--1 5=0
--1 5=1
--1 4!=5
--1 
-We are backtracking to the level: 2
-# of backtracks so far: 21
-Checking satisfiability...
-Unsatisfied clause # 51
-5!=2
--1 4!=2
--1 
-Learned a clause: 
-6!=5
--1 5!=5
--1 
-We are backtracking to the level: 1
-# of backtracks so far: 22
-Checking satisfiability...
-Unsatisfied clause # 23
-3!=1
--1 2!=1
--1 
-Decision literal: 2=2
-Checking satisfiability...
-Unsatisfied clause # 26
-4!=1
--1 3!=1
--1 
-Decision literal: 3=3
-Checking satisfiability...
-Unsatisfied clause # 30
-5!=1
--1 4!=1
--1 
-Decision literal: 4=4
-Checking satisfiability...
-Unsatisfied clause # 30
-5!=1
--1 4!=1
--1 
-Learned a clause: 
-5!=4
--1 4!=4
--1 
-We are backtracking to the level: 3
-# of backtracks so far: 23
-Checking satisfiability...
-Unsatisfied clause # 30
-5!=1
--1 4!=1
--1 
-Learned a clause: 
-7!=4
--1 6!=4
--1 
-We are backtracking to the level: 2
-# of backtracks so far: 24
-Checking satisfiability...
-Unsatisfied clause # 26
-4!=1
--1 3!=1
--1 
-Learned a clause: 
-5!=4
--1 4!=4
--1 
-We are backtracking to the level: 1
-# of backtracks so far: 25
-Checking satisfiability...
-Unsatisfied clause # 23
-3!=1
--1 2!=1
--1 
-No units left.
-Decision literal: 2=1
-Checking satisfiability...
-Unsatisfied clause # 28
-5!=1
--1 2!=1
--1 
-Learned a clause: 
-5!=1
--1 2!=1
--1 
-We are backtracking to the level: 1
-# of backtracks so far: 26
-Checking satisfiability...
-Unsatisfied clause # 28
-5!=1
--1 2!=1
--1 
-Decision literal: 2=2
-Checking satisfiability...
-Unsatisfied clause # 44
-3!=2
--1 2!=2
--1 
-Learned a clause: 
-3!=2
--1 2!=2
--1 
-We are backtracking to the level: 1
-# of backtracks so far: 27
-Checking satisfiability...
-Unsatisfied clause # 44
-3!=2
--1 2!=2
--1 
-Decision literal: 2=3
-Checking satisfiability...
-Unsatisfied clause # 74
-6!=3
--1 2!=3
--1 
-Learned a clause: 
-6!=3
--1 2!=3
--1 
-We are backtracking to the level: 1
-# of backtracks so far: 28
-Checking satisfiability...
-Unsatisfied clause # 74
-6!=3
--1 2!=3
--1 
-Decision literal: 2=4
-Checking satisfiability...
-Unsatisfied clause # 100
-7!=4
--1 2!=4
--1 
-Learned a clause: 
-7!=4
--1 2!=4
--1 
-We are backtracking to the level: 1
-# of backtracks so far: 29
-Checking satisfiability...
-Unsatisfied clause # 100
-7!=4
--1 2!=4
--1 
+
+0.4697	 0.4759	UNSAT
+
+Number of Decisions   : 2
+Number of Units       : 0
+Number of Backtracks  : 2
+Number of Entails     : 9
+Number of Levels      : 0
+Number of Variables   : 4
+Number of Clauses     : 23
+

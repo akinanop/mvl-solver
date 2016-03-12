@@ -77,7 +77,7 @@ where :
 
 Use the following format to run the program. The solver accepts problems in DIMACS format.
 
-``` exe -b2f -file <string> -model <string> ```
+``` ./Solver -b2f -file <string> -model <string> ```
 where :
 
 ```
