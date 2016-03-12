@@ -952,6 +952,7 @@ int Formula::NonChronoBacktrack()
   // return 1 : if time out
   // return 2 : if CONFLICT and later used as unsatisfied
 while(true){
+  cout<<"Number of clauses so far: "<<CLAUSELIST.size()<<endl;
   //Check if theory satisfied
  checkUnit();
   if(checkSat())
