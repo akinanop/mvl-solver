@@ -448,7 +448,7 @@ void Formula::reduceTheory(int var, bool equals, int val)
       satisfyClauses(var, equals, val);
       removeLiteral(var, !equals, val);
       VARLIST[var]->ATOMASSIGN[val] = 1;
-      VARLIST[var]->ATOMLEVEL[val] = LEVEL;
+      if(VARLIST[var]->ATOMLEVEL[val] == -1) VARLIST[var]->ATOMLEVEL[val] = LEVEL;
 
       VARLIST[var]->VAL = val;
       VARLIST[var]->SAT = true; // means variable is assigned
@@ -476,7 +476,7 @@ void Formula::reduceTheory(int var, bool equals, int val)
 	      satisfyClauses(var, !equals, i);
 	      removeLiteral(var, equals, i);
 	      VARLIST[var]->ATOMASSIGN[i] = -1;
-	      VARLIST[var]->ATOMLEVEL[i] = LEVEL;
+	      if(VARLIST[var]->ATOMLEVEL[i] == -1) VARLIST[var]->ATOMLEVEL[i] = LEVEL;
 	     if(VARLIST[var]->CLAUSEID[val] == -10) VARLIST[var]->CLAUSEID[i] = UNITCLAUSE;
   //      cout<<"Set the reason for the literal "<<var<<(!equals?"=":"!")<<i<<endl;
     //    if (UNITCLAUSE > -1) CLAUSELIST[UNITCLAUSE]->Print(); else cout<<-1<<endl;
@@ -494,7 +494,7 @@ void Formula::reduceTheory(int var, bool equals, int val)
 	    {
 	      satisfyClauses(var, !equals, i);
 	      removeLiteral(var, equals, i);
-	      VARLIST[var]->ATOMASSIGN[i] = -1;
+	      if(VARLIST[var]->ATOMLEVEL[i] == -1) VARLIST[var]->ATOMASSIGN[i] = -1;
 	      VARLIST[var]->ATOMLEVEL[i] = LEVEL;
 	      if(VARLIST[var]->CLAUSEID[val] == -10) VARLIST[var]->CLAUSEID[i] = UNITCLAUSE;
   //      cout<<"Set the reason for the literal "<<var<<(!equals?"=":"!")<<i<<endl;
@@ -516,7 +516,7 @@ void Formula::reduceTheory(int var, bool equals, int val)
       satisfyClauses(var, equals, val);
       removeLiteral(var, !equals, val);
       VARLIST[var]->ATOMASSIGN[val] = -1;
-      VARLIST[var]->ATOMLEVEL[val] = LEVEL;
+     if(VARLIST[var]->ATOMLEVEL[val] == -1) VARLIST[var]->ATOMLEVEL[val] = LEVEL;
      if(VARLIST[var]->CLAUSEID[val] == -10)  VARLIST[var]->CLAUSEID[val] = UNITCLAUSE;
       //Add literal to DecisionStack
   //    cout<<"Adding literal to the decision stack: "<<var<<"!"<<val<<endl;
@@ -791,8 +791,9 @@ bool Formula::Potent(Clause * clause)
 {
   int counter = 0;
   for (int i = 0; i < clause->NumAtom; i++)
-  {
-    if (VARLIST[clause->ATOM_LIST[i]->VAR]->LEVEL == LEVEL) counter++;
+  { //  if( VARLIST[whyFalse(clause->ATOM_LIST[i])->VAR]->ATOMLEVEL[whyFalse(clause->ATOM_LIST[i])->VAL] == LEVEL ) counter++;
+  //  if (VARLIST[clause->ATOM_LIST[i]->VAR]->LEVEL == LEVEL) counter++;
+  if( VARLIST[clause->ATOM_LIST[i]->VAR]->ATOMLEVEL[clause->ATOM_LIST[i]->VAL] == LEVEL ) counter++;
   }
 
   if(counter != 1) return false;
@@ -882,7 +883,9 @@ Clause * Formula::analyzeConflict(Clause * clause)
     }
 
     clause = resolve(clause,max,entailClause);
-  } else clause = resolve(clause,max,CLAUSELIST[VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]]);
+  }
+  else
+  { clause = resolve(clause,max,CLAUSELIST[VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]]); }
    cout<<"Resolvent:"<<endl;
    clause->Print();
   return analyzeConflict(clause);
