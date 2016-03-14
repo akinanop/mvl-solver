@@ -7,7 +7,7 @@
 
 //Including Libraries and Header Files
 #include "Clause.h"
-
+#include "Literal.h"
 using namespace std;
 //**************************************************************
 //Start of Code
@@ -105,6 +105,22 @@ inline void Clause::decNumUnAss()
 inline int Clause::getLevel()
 {
   return LEVEL;
+}
+
+bool Clause::LitisEqual(Literal * literal1, Literal * literal2){
+  if(literal1->VAR == literal2->VAR && literal1->VAL == literal2->VAL && literal1->EQUAL == literal2->EQUAL) return true;
+   else return false;
+}
+
+bool Clause::ClauseisEqual(Clause * clause1,Clause * clause2)
+{
+  if(clause1->NumAtom != clause2->NumAtom) return false;
+
+  for(int i=0; i<clause1->NumAtom; i++)
+  {
+    if(!LitisEqual(clause1->ATOM_LIST[i], clause2->ATOM_LIST[i])) return false;
+  }
+  return true;
 }
 
 //setLevel

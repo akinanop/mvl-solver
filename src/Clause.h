@@ -81,8 +81,11 @@ public:
   bool isUnit();
   //isEmpty : returns true if NumUnAss == 0
   bool isEmpty();
+
   //hasAtom
-//  bool HasAtom(Literal * atom);
+   bool ClauseisEqual(Clause * clause1, Clause * clause2);
+  bool LitisEqual(Literal * literal1, Literal * literal2);
+ //bool HasAtom(Literal * atom);
 };
 // End of Code
 //

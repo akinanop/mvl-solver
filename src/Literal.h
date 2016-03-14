@@ -52,6 +52,8 @@ public:
     else EQUAL = false;
   }
 
+
+  
   //Print : function to print the atom
   void Print()
   {
