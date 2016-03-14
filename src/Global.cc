@@ -1,6 +1,6 @@
 //**************************************************************
 //
-// Finite Domain Solver - Hemal Lal
+// Finite Domain Solver 
 //
 // File : Global.cc
 // Description : Contains code for Commandline arguments parsing
@@ -22,7 +22,7 @@ double GetTime()
   struct timeval tval;
   gettimeofday(&tval, NULL);
   t = (double)tval.tv_sec + (double)tval.tv_usec / 1.0e+6;
-  return t; 
+  return t;
 }
 
 //PrintHelp
@@ -79,7 +79,7 @@ void PrintHelp()
 	    cout<<" * - required fields"<<endl<<endl;
 	    break;
 	  }
-	  
+
 	case 2:
 	  {
 	    cout<<"**** Finite Domain Solver (Chronological Backtracking) Help ****"<<endl;
@@ -91,7 +91,7 @@ void PrintHelp()
 	    cout<<"  -var            : * number of variables in benchmark problem"<<endl;
 	    cout<<"  -clause         : * number of clauses in benchmark problem"<<endl;
 	    cout<<"  -file           : * name of the output file"<<endl;
-	    cout<<"  -time           : amount of time allowed for solver to run"<<endl; 
+	    cout<<"  -time           : amount of time allowed for solver to run"<<endl;
 	    cout<<endl;
 	    cout<<" * - required fields"<<endl<<endl;
 	    break;
@@ -108,7 +108,7 @@ void PrintHelp()
 	    cout<<"  -var            : * number of variables in benchmark problem"<<endl;
 	    cout<<"  -clause         : * number of clauses in benchmark problem"<<endl;
 	    cout<<"  -file           : * name of the output file"<<endl;
-	    cout<<"  -time           : amount of time allowed for solver to run"<<endl; 
+	    cout<<"  -time           : amount of time allowed for solver to run"<<endl;
 	    cout<<endl;
 	    cout<<" * - required fields"<<endl<<endl;
 	    break;
@@ -164,7 +164,7 @@ void PrintHelp()
 	    break;
 	  }
 	}
-      getchar();	    
+      getchar();
       getchar();
     }while(option != 0);
 }
@@ -176,8 +176,8 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 {
   //local variables
   int current = 1;
-  
-  //Default Initialization 
+
+  //Default Initialization
   cline->NUM_VAR = -1;
   cline->NUM_CLAUSE = -1;
   cline->CLAUSE_SIZE = 3;
@@ -193,7 +193,7 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
     {
       PrintHelp();
     }
-  
+
   else
     {
       //If Menu/Help option selected
@@ -249,7 +249,7 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 		cline->MODEL_FILE = argv[++current];
 	      else
 		;
-	    }	  
+	    }
 	}
 
       //If option if for converting finite domain to boolean : Linear Encoding
@@ -263,7 +263,7 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 		cline->MODEL_FILE = argv[++current];
 	      else
 		;
-	    }	  
+	    }
 	}
 
       //If option if for converting finite domain to boolean : Quadratic Encoding
@@ -277,7 +277,7 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 		cline->MODEL_FILE = argv[++current];
 	      else
 		;
-	    }	  
+	    }
 	}
 
       //If option is for solving a domain problem : Chronological Backtracking

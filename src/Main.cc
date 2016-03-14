@@ -1,6 +1,6 @@
 //**************************************************************
 //
-// Finite Domain Solver - Hemal Lal
+// Finite Domain Solver
 //
 // File : Main.cc
 // Description : Main Driver program code
@@ -26,12 +26,15 @@ using namespace std;
 int main(int argc, char ** argv)
 {
   //Start Solver Time
-  cout<<endl<<"**** Finite Domain Sat Solver - Hemal A Lal ****"<<endl;
+  cout<<endl<<"************************************************************************"<<endl;
+  cout<<endl<<"Finite Domain Sat Solver"<<endl;
+  cout<<endl<<"This is work in progress, use only on small inputs (var,clauses < 100) "<<endl;
+  cout<<endl<<"************************************************************************"<<endl;
 
   //Parse commandline info
   CommandLine * clineinfo = new CommandLine;
   ParseCommandLine(clineinfo, argc, argv);
-  
+
   //Check what option is selected and call appropriate function
   if(argc <= 1)
     {
@@ -52,7 +55,7 @@ int main(int argc, char ** argv)
 	  //Call GenBenBool
 	  GenBenBool(clineinfo);
 	}
-      
+
     }
 
   else if(!strcmp(argv[1], "-b2f"))
@@ -60,19 +63,19 @@ int main(int argc, char ** argv)
       //Call Boolean2Finite
       Boolean2Finite(clineinfo);
     }
-  
+
   else if(!strcmp(argv[1], "-linenc"))
     {
       //Call LinearEncode
       LinearEncode(clineinfo);
-    }  
+    }
 
   else if(!strcmp(argv[1], "-quadenc"))
     {
       //Call QuadraticEncode
       QuadraticEncode(clineinfo);
-    }  
-  
+    }
+
   else if(!strcmp(argv[1], "-solvech"))
     {
       //Call SolveFinite - see SolveFinite.cc
@@ -84,7 +87,7 @@ int main(int argc, char ** argv)
       //Call SolveFinite
       SolveFinite(clineinfo, "nc");
     }
-    
+
   else
     {
       PrintHelp();

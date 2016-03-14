@@ -1,6 +1,6 @@
 //**************************************************************
 //
-// Finite Domain Solver - Hemal Lal
+// Finite Domain Solver 
 //
 // File : Literal.h
 // Description : Contains code for Literal class. Literal contains a
@@ -53,7 +53,7 @@ public:
   }
 
 
-  
+
   //Print : function to print the atom
   void Print()
   {

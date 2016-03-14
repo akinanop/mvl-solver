@@ -1,6 +1,6 @@
 //**************************************************************
 //
-// Finite Domain Solver - Hemal Lal
+// Finite Domain Solver 
 //
 // File : Clause.h
 // Description : Contains code for creating clause to store atoms,

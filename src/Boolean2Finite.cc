@@ -1,8 +1,4 @@
 //**********************************************************************//
-// Author: Hemal A Lal
-// Date : 03-08-2004
-//
-//**********************************************************************//
 //Including Libraries and Header files
 #include "Global.h"
 #include <cstring>
@@ -27,7 +23,7 @@ void Boolean2Finite(CommandLine * cline)
   set<int> variables;
   vector <vector<int> > data;
 
-  //opening infile to read and checking if it opens 
+  //opening infile to read and checking if it opens
   infile.open(cline->FILE, ios::in);
   if(!infile)
     {
@@ -80,11 +76,11 @@ void Boolean2Finite(CommandLine * cline)
 		  lp++;
 		}
 	      //reading each value into word buffer
-	      while (*lp && (*lp != ' ') && (*lp != '\t') && (*lp != '\n')) 
+	      while (*lp && (*lp != ' ') && (*lp != '\t') && (*lp != '\n'))
 		{
 		  *(wp++) = *(lp++);
 		}
-	      *wp = '\0';   
+	      *wp = '\0';
 	      //converting into int and writing to file
 	      if(strlen(word_buffer) != 0)
 		{
@@ -111,7 +107,7 @@ void Boolean2Finite(CommandLine * cline)
 		    {
 		      //outfile.put('\n');
 		    }
-		}	      
+		}
 	    }while(*lp);
 	  data.push_back(temp);
 	}

@@ -2,9 +2,6 @@
 // GenerateBenchmark
 // This program generates benchmarks in modified cnf form
 //
-// Author: Hemal A Lal
-// Date : 03-08-2004
-//
 //**********************************************************************//
 //Including Libraries and Header files
 #include "Global.h"
@@ -36,7 +33,7 @@ void LinearEncode(CommandLine * cline)
   int count = 0;
   char ch, ch1;
 
-  //opening infile to read and checking if it opens 
+  //opening infile to read and checking if it opens
   infile.open(cline->FILE, ios::in);
   if(!infile)
     {
@@ -156,11 +153,11 @@ void LinearEncode(CommandLine * cline)
 		  lp++;
 		}
 	      //reading each value into word buffer
-	      while (*lp && (*lp != ' ') && (*lp != '\t') && (*lp != '\n')) 
+	      while (*lp && (*lp != ' ') && (*lp != '\t') && (*lp != '\n'))
 		{
 		  *(wp++) = *(lp++);
 		}
-	      *wp = '\0';   
+	      *wp = '\0';
 	      //converting into int and writing to file
 	      if(strlen(word_buffer) != 0)
 		{
@@ -192,7 +189,7 @@ void LinearEncode(CommandLine * cline)
 			    }
 			}
 		    }
-		}	      
+		}
 	    }while(*lp);
 	  outfile<<"0"<<endl;
 	}

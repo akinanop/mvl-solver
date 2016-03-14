@@ -2,9 +2,6 @@
 // GenerateBenchmark
 // This program generates benchmarks in modified cnf form
 //
-// Author: Hemal A Lal
-// Date : 03-08-2004
-//
 //**********************************************************************//
 //Including Libraries and Header files
 #include "Global.h"
@@ -41,8 +38,8 @@ void QuadraticEncode(CommandLine * cline)
   Variable * temp_var;
   vector <Variable *> VAR_LIST;
   char ch, ch1;
-  
-  //opening infile to read and checking if it opens 
+
+  //opening infile to read and checking if it opens
   infile.open(cline->FILE, ios::in);
   if(!infile)
     {
@@ -85,7 +82,7 @@ void QuadraticEncode(CommandLine * cline)
       else if(line_buffer[0] == 'd')
 	{
 	  temp = sscanf(line_buffer, "d %d %d", &var, &val);
-	  temp_var = new Variable(var, val);	  
+	  temp_var = new Variable(var, val);
 	  VAR_LIST.push_back(temp_var);
 	  num_var += val;
 	  num_clause += (Fact(val)/(Fact(val-2)*Fact(2)));
@@ -125,11 +122,11 @@ void QuadraticEncode(CommandLine * cline)
 		  lp++;
 		}
 	      //reading each value into word buffer
-	      while (*lp && (*lp != ' ') && (*lp != '\t') && (*lp != '\n')) 
+	      while (*lp && (*lp != ' ') && (*lp != '\t') && (*lp != '\n'))
 		{
 		  *(wp++) = *(lp++);
 		}
-	      *wp = '\0';   
+	      *wp = '\0';
 	      //converting into int and writing to file
 	      if(strlen(word_buffer) != 0)
 		{
@@ -145,8 +142,8 @@ void QuadraticEncode(CommandLine * cline)
 			{
 			  outfile<<var<<"="<<val<<" ";
 			}
-		    }	 
-		}     
+		    }
+		}
 	    }while(*lp);
 	  outfile<<"0"<<endl;
 	}

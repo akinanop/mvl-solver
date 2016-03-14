@@ -1,6 +1,6 @@
 //**********************************************************************//
 //
-// Finite Domain Solver - Hemal Lal
+// Finite Domain Solver
 //
 // File : SolveFinite.cc
 //
@@ -65,7 +65,11 @@ void SolveFinite(CommandLine * cline, string type)
   // compute the search time
   difftime = fobj->TIME_E - fobj->TIME_S;
   totaltime += difftime;
+  //cout<<"Solving time: "<<endl;
   printf("%2.4f\t %2.4f\t", difftime, totaltime);
+  cout<<endl;
+  cout<<endl;
+
   if(result == 0)
     cout<<"SAT"<<endl;
   else if(result == 1)

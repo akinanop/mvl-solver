@@ -1,6 +1,6 @@
 //**************************************************************
 //
-// Finite Domain Solver - Hemal Lal
+// Finite Domain Solver
 //
 // File : Formula.h
 // Description : represents the whole formula, contains the

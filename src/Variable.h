@@ -1,6 +1,6 @@
 //**************************************************************
 //
-// Finite Domain Solver - Hemal Lal
+// Finite Domain Solver 
 //
 // File : Variable.h
 // Description : represents the variable object for the solver

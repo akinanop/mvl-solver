@@ -1,10 +1,7 @@
 //**********************************************************************//
 // GenerateBenchmark
 // This program generates benchmarks in modified cnf form
-//
-// Author: Hemal A Lal
-// Date : 03-08-2004
-//
+
 //**********************************************************************//
 //Including Libraries and Header files
 #include "Global.h"
@@ -23,7 +20,7 @@ Literal * VARIABLES;
 //**********************************************************************//
 //Function Definitions
 //GenBenFin
-//This function is the brain of generating benchmark problem. It initializes 
+//This function is the brain of generating benchmark problem. It initializes
 //the variables, creates a soln, and writes to the file
 void GenBenFin(CommandLine * cline)
 {
@@ -60,7 +57,7 @@ void GenBenFin(CommandLine * cline)
 	{
 	  VARIABLES[x].VAR = x;
 	  VARIABLES[x].VAL = rand() % cline->DOMAIN_SIZE;
-	}      
+	}
     }
 
   //Generating solution
@@ -78,19 +75,19 @@ void GenBenFin(CommandLine * cline)
 	{
 	  //checking if problem needs to be solvable or random
 	  //if satisfiable
-	  if(cline->SAT_UNSAT && x==0) 
+	  if(cline->SAT_UNSAT && x==0)
 	    {
 	      //assigning variable to clause
 	      CLAUSE_LIST[y][x].VAR = SOLN[rand() % cline->NUM_VAR].VAR;
 	      CLAUSE_LIST[y][x].VAL = SOLN[CLAUSE_LIST[y][x].VAR].VAL;
 	    }
-	  
+
 	  //else unsatisfiable
 	  else
 	    {
 	      //assigning variable to clause
 	      CLAUSE_LIST[y][x].VAR = rand() % cline->NUM_VAR;
-	      //checking if variable already exist	
+	      //checking if variable already exist
 	      do
 		{
 		  already_exist = false;
@@ -106,7 +103,7 @@ void GenBenFin(CommandLine * cline)
 			  already_exist = false;
 			}
 		    }
-		}while(already_exist);	  
+		}while(already_exist);
 	      CLAUSE_LIST[y][x].VAL = rand() % VARIABLES[CLAUSE_LIST[y][x].VAR].VAL;
 	    }
 	}
@@ -151,10 +148,10 @@ void GenBenBool(CommandLine * cline)
   int x = 0;
   int y = 0;
   int z = 0;
-  int * BSOLN;  
+  int * BSOLN;
   int ** BCLAUSE_LIST;
   srand(time(NULL));
-  
+
   //Assign Memory to each global variable
   BSOLN = new int[cline->NUM_VAR+1];
 
@@ -179,7 +176,7 @@ void GenBenBool(CommandLine * cline)
 	{
 	  //checking if problem needs to be solvable or random
 	  //if satisfiable
-	  if(cline->SAT_UNSAT && x==0) 
+	  if(cline->SAT_UNSAT && x==0)
 	    {
 	      //assigning variable to clause
 	      if(rand()%2)
@@ -191,7 +188,7 @@ void GenBenBool(CommandLine * cline)
 		  BCLAUSE_LIST[y][x] = -1 * BSOLN[(rand() % cline->NUM_VAR)+1];
 		}
 	    }
-	  
+
 	  //else unsatisfiable
 	  else
 	    {
@@ -204,7 +201,7 @@ void GenBenBool(CommandLine * cline)
 		{
 		  BCLAUSE_LIST[y][x] = -1 * ((rand() % cline->NUM_VAR) + 1);
 		}
-	      //checking if variable already exist	
+	      //checking if variable already exist
 	      do
 		{
 		  already_exist = false;
@@ -220,7 +217,7 @@ void GenBenBool(CommandLine * cline)
 			  already_exist = false;
 			}
 		    }
-		}while(already_exist);	  
+		}while(already_exist);
 	    }
 	}
     }

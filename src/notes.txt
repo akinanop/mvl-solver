@@ -1,9 +1,0 @@
-NOTES, 20.01.2016
-Problem is with analyzeConflict()
-
-Note: The algorithm implemented by Lal [15] is essentially the same as Algorithm 7
-but the L 0 .reason when L 0 is falsified because of a decision literal L was not set properly to
- ̄ Consequenstly, Lal’s version of the analyzeConflict() function fails
-be the clause {L, L}.
-to return a learned clause on problems such as that in Example 2 above. Due to this reason,
-Lal’s solver crashes on certain inputs.
