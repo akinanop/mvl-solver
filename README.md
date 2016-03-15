@@ -1,21 +1,19 @@
 ## Finite Domain Satisfiablity Solver
 
-*Note*: This solver corrects and improves the (unsound) solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. Currently it implements Non-Chronological backtracking with resolution-based learning. You can find the description of the algorithm in the documentation folder.
+*Note*: This solver corrects and improves the (unsound) solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. Currently it implements Non-Chronological backtracking with resolution-based learning. You can find the description of the algorithms in the documentation folder.
 
 ### Building the Solver
 
 You can easily create executable on Linux using g++ compiler in the following way:
 
 ```
-cd ~/your-path-to/mvl-solver/
+cd ~/your-path-to/mvl-solver/src
 
 make
 
 ```
 
-Or download the executable for Linux from mvl-solver/MySolver.
-
-Below follows the description of how to execute the program.
+Alternatively download the executable ```Solver``` for Linux from the current folder. Below follows the description of the input the solver accepts as well as description of how to use the program to generate a benchmark problem, convert Boolean problem to Finite-domain problem or
 
 ### Extended DIMACS format
 
