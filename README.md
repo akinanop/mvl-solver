@@ -1,8 +1,65 @@
 ## Finite Domain Satisfiablity Solver
 
-*Note*: This solver corrects and improves the (unsound) solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. In particular, now on the counterexample described in [*Jain_report.pdf*, p.28] the solver produces the correct result.
+*Note*: This solver corrects and improves the (unsound) solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. Currently it implements Non-Chronological backtracking with resolution-based learning. You can find the description of the algorithm in the documentation folder.
+
+### Building the Solver
+
+You can easily create executable on Linux using g++ compiler in the following way:
+
+```
+cd ~/your-path-to/mvl-solver/
+
+make
+
+```
+
+Or download the executable for Linux from mvl-solver/MySolver.
 
 Below follows the description of how to execute the program.
+
+### Extended DIMACS format
+
+The solver accepts the problems in extended DIMACS CNF format, which is an extension of the standard DIMACS CNF format commonly used for Boolean SAT problems. There are 4 possible lines in a DIMACS file:
+
+1. Comment line: This line contains comments and can be ignored.
+
+``` c This is a comment line  ```
+
+2. Problem line: This line contains information about the problem. It begins with a p. There is exactly one such line for each problem.
+
+```p cnf <NumVar> <NumClause>```
+
+where NumVar is the total number of variables in the problem, and NumClause is the number of
+clauses in the problem.
+
+3. Domain line: This line contains information about the domain size of a variable. It begins with a d
+and is followed by the variable and then by the domain size.
+
+```d <VarName> <DomainSize>```
+
+where VarName is the variable name, and DomainSize is the size of the domain of the variable.
+There should be at most one domain life for each variable.
+
+4. Clause line: each literal is of the form ```<VarName>=<DomainValue>``` or ```<VarName>!=<DomainValue>```. Each clause ends with a 0, which is used as an end-marker, and the variables are represented by numbers from 1 to N where N is the total number of variables in the theory.
+
+**EXAMPLE**
+
+```
+c This is a pigeonhole problem with 3 pigeons and 2 holes
+p cnf 3 5
+d 1 2
+d 2 2
+d 3 2
+2!=0 1!=0 0
+3!=0 1!=0 0
+3!=0 2!=0 0
+2!=1 1!=1 0
+3!=1 1!=1 0
+3!=1 2!=1 0
+
+```
+
+
 
 ### Generating Benchmark Problem
 
@@ -33,17 +90,17 @@ exe               | * name of executable
 
 EXAMPLE: ``` ./Solver -genben -var 4 -clause 18 -clausesize 2 -sat 0 -domain 2 -bool 1 -file "finite.txt" ```
 
-### Finite Domain Solver with Chronological Backtracking
+### Finite Domain Solver with Non-Chronological Backtracking
 
-Use the following format to run the program. The solver accepts problems in extended DIMACS format. See *report.pdf*, p. 30 for the syntax description.
+Use the following format to run the program. The solver accepts problems in extended DIMACS format.
 
-``` exe -solvech -var <int> -clause <int> -file <string> -time <int> ```
+``` exe -solvenc -var <int> -clause <int> -file <string> -time <int> ```
 
 where :
 
 ```
   exe             : * name of executable
-  -solvech        : * option stating to solve the finite domain problem
+  -solvenc       : * option stating to solve the finite domain problem
   -var            : * number of variables in benchmark problem
   -clause         : * number of clauses in benchmark problem
   -file           : * name of the input file
@@ -51,26 +108,7 @@ where :
 
  * - required fields
 ```
-EXAMPLE: ``` ./Solver -solvenc -var 4 -clause 18 -file "counterexample.txt" ```
-
-
-### Finite Domain Solver with NonChronological Backtracking
-
-Use the following format to run the program:
-
-``` exe -solvenc -var <int> -clause <int> -file <string> -time <int> ```
-
-where :
-```
-  exe             : * name of executable
-  -solvenc        : * option stating to solve the finite domain problem
-  -var            : * number of variables in benchmark problem
-  -clause         : * number of clauses in benchmark problem
-  -file           : * name of the output file
-  -time           : amount of time allowed for solver to run
-
- * - required fields
-```
+EXAMPLE: ``` ./Solver -solvenc -var 4 -clause 18 -file "example.txt" ```
 
 
 ### Convert Boolean to Finite Domain
@@ -122,3 +160,4 @@ where :
 
  * - required fields
 ```
+
