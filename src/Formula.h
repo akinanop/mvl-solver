@@ -135,7 +135,7 @@ public:
   //unitPropagation : does BCP in Finite Domain, returns true if no conflict
   //else returns false
   bool LitisEqual(Literal * literal1, Literal * literal2);
-  //bool unitPropagation();
+  bool unitPropagation();
 // find unit literal in the unit clause
   Literal * unitLiteral(Clause * clause);
   //NonChronoBacktrack : Extended DPLL algorithm with clause learning and

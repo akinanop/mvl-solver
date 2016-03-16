@@ -45,16 +45,10 @@ void SolveFinite(CommandLine * cline, string type)
  if(type == "ch")
 
  {
-  result = 1;
-  cout << "\n This solver doesn't support chronological backtracking"<<endl;
- }
-
-/* To simplify code, I remove chronological backtracking for now
- {
       // 1. Chronological Backtracking
-      result = fobj->ChronoBacktrack(0); // The function defined in FDSolver/Formula.cc
+     result = fobj->ChronoBacktrack(0); // The function defined in FDSolver/Formula.cc
     }
-*/
+
   // 2. NonChronological Backtracking with Clause learning
  else
     {
