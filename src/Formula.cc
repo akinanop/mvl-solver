@@ -219,6 +219,14 @@ void Formula::PrintInfo()
   printf("\n");
 }
 
+bool Formula::hasClause(Clause * clause){
+  for(int i=0; i < CLAUSELIST.size(); i++){
+    if(clause->ClauseisEqual(CLAUSELIST[i],clause)) return true;
+  }
+  return false;
+}
+
+
 //verifyModel
 bool Formula::verifyModel()
 {
@@ -282,7 +290,7 @@ bool Formula::verifyModel()
 
 //checkSat
 bool Formula::checkSat()
-{  cout<<"Checking satisfiability..."<<endl;
+{  //cout<<"Checking satisfiability..."<<endl;
   int size = CLAUSELIST.size();
   for(int i=0; i<size; i++)
     {
@@ -313,7 +321,7 @@ int Formula::checkConflict()
 
 //checkUnit
 void Formula::checkUnit()
-{ cout<<"Checking if there is a unit clause..."<<endl;
+{ //cout<<"Checking if there is a unit clause..."<<endl;
   int size = CLAUSELIST.size();
   UNITLIST.clear();
   for(int i=0; i<size; i++)
@@ -505,7 +513,7 @@ void Formula::reduceTheory(int var, bool equals, int val)
 if(checkEntail(var))
 {
 ENTAILS++;
-cout<<"Entailment... "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
+//cout<<"Entailment... "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
 /* Clause * entailClause = new Clause();
 entailClause -> LEVEL = LEVEL;
 for (int i=0; i < VARLIST[ENTAILLITERAL->VAR]->DOMAINSIZE; i++){
@@ -831,8 +839,8 @@ Clause * Formula::analyzeConflict(Clause * clause)
   if (Potent(clause)) {
    clause->NumUnAss = 0;
    //clause->LEVEL = -1;
-   cout<<"Learned a clause: "<<endl;
-   clause->Print();
+   //cout<<"Learned a clause: "<<endl;
+//   clause->Print();
     CLAUSELIST.push_back(clause);
     int csize = clause->NumAtom;
     int CID = CLAUSELIST.size()-1;
@@ -841,6 +849,7 @@ Clause * Formula::analyzeConflict(Clause * clause)
                  clause->ATOM_LIST[i]->VAL,
                  clause->ATOM_LIST[i]->EQUAL);
    // UNITLIST.push_front(CLAUSELIST.size()-1);
+
     return clause;
 }
 
@@ -1036,9 +1045,9 @@ while(true){
       if(LEVEL == 0) return 2;
 
       LEVEL = backtrackLevel(analyzeConflict(CLAUSELIST[CONFLICTINGCLAUSE]));
-      cout << "We are backtracking to the level: " << LEVEL << endl;
+    //  cout << "We are backtracking to the level: " << LEVEL << endl;
       BACKTRACKS++;
-      cout << "# of backtracks so far: "<<BACKTRACKS<<endl;
+    //  cout << "# of backtracks so far: "<<BACKTRACKS<<endl;
       CONFLICT = false;
       undoTheory(LEVEL);
     }
@@ -1065,7 +1074,7 @@ if(!CONFLICT)
     //  REASON = chooseClause;
       CLAUSELIST.push_back(chooseClause); //decision...
       UNITCLAUSE = CLAUSELIST.size()-1; */
-      cout<<"Decision: "<<atom->VAR<<(atom->EQUAL?'=':'!')<<atom->VAL<<endl;
+    //  cout<<"Decision: "<<atom->VAR<<(atom->EQUAL?'=':'!')<<atom->VAL<<endl;
       UNITCLAUSE = -1; // REASON for subsequent falsified atoms
       reduceTheory(atom->VAR, atom->EQUAL, atom->VAL);
   }
@@ -1192,7 +1201,7 @@ bool Formula::unitPropagation()
 
 	  if(flag)
 	    {
-	      cout<<"Unit literal: "<<lit_var<<(lit_equal?"=":"!=")<<lit_val<<endl;
+	    //  cout<<"Unit literal: "<<lit_var<<(lit_equal?"=":"!=")<<lit_val<<endl;
 	      reduceTheory(lit_var, lit_equal, lit_val);
 	      flag = false;
 	    }
@@ -1202,7 +1211,7 @@ bool Formula::unitPropagation()
     return true;
   else
     {
-      cout<<"Conflict : "<<CONFLICTINGCLAUSE<<endl;
+    //  cout<<"Conflict : "<<CONFLICTINGCLAUSE<<endl;
       UNITLIST.clear();
       return false;
     }

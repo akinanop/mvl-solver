@@ -92,8 +92,10 @@ public:
   void PrintClauses();
   //PrintInfo : prints the backtrack, conflict, unit, entail, pure info
   void PrintInfo();
+  bool hasClause(Clause * clause);
   //verifyModel : verifies the model that was found, if any. returns true
   //if corret
+
   bool verifyModel();
   //checkSat : returns true if theory satisfied else false
   bool checkSat();
