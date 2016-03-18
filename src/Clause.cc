@@ -1,6 +1,6 @@
 //**************************************************************
 //
-// Finite Domain Solver 
+// Finite Domain Solver
 //
 // File : Clause.cc
 //**************************************************************
@@ -15,7 +15,7 @@ using namespace std;
 //Zero Argument Constructor
 Clause::Clause()
 {
-  ATOM_LIST.reserve(125);
+  ATOM_LIST.reserve(5);
   SAT = false;
   NumAtom = 0;
   NumUnAss = 0;
