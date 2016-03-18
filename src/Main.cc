@@ -28,7 +28,7 @@ int main(int argc, char ** argv)
   //Start Solver Time
   cout<<endl<<"************************************************************************"<<endl;
   cout<<endl<<"Finite Domain Sat Solver"<<endl;
-  cout<<endl<<"This is work in progress, use only on small inputs (var,clauses < 100) "<<endl;
+
   cout<<endl<<"************************************************************************"<<endl;
 
   //Parse commandline info

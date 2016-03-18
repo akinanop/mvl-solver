@@ -1,6 +1,6 @@
 ## Finite Domain Satisfiablity Solver
 
-*Note*: This solver corrects and improves the solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. Currently it implements Non-Chronological backtracking with resolution-based learning. You can find the description of the algorithms in the documentation folder.
+*Note*: This solver corrects and improves the solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. In particular, it implements different Non-Chronological backtracking algorithm. You can find the description of the algorithms in the documentation folder.
 
 ### Building the Solver
 
