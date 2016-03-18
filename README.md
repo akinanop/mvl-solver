@@ -1,8 +1,11 @@
 ## Finite Domain Satisfiablity Solver
 
-*Note*: This solver corrects and improves the (unsound) solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. Currently it implements Non-Chronological backtracking with resolution-based learning. You can find the description of the algorithms in the documentation folder.
+*Note*: This solver corrects and improves the (unsound) solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. Currently it implements non-chronological backtracking with resolution-based learning based on the Algorithm 7 in documentation/FD Solver.pdf. 
+
+If you want to try out the solver, download the archive in the current folder and follow the instructions below.
 
 ### Building the Solver
+
 
 You can easily create executable on Linux using g++ compiler in the following way:
 
