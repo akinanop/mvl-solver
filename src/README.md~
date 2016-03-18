@@ -1,5 +1,7 @@
 ## Finite Domain Satisfiablity Solver
 
+
+
 ### Building the Solver
 
 You can easily create executable on Linux using g++ compiler in the following way:
