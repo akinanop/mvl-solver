@@ -191,6 +191,15 @@ void Formula::PrintVar()
     }
 }
 
+void Formula::PrintModel()
+{
+  for(int i=0; i<DECSTACK.size();i++)
+  {
+    if(DECSTACK[i]->EQUAL) DECSTACK[i]->Print();
+  }
+  cout<<endl;
+}
+
 //PrintClause
 void Formula::PrintClauses()
 {
