@@ -392,7 +392,7 @@ bool Formula::checkEntail(int var)
 //chooseLiteral
 Literal * Formula::chooseLiteral()
 {
-  int max = -9;
+  int max = -9999999999999999;
   int size = VARLIST.size();
   int domainsize = -1;
   int tvar = -1;
