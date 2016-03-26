@@ -16,7 +16,7 @@ make
 
 ```
 
-Alternatively download the executable ```Solver``` for Linux from the current folder. Below follows the description of the input the solver accepts as well as description of how to use the program to generate a benchmark problem, convert Boolean problem to Finite-domain problem or
+Alternatively download the executable ```Solver``` for Linux from the current folder. Below follows the description of the input the solver accepts as well as description of how to use the program to generate a benchmark problem, convert Boolean problem to Finite-domain problem or solve a finite-domain problem in DIMACS CNF format
 
 ### Extended DIMACS format
 
