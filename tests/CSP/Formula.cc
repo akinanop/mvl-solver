@@ -28,6 +28,7 @@ Formula::Formula()
   CONFLICT = false;
   CONFLICTINGCLAUSE = -1;
   DECSTACK.reserve(10);
+  REASON = NULL;
 }
 
 //1-arg constructor
@@ -109,8 +110,6 @@ void Formula::BuildFunction(CommandLine * cline)
 	      exit(1);
 	    }
 	}
-
-
       //else if line is d var# domsize
       else if(line_buffer[0] == 'd')
 	{
@@ -118,11 +117,6 @@ void Formula::BuildFunction(CommandLine * cline)
 	  temp_var = new Variable(var, val);
 	  VARLIST.push_back(temp_var);
 	}
-
-/*  else if (line_buffer[0] == 'C') {
-     CSP csp = new CSP();
-     csp->alldifferent();
-  } */
       //else its variables
       else
 	{
