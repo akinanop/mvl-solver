@@ -5,5 +5,5 @@ compiler:
 script:
 - cd src
 - make
-- cd playground
-- ./Solver 
+- cd ../playground
+- ./Solver -solvenc -var 4 -clause 18 -file ~/netshare/mvl-solver/tests/UNSAT/pgn4
