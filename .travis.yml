@@ -5,3 +5,5 @@ compiler:
 script:
 - cd src
 - make
+- cd playground
+- ./Solver 
