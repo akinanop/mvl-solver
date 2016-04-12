@@ -1,5 +1,0 @@
-c This is a pigeonhole problem with 2 pigeons and 1 holes
-p cnf 2 1
-d 1 1
-d 2 1
-2!=0 1!=0 0

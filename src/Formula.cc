@@ -28,6 +28,7 @@ Formula::Formula()
   CONFLICT = false;
   CONFLICTINGCLAUSE = -1;
   DECSTACK.reserve(10);
+  REASON = NULL;
 }
 
 //1-arg constructor
@@ -109,8 +110,6 @@ void Formula::BuildFunction(CommandLine * cline)
 	      exit(1);
 	    }
 	}
-
-
       //else if line is d var# domsize
       else if(line_buffer[0] == 'd')
 	{
@@ -118,11 +117,6 @@ void Formula::BuildFunction(CommandLine * cline)
 	  temp_var = new Variable(var, val);
 	  VARLIST.push_back(temp_var);
 	}
-
-/*  else if (line_buffer[0] == 'C') {
-     CSP csp = new CSP();
-     csp->alldifferent();
-  } */
       //else its variables
       else
 	{
@@ -344,7 +338,7 @@ void Formula::checkUnit()
       //add the index i into Unitlist
       if( (CLAUSELIST[i]->NumUnAss == 1 &&
 	 !CLAUSELIST[i]->SAT ) ){
-  // cout<<"Found a unit clause: "<<i<<endl;
+    // cout<<"Found a unit clause: "<<i<<endl;
 	UNITLIST.push_back(i);
 } else if ( CLAUSELIST[i]->NumUnAss == 0 && !CLAUSELIST[i]->SAT) CONFLICT = true;
 }
@@ -388,7 +382,7 @@ bool Formula::checkEntail(int var)
   if(flag)
     {
       ENTAILLITERAL = new Literal(var, domainvalue);
-      cout<<"Entailment... "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
+    //  cout<<"Entailment... "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
 
       return true;
     }
@@ -435,6 +429,7 @@ void Formula::reduceTheory(int var, bool equals, int val)
   if(equals)
     {
     //cout<<"Reducing literal: "<<var<<"="<<val<<" at level "<<LEVEL<<endl;
+
       //first satisfy all clauses with literal, and remove
       //negate literal from clasues
       satisfyClauses(var, equals, val);
@@ -749,6 +744,8 @@ Clause * Formula::resolve(Clause * clause, Literal * literal, Clause * reason)
 
     else if (reason->ATOM_LIST[i]->VAL != literal->VAL && reason->ATOM_LIST[i]->EQUAL == literal->EQUAL && reason->ATOM_LIST[i]->EQUAL ==  false && !HasAtom(resolvent,reason->ATOM_LIST[i])) resolvent->AddAtom(reason->ATOM_LIST[i]);
   }
+ //cout<<"Resolvent: "<<endl;
+ //resolvent->Print();
 
  return resolvent;
 }
@@ -806,8 +803,8 @@ Clause * Formula::analyzeConflict(Clause * clause)
 
   if (Potent(clause)) {
    clause->NumUnAss = 0;
-   cout<<"Learned a clause: "<<endl;
-    clause->Print();
+   //cout<<"Learned a clause: "<<endl;
+//   clause->Print();
     CLAUSELIST.push_back(clause);
     int csize = clause->NumAtom;
     int CID = CLAUSELIST.size()-1;
@@ -821,7 +818,7 @@ Clause * Formula::analyzeConflict(Clause * clause)
 
   // Resolve clause and reason of its latest falsified literal
 
- // cout<<"We are working with the clause: "<<endl;
+//cout<<"We are working with the clause: "<<endl;
 //clause->Print();
   int csize = clause->NumAtom;
   //cout<<csize<<endl;
@@ -930,16 +927,16 @@ while(true){
   //check if conflict
 
   if(CONFLICT)
-    { cout << "There is a conflict at level: " << LEVEL << endl;
-     cout<<"Conflicting clause: "<<  endl;
-     CLAUSELIST[CONFLICTINGCLAUSE] -> Print();
+    {// cout << "There is a conflict at level: " << LEVEL << endl;
+    // cout<<"Conflicting clause: "<<  endl;
+  //   CLAUSELIST[CONFLICTINGCLAUSE] -> Print();
 
       if(LEVEL == 0) return 2;
 
       LEVEL = backtrackLevel(analyzeConflict(CLAUSELIST[CONFLICTINGCLAUSE]));
-      cout << "We are backtracking to the level: " << LEVEL << endl;
+    //  cout << "We are backtracking to the level: " << LEVEL << endl;
       BACKTRACKS++;
-      cout << "# of backtracks so far: "<<BACKTRACKS<<endl;
+    //  cout << "# of backtracks so far: "<<BACKTRACKS<<endl;
       CONFLICT = false;
       undoTheory(LEVEL);
     }
@@ -958,7 +955,7 @@ if(!CONFLICT)
     {
       DECISIONS++;
       LEVEL++;
-      cout<<"Decision: "<<atom->VAR<<(atom->EQUAL?'=':'!')<<atom->VAL<<endl;
+    //  cout<<"Decision: "<<atom->VAR<<(atom->EQUAL?'=':'!')<<atom->VAL<<endl;
       UNITCLAUSE = -1; // REASON for subsequent falsified atoms
       reduceTheory(atom->VAR, atom->EQUAL, atom->VAL);
   }
@@ -1072,7 +1069,7 @@ bool Formula::unitPropagation()
 
 	  if(flag)
 	    {
-	     cout<<"Reducing on unit literal: "<<lit_var<<(lit_equal?"=":"!=")<<lit_val<<endl;
+	    //  cout<<"Unit literal: "<<lit_var<<(lit_equal?"=":"!=")<<lit_val<<endl;
 	      reduceTheory(lit_var, lit_equal, lit_val);
 	      flag = false;
 	    }

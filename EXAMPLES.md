@@ -1,6 +1,6 @@
 # Some simple problems
 
-Here I put some examples of problems formalized in mvl-DIMACS language. For some of them there is a corresponding script.
+Here I put some examples of problems formalized in mvl-DIMACS language. For some of them there is a corresponding script in /tests/ folder.
 
 ## Pigeonhole problem
 
@@ -35,7 +35,7 @@ d 4 3
 
 ## N-queens
 
-In the same way one can model the *alldifferent* constraint from CSP, which can be used to give a concise formulation of the n-queens problem.
+In the same way one can model the *alldifferent* constraint from CSP, which can be used to give a concise formulation of the n-queens problem. For the 8-queens problem we have 8 variables and 504 clauses. Similar Boolean SAT encoding consists of 64 variables and 774 clauses.
 
 ```
 c This is a 4-queens problem
@@ -68,7 +68,7 @@ c alldifferent(1,2,3,4)
 4!=3 1!=3 0
 4!=3 2!=3 0
 4!=3 3!=3 0
-c down diagonals and up diagonals
+c alldifferent for down and up diagonals
 1!=0 2!=1 0
 1!=0 3!=2 0
 1!=0 4!=3 0
