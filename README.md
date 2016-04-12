@@ -2,7 +2,7 @@
 
 *Note*: This solver corrects and improves the (unsound) solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. Currently it implements non-chronological backtracking with resolution-based learning based on the Algorithm 7 in documentation/FD Solver.pdf. 
 
-If you want to try out the solver, download the archive in the current folder and follow the instructions below.
+If you want to try out the solver, download the archive in the current folder and follow the instructions below. See EXAMPLES for some simple problems you could solve. 
 
 ### Building the Solver
 
