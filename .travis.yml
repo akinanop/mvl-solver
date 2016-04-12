@@ -1,7 +1,11 @@
 language: cpp
+notifications:
+    email: false
 compiler:
 - clang
 - gcc
 script:
 - cd src
 - make
+- cd ../playground
+- ./Solver -solvenc -var 4 -clause 18 -file ../tests/UNSAT/pgn4
