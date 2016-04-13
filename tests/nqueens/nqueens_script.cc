@@ -12,10 +12,10 @@ using namespace std;
 
 int main(){
     int clauses = 0;
-    int var = 100;
-    int domain = 100;
+    int var = 53;
+    int domain = 53;
     ofstream file;
-    file.open("100queens");
+    file.open("53queens");
 
      for(int i=1; i < var + 1; i++){
       file<< "d "<<i<< " "<<domain<<endl;
@@ -49,7 +49,7 @@ for(int i=1; i < var+1; i++)
 }
 
 file<<"p cnf "<<var<<" "<<clauses<<endl;
-
+cout<<clauses<<endl;
     file.close();
 
   return 0;

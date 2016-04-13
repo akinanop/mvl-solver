@@ -27,8 +27,8 @@ Clause.o: ~/netshare/mvl-solver/src/Clause.cc ~/netshare/mvl-solver/src/Clause.h
 Variable.o: ~/netshare/mvl-solver/src/Variable.cc ~/netshare/mvl-solver/src/Variable.h
 	g++ -g -c ~/netshare/mvl-solver/src/Variable.cc
 
-Formula.o:  ~/netshare/mvl-solver/src/Formula.cc ~/netshare/mvl-solver/src/Formula.h
-	g++ -g -c ~/netshare/mvl-solver/src/Formula.cc
+Formula.o:  ~/netshare/mvl-solver/src/Formula_verbose.cc ~/netshare/mvl-solver/src/Formula.h
+	g++ -g -c ~/netshare/mvl-solver/src/Formula_verbose.cc
 
 SolveFinite.o: ~/netshare/mvl-solver/src/SolveFinite.cc ~/netshare/mvl-solver/src/Formula.h
 	g++ -g -c ~/netshare/mvl-solver/src/SolveFinite.cc
