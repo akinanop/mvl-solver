@@ -72,7 +72,7 @@ public:
   bool CONFLICT;
   int CONFLICTINGCLAUSE;
   vector <Literal *> DECSTACK;
-  Clause * REASON;
+  int RESTARTS;
   // int ORIGINALFORMULA;
   //public variables and functions
   //Zero argument constructor

@@ -86,6 +86,7 @@ int main(int argc, char ** argv)
     {
       //Call SolveFinite
       SolveFinite(clineinfo, "nc");
+      
     }
 
   else
@@ -94,6 +95,7 @@ int main(int argc, char ** argv)
     }
 
   //return nothing
+
   return 0;
 }
 //End of Code

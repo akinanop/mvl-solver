@@ -27,11 +27,11 @@ Clause.o: ~/netshare/mvl-solver/src/Clause.cc ~/netshare/mvl-solver/src/Clause.h
 Variable.o: ~/netshare/mvl-solver/src/Variable.cc ~/netshare/mvl-solver/src/Variable.h
 	g++ -g -c ~/netshare/mvl-solver/src/Variable.cc
 
-Formula.o:  ~/netshare/mvl-solver/src/Formula_verbose.cc ~/netshare/mvl-solver/src/Formula.h
-	g++ -g -c ~/netshare/mvl-solver/src/Formula_verbose.cc
+Formula.o:  ~/netshare/mvl-solver/src/Formula.cc ~/netshare/mvl-solver/src/Formula.h
+	g++ -g -c ~/netshare/mvl-solver/src/Formula.cc
 
 SolveFinite.o: ~/netshare/mvl-solver/src/SolveFinite.cc ~/netshare/mvl-solver/src/Formula.h
-	g++ -g -c ~/netshare/mvl-solver/src/SolveFinite.cc
+	g++ -g -c  ~/netshare/mvl-solver/src/SolveFinite.cc
 
 # Cleaning object files, exe, and temp files
 clean:

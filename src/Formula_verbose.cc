@@ -28,6 +28,7 @@ Formula::Formula()
   CONFLICT = false;
   CONFLICTINGCLAUSE = -1;
   DECSTACK.reserve(10);
+  RESTARTS = 0;
 }
 
 //1-arg constructor
@@ -48,7 +49,7 @@ Formula::Formula(CommandLine * cline)
   CONFLICT = false;
   CONFLICTINGCLAUSE = -1;
   DECSTACK.reserve(cline->NUM_VAR+1);
-  REASON = NULL;
+  RESTARTS = 0;
 }
 
 //BuildFunction
@@ -223,13 +224,15 @@ void Formula::PrintClauses()
 void Formula::PrintInfo()
 {
   printf("\n");
-  printf("Number of Decisions   : %d\n", DECISIONS);
+  printf("Decisions   : %d\n", DECISIONS);
 //  printf("Number of Units       : %d\n", UNITS);
-  printf("Number of Backtracks  : %d\n", BACKTRACKS);
-  printf("Number of Entails     : %d\n", ENTAILS);
+  printf("Backtracks  : %d\n", BACKTRACKS);
+  printf("Entails     : %d\n", ENTAILS);
 //  printf("Number of Levels      : %d\n", LEVEL);
-  printf("Number of Variables   : %d\n", VARLIST.size()-1);
-  printf("Number of Clauses     : %d\n", CLAUSELIST.size());
+  printf("Variables   : %d\n", VARLIST.size()-1);
+  printf("Clauses     : %d\n", CLAUSELIST.size());
+  printf("Restarts   : %d\n", RESTARTS);
+
   printf("\n");
 }
 
@@ -388,7 +391,7 @@ bool Formula::checkEntail(int var)
   if(flag)
     {
       ENTAILLITERAL = new Literal(var, domainvalue);
-      cout<<"Entailment... "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
+    //  cout<<"Entailment... "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
 
       return true;
     }
@@ -776,8 +779,8 @@ int Formula::backtrackLevel(Clause * learnedClause)
 
 
   //if learned clause has only one literal then backtrack to level 0
-//if(csize == 1)
-  // return 0;
+if(csize == 1)
+  return 0;
 
   for(int i=0; i<csize; i++)
   {
@@ -806,8 +809,10 @@ Clause * Formula::analyzeConflict(Clause * clause)
 
   if (Potent(clause)) {
    clause->NumUnAss = 0;
-   cout<<"Learned a clause: "<<endl;
-    clause->Print();
+   //cout<<"Learned a clause: "<<endl;
+  //  clause->Print();
+  //  cout<<"Size of the clause: "<< clause->NumAtom<<endl;
+
     CLAUSELIST.push_back(clause);
     int csize = clause->NumAtom;
     int CID = CLAUSELIST.size()-1;
@@ -912,7 +917,8 @@ for(int i=0; i<unit->NumAtom; i++)
 //\\====================NON-CHRONOLOGICAL BACKTRACK=============================
 
 int Formula::NonChronoBacktrack()
-{
+{ int restartCount = 200;
+  //int RESTARTS = 0;
   // LEVEL = 0;
   //start of finite domain extended dpll
   // return 0 : if theory satisfied
@@ -941,7 +947,8 @@ while(true){
       BACKTRACKS++;
       cout << "# of backtracks so far: "<<BACKTRACKS<<endl;
       CONFLICT = false;
-      undoTheory(LEVEL);
+      if(BACKTRACKS == restartCount) {undoTheory(0); restartCount = BACKTRACKS + 200; RESTARTS++;}
+      else undoTheory(LEVEL);
     }
     // If there is a unit clause, propagate
 
@@ -1072,7 +1079,7 @@ bool Formula::unitPropagation()
 
 	  if(flag)
 	    {
-	     cout<<"Reducing on unit literal: "<<lit_var<<(lit_equal?"=":"!=")<<lit_val<<endl;
+	    // cout<<"Reducing on unit literal: "<<lit_var<<(lit_equal?"=":"!=")<<lit_val<<endl;
 	      reduceTheory(lit_var, lit_equal, lit_val);
 	      flag = false;
 	    }

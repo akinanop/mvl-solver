@@ -11,11 +11,15 @@ using namespace std;
 // n-queens as alldifferent
 
 int main(){
+  for(int queens=27; queens < 49; queens++){
+
+    string name = to_string(queens)+"queens";
+
     int clauses = 0;
-    int var = 53;
-    int domain = 53;
+    int var = queens;
+    int domain = queens;
     ofstream file;
-    file.open("53queens");
+    file.open(name);
 
      for(int i=1; i < var + 1; i++){
       file<< "d "<<i<< " "<<domain<<endl;
@@ -51,6 +55,6 @@ for(int i=1; i < var+1; i++)
 file<<"p cnf "<<var<<" "<<clauses<<endl;
 cout<<clauses<<endl;
     file.close();
-
+}
   return 0;
 }

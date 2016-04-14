@@ -63,7 +63,7 @@ void SolveFinite(CommandLine * cline, string type)
   printf("%2.4f\t %2.4f\t", difftime, totaltime);
   cout<<endl;
   cout<<endl;
-
+  cout << '\a';
   if(result == 0)
     cout<<"SAT"<<endl;
   else if(result == 1)
@@ -72,7 +72,7 @@ void SolveFinite(CommandLine * cline, string type)
     cout<<"UNSAT"<<endl;
   fobj->PrintInfo();
   if(result == 0)
-   { cout<<"The model: "<<endl; 
+   { cout<<"The model: "<<endl;
      fobj->PrintModel();
       cout<<"Verifying model ... ";
        if(fobj->verifyModel())
