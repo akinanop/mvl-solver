@@ -1,7 +1,5 @@
 set terminal latex
-set output "fc_result1000.tex"
-set ylabel "Percentage of sat forumulas"
+set output "nqueens.tex"
+set ylabel "Backtracks"
 set xlabel "Time"
 plot "fc_result1000.dat" with yerrorbars
-
-        

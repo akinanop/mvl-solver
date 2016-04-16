@@ -1,0 +1,7 @@
+set terminal latex
+set output "nqueens.tex"
+set ylabel "Backtracks"
+set xlabel "N-queens"
+set xrange [4 : 100]
+set yrange [0 : 1500]
+plot "~/netshare/mvl-solver/tests/results.dat" using 2:4 with lines

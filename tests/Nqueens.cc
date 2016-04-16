@@ -9,7 +9,7 @@ using namespace std;
 
 int Nqueens() {
   int result = 0;
-  for(int queens=4; queens < 30; queens++){
+  for(int queens=100; queens < 201; queens++){
 
     string name = to_string(queens)+"queens";
 

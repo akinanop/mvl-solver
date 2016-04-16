@@ -916,7 +916,8 @@ int Formula::NonChronoBacktrack()
   // return 1 : if time out
   // return 2 : if CONFLICT and later used as unsatisfied
 while(true){
-  // cout<<"Number of clauses so far: "<<CLAUSELIST.size()<<endl;
+  //cout<<"Number of clauses so far: "<<CLAUSELIST.size()<<endl;
+  // cout<<BACKTRACKS<<endl;
   //Check if theory satisfied
   if(checkSat())
     return 0; // add PrintModel(); - from DECSTACK
