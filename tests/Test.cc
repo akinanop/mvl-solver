@@ -10,7 +10,7 @@ using namespace std;
 void run_solver(int var, int clauses, string file)
 { char buffer [100];
   FILE * outp;
-  outp = fopen("out4_100R_50", "a");
+  outp = fopen("out85_200R_50", "a");
 
   string total =  "~/netshare/mvl-solver/playground/./Solver -solvenc -var "+to_string(var)+" -clause "+to_string(clauses)+" -file "+file;
   FILE* test = popen(total.c_str(), "r");
@@ -29,7 +29,7 @@ int main()
 {
   // Nqueens
 
-  for(int queens=4; queens < 100; queens++){
+  for(int queens=86; queens < 201; queens++){
 
     string name = to_string(queens)+"queens";
 
