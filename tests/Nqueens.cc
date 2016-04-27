@@ -9,7 +9,7 @@ using namespace std;
 
 int main() {
   int result = 0;
-  for(int queens=52; queens < 53; queens++){
+  for(int queens=34; queens < 35; queens++){
 
     string name = to_string(queens)+"queens";
 

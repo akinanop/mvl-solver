@@ -1,0 +1,48 @@
+valgrind ./Solver -solvenc -var 34 -clause 44132 -file ~/Desktop/mvl-solver/tests/34queens
+==6230== Memcheck, a memory error detector
+==6230== Copyright (C) 2002-2013, and GNU GPL'd, by Julian Seward et al.
+==6230== Using Valgrind-3.10.1 and LibVEX; rerun with -h for copyright info
+==6230== Command: ./Solver -solvenc -var 34 -clause 44132 -file /home/nika/Desktop/mvl-solver/tests/34queens
+==6230==
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+==6230== Stack overflow in thread 1: can't grow stack to 0xffe801ff8
+==6230==
+==6230== Process terminating with default action of signal 11 (SIGSEGV)
+==6230==  Access not within mapped region at address 0xFFE801FF8
+==6230==    at 0x40B99B: Literal** std::__copy_move<false, true, std::random_access_iterator_tag>::__copy_m<Literal*>(Literal* const*, Literal* const*, Literal**) (stl_algobase.h:369)
+==6230==  If you believe this happened as a result of a stack
+==6230==  overflow in your program's main thread (unlikely but
+==6230==  possible), you can try to increase the size of the
+==6230==  main thread stack using the --main-stacksize= flag.
+==6230==  The main thread stack size used in this run was 8388608.
+==6230== Stack overflow in thread 1: can't grow stack to 0xffe801fd8
+==6230==
+==6230== Process terminating with default action of signal 11 (SIGSEGV)
+==6230==  Access not within mapped region at address 0xFFE801FD8
+==6230==    at 0x4A256B0: _vgnU_freeres (in /usr/lib/valgrind/vgpreload_core-amd64-linux.so)
+==6230==  If you believe this happened as a result of a stack
+==6230==  overflow in your program's main thread (unlikely but
+==6230==  possible), you can try to increase the size of the
+==6230==  main thread stack using the --main-stacksize= flag.
+==6230==  The main thread stack size used in this run was 8388608.
+==6230==
+==6230== HEAP SUMMARY:
+==6230==     in use at exit: 85,443,807 bytes in 979,196 blocks
+==6230==   total heap usage: 1,361,451 allocs, 382,255 frees, 141,161,607 bytes allocated
+==6230==
+==6230== LEAK SUMMARY:
+==6230==    definitely lost: 4,713,168 bytes in 120,321 blocks
+==6230==    indirectly lost: 15,065,000 bytes in 135,685 blocks
+==6230==      possibly lost: 2,707 bytes in 63 blocks
+==6230==    still reachable: 65,662,932 bytes in 723,127 blocks
+==6230==         suppressed: 0 bytes in 0 blocks
+==6230== Rerun with --leak-check=full to see details of leaked memory
+==6230==
+==6230== For counts of detected and suppressed errors, rerun with: -v
+==6230== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+Segmentation fault
