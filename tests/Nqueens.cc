@@ -7,9 +7,9 @@
 #include <cmath>
 using namespace std;
 
-int Nqueens() {
+int main() {
   int result = 0;
-  for(int queens=100; queens < 201; queens++){
+  for(int queens=52; queens < 53; queens++){
 
     string name = to_string(queens)+"queens";
 
@@ -53,6 +53,7 @@ for(int i=1; i < var+1; i++)
 file<<"p cnf "<<var<<" "<<clauses<<endl;
 // cout<<clauses<<endl;
     file.close();
+    return clauses;
+
 }
-  return clauses;
 }
