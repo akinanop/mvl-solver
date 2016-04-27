@@ -1,8 +1,18 @@
-## Finite Domain Satisfiablity Solver
+# Finite Domain Satisfiablity Solver
 
-*Note*: This solver corrects and improves the (unsound) solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. Currently it implements non-chronological backtracking with resolution-based learning based on the Algorithm 7 in documentation/FD Solver.pdf. 
+To learn what is a finite satisfiability problem, go to the [wiki page](https://github.com/akinanop/mvl-solver/wiki). If you want to try out the solver, download the archive in the current folder and follow the instructions below. Click [here](https://github.com/akinanop/mvl-solver/blob/master/EXAMPLES.md) to see some simple problems you could solve. 
 
-If you want to try out the solver, download the archive in the current folder and follow the instructions below. See EXAMPLES for some simple problems you could solve. 
+Table of contents:
+
+* [Building the solver](https://github.com/akinanop/mvl-solver#building-the-solver)
+* [Input format for the solver (extended DIMACS)](https://github.com/akinanop/mvl-solver#extended-dimacs-format)
+* Using the solver:
+      * [Generate random benchmarks](https://github.com/akinanop/mvl-solver#generating-benchmark-problem)
+      * [Solve a problem](https://github.com/akinanop/mvl-solver#finite-domain-solver-with-non-chronological-backtracking)
+      * [Convert between Boolean and Finite domain problems](https://github.com/akinanop/mvl-solver#convert-boolean-to-finite-domain)
+
+<small>*Note*: This solver corrects and builds upon the unsound solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. Currently it implements non-chronological backtracking with resolution-based learning based on the Algorithm 7 in documentation/FD Solver.pdf.</small>
+
 
 ### Building the Solver
 
