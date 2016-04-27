@@ -11,7 +11,7 @@ int main( int argc , char** argv ) {
    const char * oldstr ;
    int oldstrlen ;
    ofstream output ;
-   output.open( "results4_85R_50.txt" ) ;
+   output.open( "results4_200R200" ) ;
    ifstream infile( argv[ 1 ] ) ;
    if ( infile ) {
       while ( getline( infile , line ) ) {

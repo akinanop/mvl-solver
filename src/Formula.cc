@@ -939,8 +939,10 @@ while(true){
       BACKTRACKS++;
     //  cout << "# of backtracks so far: "<<BACKTRACKS<<endl;
       CONFLICT = false;
-      if(BACKTRACKS == restartCount) {undoTheory(0); restartCount = BACKTRACKS + 50; RESTARTS++;}
-      else undoTheory(LEVEL);    }
+    /*  if(BACKTRACKS == restartCount) {undoTheory(0); restartCount = BACKTRACKS + 50; RESTARTS++;}
+      else */
+      undoTheory(LEVEL);
+      }
     // If there is a unit clause, propagate
 
     checkUnit();

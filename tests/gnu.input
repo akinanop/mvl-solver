@@ -1,7 +1,0 @@
-set terminal pngcairo
-set output "nqueens.png"
-set ylabel "Backtracks"
-set xlabel "N-queens"
-set xrange [4 : 200]
-set yrange [0 : 1900]
-plot "new.dat" using 4:2 with lines
