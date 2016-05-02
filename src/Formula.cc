@@ -831,7 +831,7 @@ Clause * Formula::analyzeConflict(Clause * clause)
 //  cout<<VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]<<endl;
 //  if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] > -1) CLAUSELIST[VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]] -> Print();
 Clause * resolvent = new Clause();
-  // dealing with decision and entail reasons:
+  // dealing with decision and entail reasons: TODO FIX - segfault on certain instances
   if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] == -1 ){
 
      Clause * chooseClause = new Clause();
