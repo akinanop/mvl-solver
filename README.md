@@ -11,7 +11,17 @@ Table of contents:
       * [Solve a problem](https://github.com/akinanop/mvl-solver#finite-domain-solver-with-non-chronological-backtracking)
       * [Convert between Boolean and Finite domain problems](https://github.com/akinanop/mvl-solver#convert-boolean-to-finite-domain)
 
-<small>*Note*: This solver corrects and builds upon the unsound solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. Currently it implements non-chronological backtracking with resolution-based learning based on the Algorithm 7 in documentation/FD Solver.pdf.</small>
+*Note*: This solver corrects and builds upon the unsound solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. Currently it implements [non-chronological backtracking with resolution-based learning](https://github.com/akinanop/mvl-solver/blob/master/literature/Algorithm%207.pdf).
+
+Roughly, the quarter of the original code was modified. E.g., if you run ```dwdiff -s``` on the file containing main functions:
+
+```
+dwdiff -s /original_solver/Formula.cc /src/Formula.cc
+
+old: 2848 words  2036 71% common  328 11% deleted  484 16% changed
+new: 3102 words  2036 65% common  335 10% inserted  731 23% changed
+
+```
 
 
 ### Building the Solver
