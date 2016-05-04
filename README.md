@@ -13,7 +13,7 @@ Table of contents:
 
 *Note*: This solver corrects and builds upon the unsound solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. Currently it implements [non-chronological backtracking with resolution-based learning](https://github.com/akinanop/mvl-solver/blob/master/literature/Algorithm%207.pdf).
 
-Roughly, the quarter of the original code was modified. If you run ```dwdiff -s``` on the file containing main functions:
+Roughly, a quarter of the original code was modified. If you run ```dwdiff -s``` on the file containing the main functions, you get:
 
 ```
 dwdiff -s /original_solver/Formula.cc /src/Formula.cc
