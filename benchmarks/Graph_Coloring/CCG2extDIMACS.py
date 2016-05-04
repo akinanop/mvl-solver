@@ -8,7 +8,6 @@ DIMACS_DOMAIN_LINE = 'd {VarName:d} {DomainSize:d}\n'
 DIMACS_CLAUSE_LINE = '{VarName1:d}!={DomainValue1:d} {VarName2:d}!={DomainValue2:d} 0\n'
 
 def convert_problem_line(line):
-    global results_lines
     try:
         n_vertices = int(line.split()[2])
         n_edges = int(line.split()[3])
@@ -26,7 +25,8 @@ def convert_problem_line(line):
 parser = argparse.ArgumentParser()
 parser.add_argument("CCG_file", help = "name of mask of files in CCG format to be converted")
 parser.add_argument("N", help = "the number of colors", type = int)
-parser.add_argument("--folder", help = "the folder to save .dimacs file(s)")
+parser.add_argument("-folder", help = "the folder to save .dimacs file(s)")
+parser.add_argument("-s", help = "skip bad-formatted files", action = "store_true")
 args = parser.parse_args()
 
 # saving the number of colors
@@ -99,7 +99,11 @@ else:
                 if report != 'OK':
                         print(ERROR_REPORT.format(**{'error_type':report, 'filename':filename, 
                                                      'line_number':line_number, 'line':line.strip()}))
-                        exit()
+                        if args.s:
+                            os.remove(os.path.join(results_folder,result_filename))
+                            break
+                        else:
+                            exit()
                 line = f.readline()
         # now we should write the clauses to result file
         with open(os.path.join(results_folder, result_filename), 'a') as result_file:
