@@ -56,7 +56,7 @@ else:
     for filename in filenames:
         # creating/overwriting results file 
         print('converting ' + filename)
-        result_filename = '.'.join([filename.rsplit('.', maxsplit = 1)[0],'_N' + str(N) + '.dimacs'])
+        result_filename = ''.join([filename.rsplit('.', maxsplit = 1)[0],'_N' + str(N) + '.dimacs'])
         results_file = open(os.path.join(results_folder, result_filename), 'w')
         results_file.close()
         # setting flags
@@ -107,8 +107,8 @@ else:
                 line = f.readline()
         # now we should write the clauses to result file
         with open(os.path.join(results_folder, result_filename), 'a') as result_file:
-            for i in range(len(sources)):
-                for d in range(N):
+            for d in range(N):
+                for i in range(len(sources)):
                     result_file.write(DIMACS_CLAUSE_LINE.format(**{'VarName1':sources[i],'DomainValue1':d, 'VarName2':targets[i], 'DomainValue2':d}))
-    
+        
             
