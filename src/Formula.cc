@@ -28,7 +28,8 @@ Formula::Formula()
   CONFLICT = false;
   CONFLICTINGCLAUSE = -1;
   DECSTACK.reserve(10);
-RESTARTS = 0;}
+  RESTARTS = 0;
+}
 
 //1-arg constructor
 Formula::Formula(CommandLine * cline)
@@ -48,7 +49,8 @@ Formula::Formula(CommandLine * cline)
   CONFLICT = false;
   CONFLICTINGCLAUSE = -1;
   DECSTACK.reserve(cline->NUM_VAR+1);
-RESTARTS = 0;}
+  RESTARTS = 0;
+}
 
 //BuildFunction
 void Formula::BuildFunction(CommandLine * cline)
@@ -820,7 +822,7 @@ Clause * Formula::analyzeConflict(Clause * clause)
 
 //cout<<"We are working with the clause: "<<endl;
 //clause->Print();
-  int csize = clause->NumAtom;
+//  int csize = clause->NumAtom;
   //cout<<csize<<endl;
 //  Literal * lastFalse = maxLit(clause); //Find latest falsified literal
   // Find the reason:
@@ -833,12 +835,26 @@ Clause * Formula::analyzeConflict(Clause * clause)
 Clause * resolvent = new Clause();
   // dealing with decision and entail reasons: TODO FIX - segfault on certain instances
   if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] == -1 ){
+    clause->NumUnAss = 0; //???
+    CLAUSELIST.push_back(clause);
+    int csize = clause->NumAtom;
+    int CID = CLAUSELIST.size()-1;
+   for(int i=0; i<csize; i++) {
+      VARLIST[clause->ATOM_LIST[i]->VAR]->AddRecord(CID,
+                 clause->ATOM_LIST[i]->VAL,
+                 clause->ATOM_LIST[i]->EQUAL);
+  }
+  return clause;
+
+}
+ /*if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] == -1 ){
 
      Clause * chooseClause = new Clause();
       chooseClause -> AddAtom(new Literal(lastFalse->VAR,'=',lastFalse->VAL));
       chooseClause -> AddAtom(new Literal(lastFalse->VAR,'!',lastFalse->VAL));
       resolvent = resolve(clause,lastFalse,chooseClause);
-  }
+  } */
+
   else if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] == -2){
     Clause * entailClause = new Clause();
  for (int i=0; i < VARLIST[lastFalse->VAR]->DOMAINSIZE; i++){
@@ -909,7 +925,7 @@ for(int i=0; i<unit->NumAtom; i++)
 //\\====================NON-CHRONOLOGICAL BACKTRACK=============================
 
 int Formula::NonChronoBacktrack()
-{ int restartCount = 50;
+{ //int restartCount = 0;
   // LEVEL = 0;
   //start of finite domain extended dpll
   // return 0 : if theory satisfied
@@ -941,6 +957,71 @@ while(true){
       CONFLICT = false;
     /*  if(BACKTRACKS == restartCount) {undoTheory(0); restartCount = BACKTRACKS + 50; RESTARTS++;}
       else */
+      undoTheory(LEVEL);
+      }
+    // If there is a unit clause, propagate
+
+    checkUnit();
+    if(!UNITLIST.empty())
+      unitPropagation();
+
+    // otherwise choose a literal and propagate - no need for separate unit propagation
+if(!CONFLICT)
+{
+
+  Literal * atom = chooseLiteral();
+  if(atom)
+    {
+      DECISIONS++;
+      LEVEL++;
+    //  cout<<"Decision: "<<atom->VAR<<(atom->EQUAL?'=':'!')<<atom->VAL<<endl;
+      UNITCLAUSE = -1; // REASON for subsequent falsified atoms
+      reduceTheory(atom->VAR, atom->EQUAL, atom->VAL);
+  }
+
+}
+}
+
+
+}
+
+
+int Formula::NonChronoBacktrack(int restarts)
+{  int restartCount = restarts;
+  // LEVEL = 0;
+  //start of finite domain extended dpll
+  // return 0 : if theory satisfied
+  // return 1 : if time out
+  // return 2 : if CONFLICT and later used as unsatisfied
+while(true){
+  //cout<<"Number of clauses so far: "<<CLAUSELIST.size()<<endl;
+  // cout<<BACKTRACKS<<endl;
+  //Check if theory satisfied
+  if(checkSat())
+    return 0; // add PrintModel(); - from DECSTACK
+  //Check if time out
+ TIME_E = GetTime();
+ if((TIME_E - TIME_S) > TIMELIMIT)
+   return 1;
+  //check if conflict
+
+  if(CONFLICT)
+    {// cout << "There is a conflict at level: " << LEVEL << endl;
+    // cout<<"Conflicting clause: "<<  endl;
+  //   CLAUSELIST[CONFLICTINGCLAUSE] -> Print();
+
+      if(LEVEL == 0) return 2;
+
+      LEVEL = backtrackLevel(analyzeConflict(CLAUSELIST[CONFLICTINGCLAUSE]));
+    //  cout << "We are backtracking to the level: " << LEVEL << endl;
+      BACKTRACKS++;
+    //  cout << "# of backtracks so far: "<<BACKTRACKS<<endl;
+      CONFLICT = false;
+    if(BACKTRACKS == restartCount) {
+      undoTheory(0);
+      restartCount = BACKTRACKS + restarts; RESTARTS++;
+    }
+      else
       undoTheory(LEVEL);
       }
     // If there is a unit clause, propagate

@@ -916,8 +916,8 @@ for(int i=0; i<unit->NumAtom; i++)
 
 //\\====================NON-CHRONOLOGICAL BACKTRACK=============================
 
-int Formula::NonChronoBacktrack()
-{ int restartCount = 200;
+int Formula::NonChronoBacktrack(int restarts)
+{ int restartCount = restarts;
   //int RESTARTS = 0;
   // LEVEL = 0;
   //start of finite domain extended dpll
@@ -947,7 +947,10 @@ while(true){
       BACKTRACKS++;
       cout << "# of backtracks so far: "<<BACKTRACKS<<endl;
       CONFLICT = false;
-      if(BACKTRACKS == restartCount) {undoTheory(0); restartCount = BACKTRACKS + 200; RESTARTS++;}
+      if(BACKTRACKS == restartCount) {
+        undoTheory(0);
+        restartCount = BACKTRACKS + restarts; RESTARTS++;
+      }
       else undoTheory(LEVEL);
     }
     // If there is a unit clause, propagate
@@ -975,6 +978,67 @@ if(!CONFLICT)
 
 
 }
+
+
+int Formula::NonChronoBacktrack()
+{ //int restartCount = restarts;
+  //int RESTARTS = 0;
+  // LEVEL = 0;
+  //start of finite domain extended dpll
+  // return 0 : if theory satisfied
+  // return 1 : if time out
+  // return 2 : if CONFLICT and later used as unsatisfied
+while(true){
+  // cout<<"Number of clauses so far: "<<CLAUSELIST.size()<<endl;
+  //Check if theory satisfied
+  if(checkSat())
+    return 0; // add PrintModel(); - from DECSTACK
+  //Check if time out
+ TIME_E = GetTime();
+ if((TIME_E - TIME_S) > TIMELIMIT)
+   return 1;
+  //check if conflict
+
+  if(CONFLICT)
+    { cout << "There is a conflict at level: " << LEVEL << endl;
+     cout<<"Conflicting clause: "<<  endl;
+     CLAUSELIST[CONFLICTINGCLAUSE] -> Print();
+
+      if(LEVEL == 0) return 2;
+
+      LEVEL = backtrackLevel(analyzeConflict(CLAUSELIST[CONFLICTINGCLAUSE]));
+      cout << "We are backtracking to the level: " << LEVEL << endl;
+      BACKTRACKS++;
+      cout << "# of backtracks so far: "<<BACKTRACKS<<endl;
+      CONFLICT = false;
+      undoTheory(LEVEL);
+    }
+    // If there is a unit clause, propagate
+
+    checkUnit();
+    if(!UNITLIST.empty())
+      unitPropagation();
+
+    // otherwise choose a literal and propagate - no need for separate unit propagation
+if(!CONFLICT)
+{
+
+  Literal * atom = chooseLiteral();
+  if(atom)
+    {
+      DECISIONS++;
+      LEVEL++;
+      cout<<"Decision: "<<atom->VAR<<(atom->EQUAL?'=':'!')<<atom->VAL<<endl;
+      UNITCLAUSE = -1; // REASON for subsequent falsified atoms
+      reduceTheory(atom->VAR, atom->EQUAL, atom->VAL);
+  }
+
+}
+}
+
+
+}
+
 
 int Formula::ChronoBacktrack(int level)
 {

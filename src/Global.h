@@ -1,6 +1,6 @@
 //**************************************************************
 //
-// Finite Domain Solver 
+// Finite Domain Solver
 //
 // File : Global.h
 // Description : Contains code for Commandline arguments parsing
@@ -52,6 +52,8 @@ struct CommandLine
   char * MODEL_FILE;
   //Time limit
   int TIME;
+
+  int RESTARTS;
 };
 
 //Global Declaration - Functions

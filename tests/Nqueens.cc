@@ -10,18 +10,18 @@
 using namespace std;
 
 int main( ) {
-  for( int queens = 4 ; queens < 101 ; queens++ ) { 
+  for( int queens = 60 ; queens < 61 ; queens++ ) {
     // we want a seperate file for each n = 4...100 with title "nqueens"
     string name = to_string(queens) + "queens" ;
 
     int clauses = 0 ; // we want to count clauses to add this info later - could have just found a fomula as in the pigeonhole case
     int var = queens ; // each variable corresponds to a queen on a column
     int domain = queens ; // each domain value corresponds to a quuen on a row
-    
+
     //open a file
     ofstream file ;
     file.open(name) ;
-    
+
     // write domain declaration for each variable
 
      for(int i = 1; i < var + 1; i++ ) {
