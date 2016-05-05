@@ -2,7 +2,7 @@
 
 To learn what is a finite satisfiability problem, go to the [wiki page](https://github.com/akinanop/mvl-solver/wiki). If you want to try out the solver, download the archive in the current folder and follow the instructions below. Click [here](https://github.com/akinanop/mvl-solver/blob/master/EXAMPLES.md) to see some simple problems you could solve. 
 
-This project supported by the Austrian Science Fund (FWF): I836-N23.
+*This project supported by the Austrian Science Fund (FWF): I836-N23.*
 
 
 Table of contents:
@@ -115,7 +115,7 @@ EXAMPLE: ``` ./Solver -genben -var 4 -clause 18 -clausesize 2 -sat 0 -domain 2 -
 
 ### Finite Domain Solver with Non-Chronological Backtracking
 
-Use the following format to run the program. The solver accepts problems in extended DIMACS format.
+Use the following format to run the program. The solver accepts problems in [extended DIMACS format](https://github.com/akinanop/mvl-solver/wiki/Extended-DIMACS-format).
 
 ``` ./mvl-solver -solvenc -var <int> -clause <int> -file <string> -time <int> ```
 
