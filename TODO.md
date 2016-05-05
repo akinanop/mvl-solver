@@ -1,4 +1,10 @@
-May-June 2016
+
+### Urgent
+
+* cleanup: test + benchmarks
+* run solver on nqueens again
+
+### May-June 2016
 
 Outcomes:
 
