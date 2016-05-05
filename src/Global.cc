@@ -1,6 +1,6 @@
 //**************************************************************
 //
-// Finite Domain Solver 
+// Finite Domain Solver
 //
 // File : Global.cc
 // Description : Contains code for Commandline arguments parsing
@@ -188,6 +188,7 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
   cline->FILE = "die";
   cline->MODEL_FILE = "die";
   cline->TIME = 3600; //1 hour = 60mins * 60secs
+  cline->RESTARTS = 0;
   //Check if enough arguments supplied
   if(argc < 2)
     {
@@ -319,7 +320,9 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 	{
 	  for(current = 2; current < argc; current++)
 	    {
-	      if(!strcmp(argv[current], "-var"))
+        if (!strcmp(argv[current], "-restart"))
+    cline->RESTARTS = atoi(argv[++current]);
+	      else if(!strcmp(argv[current], "-var"))
 		cline->NUM_VAR = atoi(argv[++current]);
 	      else if(!strcmp(argv[current], "-clause"))
 		cline->NUM_CLAUSE = atoi(argv[++current]);

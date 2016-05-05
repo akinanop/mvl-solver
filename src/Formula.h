@@ -131,6 +131,7 @@ public:
   bool Potent(Clause * clause);
   int backtrackLevel(Clause * clause);
   //whyFalse: return the literal inconsistent with the input literal that was added to the interpretation earliest
+
   Literal * whyFalse(Literal * literal);
   //resolve: Extended resolution
   Clause * resolve(Clause * clause, Literal * literal, Clause * reason);
@@ -145,6 +146,7 @@ public:
   //NonChronoBacktrack : Extended DPLL algorithm with clause learning and
   //non chronological backtracking, returns backtrack level
   int NonChronoBacktrack();
+  int NonChronoBacktrack(int restarts);
 
   int NonChronoBacktrackLoop(int level);
   //ChronoBacktrack : Extended DPLL algorithm without any learning

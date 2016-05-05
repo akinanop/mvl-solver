@@ -54,7 +54,10 @@ void SolveFinite(CommandLine * cline, string type)
     {
       //3. NonChronological Backtracking with Clause learning - "loop version"
     //  result = fobj->NonChronoBacktrack(0); "recursive version"
-      result = fobj->NonChronoBacktrack(); // The function defined in Formula.cc
+      if (cline->RESTARTS != 0) {
+        result = fobj->NonChronoBacktrack(cline->RESTARTS);
+      }
+      else result = fobj->NonChronoBacktrack(); // The function defined in Formula.cc
     }
   // compute the search time
   difftime = fobj->TIME_E - fobj->TIME_S;
