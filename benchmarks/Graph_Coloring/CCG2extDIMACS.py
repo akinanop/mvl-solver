@@ -1,9 +1,14 @@
+# This program creates a fintie domain N-coloring problem from a graph specified in CCG format and a number N
+# To learn more, go here: https://github.com/akinanop/mvl-solver/wiki/Graph-coloring
+# Author: Pavlo Myronov
+# Use python3 to run this program
+
 import os
 import argparse
 import fnmatch
 
 ERROR_REPORT = '{error_type} in {filename}\nLine number {line_number}:\n"{line}"'
-DIMACS_PROBLEM_LINE = 'p conf {NumVar:d} {NumClause:d}\n'
+DIMACS_PROBLEM_LINE = 'p cnf {NumVar:d} {NumClause:d}\n'
 DIMACS_DOMAIN_LINE = 'd {VarName:d} {DomainSize:d}\n'
 DIMACS_CLAUSE_LINE = '{VarName1:d}!={DomainValue1:d} {VarName2:d}!={DomainValue2:d} 0\n'
 
@@ -49,12 +54,12 @@ for f in files_to_match:
     if fnmatch.fnmatch(f, files):
         filenames.append(f)
 
-# reading and converting files        
+# reading and converting files
 if filenames == []:
     print("No such file(s).")
 else:
     for filename in filenames:
-        # creating/overwriting results file 
+        # creating/overwriting results file
         print('converting ' + filename)
         result_filename = ''.join([filename.rsplit('.', maxsplit = 1)[0],'_N' + str(N) + '.dimacs'])
         results_file = open(os.path.join(results_folder, result_filename), 'w')
@@ -77,7 +82,7 @@ else:
                     else:
                         report = 'The second problem line is found'
                 elif line[0] == "e":
-                    # to save the desirable clauses order we should at firsts read all the 
+                    # to save the desirable clauses order we should at firsts read all the
                     # edges to generate clauses lines later
                     try:
                         source,target = [int(s) for s in line.split()[1:3:]]
@@ -97,7 +102,7 @@ else:
                 else:
                     report = 'Unknown line type'
                 if report != 'OK':
-                        print(ERROR_REPORT.format(**{'error_type':report, 'filename':filename, 
+                        print(ERROR_REPORT.format(**{'error_type':report, 'filename':filename,
                                                      'line_number':line_number, 'line':line.strip()}))
                         if args.s:
                             os.remove(os.path.join(results_folder,result_filename))
@@ -110,5 +115,3 @@ else:
             for d in range(N):
                 for i in range(len(sources)):
                     result_file.write(DIMACS_CLAUSE_LINE.format(**{'VarName1':sources[i],'DomainValue1':d, 'VarName2':targets[i], 'DomainValue2':d}))
-        
-            

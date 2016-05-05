@@ -2,6 +2,9 @@
 
 To learn what is a finite satisfiability problem, go to the [wiki page](https://github.com/akinanop/mvl-solver/wiki). If you want to try out the solver, download the archive in the current folder and follow the instructions below. Click [here](https://github.com/akinanop/mvl-solver/blob/master/EXAMPLES.md) to see some simple problems you could solve. 
 
+This project supported by the Austrian Science Fund (FWF): I836-N23.
+
+
 Table of contents:
 
 * [Building the solver](https://github.com/akinanop/mvl-solver#building-the-solver)
@@ -13,7 +16,7 @@ Table of contents:
 
 *Note*: This solver corrects and builds upon the unsound solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. Currently it implements [non-chronological backtracking with resolution-based learning](https://github.com/akinanop/mvl-solver/blob/master/literature/Algorithm%207.pdf).
 
-Roughly, the quarter of the original code was modified. E.g., if you run ```dwdiff -s``` on the file containing main functions:
+Roughly, a quarter of the original code was modified. If you run ```dwdiff -s``` on the file containing the main functions, you get:
 
 ```
 dwdiff -s /original_solver/Formula.cc /src/Formula.cc
