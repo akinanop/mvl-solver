@@ -229,14 +229,14 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 	    }
 
 	  //check if required variables are specified
-	  if((cline->NUM_VAR == -1) || (cline->NUM_CLAUSE == -1) ||
+	/*  if((cline->NUM_VAR == -1) || (cline->NUM_CLAUSE == -1) ||
 	     (!strcmp(cline->FILE, "die")))
 	    {
 	      cout<<"**** INCORRECT COMMANDLINE ****"<<endl;
 	      cout<<" Check Input format using : exe -help"<<endl;
 	      cout<<endl;
 	      exit(1);
-	    }
+	    } */
 	}
 
       //If option is for converting boolean to finite domain
@@ -305,14 +305,14 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 	    }
 
 	  //check if required variables are specified
-	  if((cline->NUM_VAR == -1) || (cline->NUM_CLAUSE == -1) ||
+	/*  if((cline->NUM_VAR == -1) || (cline->NUM_CLAUSE == -1) ||
 	     (cline->CLAUSE_SIZE == -1) || (!strcmp(cline->FILE, "die")))
 	    {
 	      cout<<"**** INCORRECT COMMANDLINE ****"<<endl;
 	      cout<<" Check Input format using : exe -help"<<endl;
 	      cout<<endl;
 	      exit(1);
-	    }
+	    } */
 	}
 
       //If option is for solving a domain problem : Non Chronological Backtracking
@@ -341,14 +341,14 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 	    }
 
 	  //check if required variables are specified
-	  if((cline->NUM_VAR == -1) || (cline->NUM_CLAUSE == -1) ||
+	/*  if((cline->NUM_VAR == -1) || (cline->NUM_CLAUSE == -1) ||
 	     (cline->CLAUSE_SIZE == -1) || (!strcmp(cline->FILE, "die")))
 	    {
 	      cout<<"**** INCORRECT COMMANDLINE ****"<<endl;
 	      cout<<" Check Input format using : exe -help"<<endl;
 	      cout<<endl;
 	      exit(1);
-	    }
+	    } */
 	}
 
       else

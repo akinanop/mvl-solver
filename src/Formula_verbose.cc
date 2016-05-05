@@ -35,8 +35,8 @@ Formula::Formula()
 Formula::Formula(CommandLine * cline)
 {
   //Setting appropriate values and resizing vectors
-  VARLIST.reserve(cline->NUM_VAR+1);
-  CLAUSELIST.reserve((int)(cline->CLAUSE_SIZE*1.2));
+//  VARLIST.reserve(cline->NUM_VAR+1);
+//  CLAUSELIST.reserve((int)(cline->CLAUSE_SIZE*1.2));
   TIMELIMIT = cline->TIME;
   TIME_S = 0;
   TIME_E = 0;
@@ -48,7 +48,7 @@ Formula::Formula(CommandLine * cline)
   UNITCLAUSE = -1;
   CONFLICT = false;
   CONFLICTINGCLAUSE = -1;
-  DECSTACK.reserve(cline->NUM_VAR+1);
+//  DECSTACK.reserve(cline->NUM_VAR+1);
   RESTARTS = 0;
 }
 
@@ -102,13 +102,13 @@ void Formula::BuildFunction(CommandLine * cline)
 	{
 	  //do nothing
 	  temp = sscanf(line_buffer, "p cnf %d %d", &var, &val);
-	  if((var != cline->NUM_VAR) || (val != cline->NUM_CLAUSE))
+	/*  if((var != cline->NUM_VAR) || (val != cline->NUM_CLAUSE))
 	    {
 	      cout<<"**** ERROR ****"<<endl;
 	      cout<<" Commandline arguments and file arguments do not match."<<endl;
 	      cout<<endl;
 	      exit(1);
-	    }
+	    } */
 	}
 
 
