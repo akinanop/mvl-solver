@@ -2,7 +2,7 @@
 
 To learn what is a finite satisfiability problem, go to the [wiki page](https://github.com/akinanop/mvl-solver/wiki). If you want to try out the solver, download the archive in the current folder and follow the instructions below. Click [here](https://github.com/akinanop/mvl-solver/blob/master/EXAMPLES.md) to see some simple problems you could solve. 
 
-This project supported by the Austrian Science Fund (FWF): I836-N23.
+*This project supported by the Austrian Science Fund (FWF): I836-N23.*
 
 
 Table of contents:
@@ -89,14 +89,13 @@ d 3 2
 
 If you want to generate a random benchmark problem, use the following format to run the program:
 
-``` exe -genben -var <int> -clause <int> -clausesize <int> -sat <1/0>
+``` ./mvl-solver -genben -var <int> -clause <int> -clausesize <int> -sat <1/0>
       -domain <int> -drand <1/0> -bool <1/0> -file <string> ```
 
 where :
 
 ```
-exe               | * name of executable
-
+   mvl-solver     | * name of executable
   -genben         | * option stating create benchmark problem
   -var            | * number of variables in benchmark problem
   -clause         | * number of clauses in benchmark problem
@@ -112,38 +111,38 @@ exe               | * name of executable
  * - required fields
 ```
 
-EXAMPLE: ``` ./Solver -genben -var 4 -clause 18 -clausesize 2 -sat 0 -domain 2 -bool 1 -file "finite.txt" ```
+EXAMPLE: ``` ./Solver -genben -var 4 -clause 18 -clausesize 2 -sat 0 -domain 2 -bool 1 -file "example.txt" ```
 
 ### Finite Domain Solver with Non-Chronological Backtracking
 
-Use the following format to run the program. The solver accepts problems in extended DIMACS format.
+Use the following format to run the program. The solver accepts problems in [extended DIMACS format](https://github.com/akinanop/mvl-solver/wiki/Extended-DIMACS-format).
 
-``` exe -solvenc -var <int> -clause <int> -file <string> -time <int> ```
+``` ./mvl-solver -solvenc -var <int> -clause <int> -file <string> -time <int> ```
 
 where :
 
 ```
-  exe             : * name of executable
+  mvl-solver     : * name of executable
   -solvenc       : * option stating to solve the finite domain problem
-  -var            : * number of variables in benchmark problem
-  -clause         : * number of clauses in benchmark problem
   -file           : * name of the input file
+  -var            :  number of variables in benchmark problem
+  -clause         :  number of clauses in benchmark problem
   -time           : amount of time allowed for solver to run (in seconds)
 
  * - required fields
 ```
-EXAMPLE: ``` ./Solver -solvenc -var 4 -clause 18 -file "example.txt" ```
+EXAMPLE: ``` ./mvl-solver -solvenc -file "example_SAT" ```
 
 
 ### Convert Boolean to Finite Domain
 
 Use the following format to run the program. The solver accepts problems in DIMACS format.
 
-``` ./Solver -b2f -file <string> -model <string> ```
+``` ./mvl-solver -b2f -file <string> -model <string> ```
 where :
 
 ```
- exe             : * name of executable
+ mvl-solver             : * name of executable
  -b2f            : * option stating to convert file
  -file           : * name of the boolean file
  -model          : * name of the finite file
@@ -156,11 +155,11 @@ where :
 
 Use the following format to run the program:
 
-``` exe -linenc -file <string> -model <string> ```
+``` ./mvl-solver -linenc -file <string> -model <string> ```
 
 where :
 ```
- exe             : * name of executable
+  mvl-solver             : * name of executable
  -linenc         : * option stating to convert file
  -file           : * name of the boolean file
  -model          : * name of the finite file
@@ -173,11 +172,11 @@ where :
 
 Use the following format to run the program:
 
-``` exe -quadenc -file <string> -model <string> ```
+``` ./mvl-solver -quadenc -file <string> -model <string> ```
 
 where :
 ```
- exe             : * name of executable
+  mvl-solver             : * name of executable
  -quadenc        : * option stating to convert file
  -file           : * name of the boolean file
  -model          : * name of the finite file
