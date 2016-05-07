@@ -1,6 +1,6 @@
 # Finite Domain Satisfiablity Solver
 
-To learn what is a finite satisfiability problem, go to the [wiki page](https://github.com/akinanop/mvl-solver/wiki). If you want to try out the solver, download the archive in the current folder and follow the instructions below. Click [here](https://github.com/akinanop/mvl-solver/blob/master/EXAMPLES.md) to see some simple problems you could solve. 
+To learn what is a finite satisfiability problem, go to the [wiki page](https://github.com/akinanop/mvl-solver/wiki). If you want to try out the solver, download the archive in the current folder and follow the instructions below. Click [here](https://github.com/akinanop/mvl-solver/wiki/Benchmarks) to see some problems you could solve. 
 
 *This project supported by the Austrian Science Fund (FWF): I836-N23.*
 
