@@ -1,6 +1,8 @@
 
 ### Urgent
 
+* run solver on pgnhole problems
+* verify algo on -1 -- see lit
 * cleanup: test + benchmarks
 * run solver on nqueens again
 
