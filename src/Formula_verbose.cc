@@ -840,19 +840,42 @@ Clause * Formula::analyzeConflict(Clause * clause)
 //  if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] > -1) CLAUSELIST[VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]] -> Print();
 Clause * resolvent = new Clause();
   // dealing with decision and entail reasons:
-  if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] == -1 ){
+
+
+
+  /*if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] == -1 ){
 
      Clause * chooseClause = new Clause();
       chooseClause -> AddAtom(new Literal(lastFalse->VAR,'=',lastFalse->VAL));
       chooseClause -> AddAtom(new Literal(lastFalse->VAR,'!',lastFalse->VAL));
       resolvent = resolve(clause,lastFalse,chooseClause);
+  } */
+
+  if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] == -1 ){
+/*    clause->NumUnAss = 0; //???
+    CLAUSELIST.push_back(clause);
+    int csize = clause->NumAtom;
+    int CID = CLAUSELIST.size()-1;
+   for(int i=0; i<csize; i++) {
+      VARLIST[clause->ATOM_LIST[i]->VAR]->AddRecord(CID,
+                 clause->ATOM_LIST[i]->VAL,
+                 clause->ATOM_LIST[i]->EQUAL);
   }
+  return clause; */
+
+cout<<"Decision reason!";
+return NULL;
+
+}
+
+
+
   else if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] == -2){
     Clause * entailClause = new Clause();
  for (int i=0; i < VARLIST[lastFalse->VAR]->DOMAINSIZE; i++){
     entailClause -> AddAtom(new Literal(lastFalse->VAR,'=',i)); }
     resolvent = resolve(clause,lastFalse,entailClause);
-  }
+}
   else
   {  resolvent = resolve(clause,lastFalse,CLAUSELIST[VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL]]); }
 //   cout<<"Resolvent:"<<endl;
