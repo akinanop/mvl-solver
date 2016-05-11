@@ -2,8 +2,8 @@
 ### Urgent
 
 * run solver on pgnhole problems
+* graph coloring preliminary tests
 * verify algo on -1 -- see lit
-* cleanup: test + benchmarks
 * run solver on nqueens again
 
 ### May-June 2016
