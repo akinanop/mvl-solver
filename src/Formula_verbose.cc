@@ -773,7 +773,7 @@ bool Formula::Potent(Clause * clause)
 }
 
 int Formula::backtrackLevel(Clause * learnedClause)
-{
+{ cout << "Finding backtrack level..."<<endl;
   int max = -1;
   int csize = learnedClause->NumAtom;
 
@@ -843,16 +843,18 @@ Clause * resolvent = new Clause();
 
 
 
-  /*if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] == -1 ){
-
+  if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] == -1 ){
+    cout<<"Decision reason!"<<endl;
+  //  lastFalse = maxLit(clause);
      Clause * chooseClause = new Clause();
       chooseClause -> AddAtom(new Literal(lastFalse->VAR,'=',lastFalse->VAL));
       chooseClause -> AddAtom(new Literal(lastFalse->VAR,'!',lastFalse->VAL));
       resolvent = resolve(clause,lastFalse,chooseClause);
-  } */
+  }
 
-  if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] == -1 ){
-/*    clause->NumUnAss = 0; //???
+/*  if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] == -1 ){
+
+  // clause->NumUnAss = 0; //???
     CLAUSELIST.push_back(clause);
     int csize = clause->NumAtom;
     int CID = CLAUSELIST.size()-1;
@@ -861,16 +863,16 @@ Clause * resolvent = new Clause();
                  clause->ATOM_LIST[i]->VAL,
                  clause->ATOM_LIST[i]->EQUAL);
   }
-  return clause; */
+  cout<<"Decision reason!"<<endl;
 
-cout<<"Decision reason!";
-return NULL;
+  return clause;
 
-}
+} */
 
 
 
   else if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] == -2){
+    cout<<"Entail reason!"<<endl;
     Clause * entailClause = new Clause();
  for (int i=0; i < VARLIST[lastFalse->VAR]->DOMAINSIZE; i++){
     entailClause -> AddAtom(new Literal(lastFalse->VAR,'=',i)); }
@@ -884,7 +886,7 @@ return NULL;
 }
 //Finding the literal falsified the latest in the clause
 Literal * Formula::maxLit(Clause * clause)
-{ // cout<<"maxLit on: "<<endl;
+{ //cout<<"maxLit on: "<<endl;
 //  clause->Print();
   int index = 0;
   int clindex = 0;
@@ -892,10 +894,9 @@ Literal * Formula::maxLit(Clause * clause)
 
   for(int i=0; i<clause->NumAtom; i++)
   { Literal * current = clause->ATOM_LIST[i];
-  //  current->Print();
    for(int j=decisions-1; j<decisions && j > -1; j--)
     {
-      if( ( (current->VAR == DECSTACK[j]->VAR && current->VAL == DECSTACK[j]->VAL && current->EQUAL != DECSTACK[j]->EQUAL)  || ( current->VAR == DECSTACK[j]->VAR && current->VAL != DECSTACK[j]->VAL && current->EQUAL == DECSTACK[j]->EQUAL && current->EQUAL )  )  && index <= j) {
+      if( ( (current->VAR == DECSTACK[j]->VAR && current->VAL == DECSTACK[j]->VAL && current->EQUAL != DECSTACK[j]->EQUAL)  || ( current->VAR == DECSTACK[j]->VAR && current->VAL != DECSTACK[j]->VAL && current->EQUAL == DECSTACK[j]->EQUAL && current->EQUAL )  )  && index < j) {
       index = j; clindex = i;
    }
   }

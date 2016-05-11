@@ -12,7 +12,7 @@ using namespace std;
 
 int main(){
 
-  for( int pgn = 3; pgn < 101; pgn++ ) { // generating problems for n = 2...100
+  for( int pgn = 3; pgn < 11; pgn++ ) { // generating problems for n = 2...100
 
     int hole = pgn - 1 ;
     int clauses = ( pow( pgn - 1 , 2 ) * pgn ) / 2 ; // # of clauses in the problem
