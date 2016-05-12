@@ -111,7 +111,7 @@ where :
  * - required fields
 ```
 
-EXAMPLE: ``` ./Solver -genben -var 4 -clause 18 -clausesize 2 -sat 0 -domain 2 -bool 1 -file "example.txt" ```
+EXAMPLE: ``` ./Solver -genben -var 4 -clause 18 -clausesize 2 -sat 1 -domain 2 -bool 1 -file "example_SAT" ```
 
 ### Finite Domain Solver with Non-Chronological Backtracking
 
@@ -131,7 +131,7 @@ where :
 
  * - required fields
 ```
-EXAMPLE: ``` ./mvl-solver -solvenc -file "example_SAT" ```
+*Example*: ``` ./mvl-solver -solvenc -file "example_SAT" ```
 
 
 ### Convert Boolean to Finite Domain
