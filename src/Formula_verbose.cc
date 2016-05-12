@@ -629,7 +629,7 @@ void Formula::undoTheory(int level)
 	      else
 		unsatisfyClauses(i, true, j, level);
 
-	      VARLIST[i]->ATOMLEVEL[j] = -1;
+	      VARLIST[i]->ATOMLEVEL[j] = -10;
 	      VARLIST[i]->ATOMASSIGN[j] = 0;
 	      VARLIST[i]->CLAUSEID[j] = -10;
 	    }
@@ -758,22 +758,25 @@ Clause * Formula::resolve(Clause * clause, Literal * literal, Clause * reason)
 
 
 bool Formula::Potent(Clause * clause)
-{
+{ // TRYING TO FIX DECISION REASON PROBLEM
   int index = 0;
   int counter = 0;
   for (int i = 0; i < clause->NumAtom; i++)
   {
-  if( VARLIST[clause->ATOM_LIST[i]->VAR]->ATOMLEVEL[clause->ATOM_LIST[i]->VAL] == LEVEL){  index = i; counter++; }
+  if( VARLIST[clause->ATOM_LIST[i]->VAR]->ATOMLEVEL[clause->ATOM_LIST[i]->VAL] == LEVEL
+// with this line potency counter == 0:
+   && VARLIST[clause->ATOM_LIST[i]->VAR]->CLAUSEID[clause->ATOM_LIST[i]->VAL] != -1
+  ){  index = i; counter++; }
   }
-
-  if(counter != 1) return false;
+  cout<<"Potency counter: "<<counter<<endl;
+  if(counter > 1) return false;
   else {
      return true;}
 
 }
 
 int Formula::backtrackLevel(Clause * learnedClause)
-{ cout << "Finding backtrack level..."<<endl;
+{ // cout << "Finding backtrack level..."<<endl;
   int max = -1;
   int csize = learnedClause->NumAtom;
 
