@@ -8,7 +8,7 @@ before_install:
   - pip install --user cpp-coveralls
 script:
 - cd src
-- ./configure --enable-gcov && make && make check
+- make && make check
 - cd ../playground
 - ./Solver -solvenc -file ../benchmarks/Pigeonhole/pgn4
 after_success:
