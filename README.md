@@ -49,28 +49,28 @@ The solver accepts the problems in extended DIMACS CNF format, which is an exten
 
 ``` c This is a comment line  ```
 
-2. Problem line: This line contains information about the problem. It begins with a p. There is exactly one such line for each problem.
+2. Problem line: This line contains information about the problem. It begins with a p. There is exactly one such line for each problem and it should be the first non-comment line in the problem.
 
-```p cnf <NumVar> <NumClause>```
+```p mvcnf <NumVar> <NumClause>```
 
 where NumVar is the total number of variables in the problem, and NumClause is the number of
 clauses in the problem.
 
 3. Domain line: This line contains information about the domain size of a variable. It begins with a d
-and is followed by the variable and then by the domain size.
+and is followed by the variable and then by the domain size. The variables are represented by numbers from 1 to N where N is the total number of variables in the theory, and the domain by numbers from 0 to M, where M is the size of the domain minus one.
 
 ```d <VarName> <DomainSize>```
 
 where VarName is the variable name, and DomainSize is the size of the domain of the variable.
-There should be at most one domain life for each variable.
+There should be at most one domain life for each variable. 
 
-4. Clause line: each literal is of the form ```<VarName>=<DomainValue>``` or ```<VarName>!=<DomainValue>```. Each clause ends with a 0, which is used as an end-marker, and the variables are represented by numbers from 1 to N where N is the total number of variables in the theory.
+4. Clause line: each literal is of the form ```<VarName>=<DomainValue>``` or ```<VarName>!=<DomainValue>```. Each clause ends with a 0, which is used as an end-marker.
 
 **EXAMPLE**
 
 ```
 c This is a pigeonhole problem with 3 pigeons and 2 holes
-p cnf 3 5
+p mvcnf 3 5
 d 1 2
 d 2 2
 d 3 2
