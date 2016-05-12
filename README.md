@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/akinanop/mvl-solver.svg?branch=master)](https://travis-ci.org/akinanop/mvl-solver)
 
+[![Coverage Status](https://coveralls.io/repos/github/akinanop/mvl-solver/badge.svg?branch=master)](https://coveralls.io/github/akinanop/mvl-solver?branch=master)
+
 To learn what is a finite satisfiability problem, go to the [wiki page](https://github.com/akinanop/mvl-solver/wiki). If you want to try out the solver, download the archive in the current folder and follow the instructions below. Click [here](https://github.com/akinanop/mvl-solver/wiki/Benchmarks) to see some problems you could solve. 
 
 *This project supported by the Austrian Science Fund (FWF): I836-N23.*
