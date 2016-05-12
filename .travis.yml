@@ -5,7 +5,7 @@ compiler:
 - clang
 - gcc
 before_install:
-  - pip3 install --user cpp-coveralls
+  - python3-pip install --user cpp-coveralls
 script:
 - cd src
 - make
