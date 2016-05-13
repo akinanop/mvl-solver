@@ -12,4 +12,4 @@ script:
 - cd ../playground
 - ./Solver -solvenc -file ../benchmarks/Pigeonhole/pgn4 
 after_success:
-  - cpp-coveralls --exclude lib --exclude tests --gcov-options '\-lp'
+  - cpp-coveralls --repo-token ${COVERALLS_TOKEN} --exclude lib --exclude tests --gcov-options '\-lp'
