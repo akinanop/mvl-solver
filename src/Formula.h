@@ -73,6 +73,7 @@ public:
   int CONFLICTINGCLAUSE;
   vector <Literal *> DECSTACK;
   int RESTARTS;
+  bool LOG; // verbose
   // int ORIGINALFORMULA;
   //public variables and functions
   //Zero argument constructor
