@@ -30,7 +30,9 @@ using namespace std;
 #define MAX_LINE 3000
 
 struct CommandLine
-{ //verbose
+{ //watched litetarals option
+  bool WATCH;
+  //verbose
   bool LOG;
   //Number of Variables in CNF File
   int NUM_VAR;

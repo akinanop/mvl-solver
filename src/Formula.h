@@ -74,6 +74,7 @@ public:
   vector <Literal *> DECSTACK;
   int RESTARTS;
   bool LOG; // verbose
+  //bool WATCH; //watched literals option
   // int ORIGINALFORMULA;
   //public variables and functions
   //Zero argument constructor
@@ -152,6 +153,8 @@ public:
   int NonChronoBacktrackLoop(int level);
   //ChronoBacktrack : Extended DPLL algorithm without any learning
   int ChronoBacktrack(int level);
+// watched literals algo:
+  int WatchedLiterals();
 };
 // End of Code
 //

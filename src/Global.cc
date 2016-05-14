@@ -330,6 +330,8 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
     cline->RESTARTS = atoi(argv[++current]);
     else if(!strcmp(argv[current], "-verbose"))
     cline->LOG = true;
+    else if(!strcmp(argv[current], "-wl"))
+    cline->WATCH = true;
 	      else if(!strcmp(argv[current], "-var"))
 		cline->NUM_VAR = atoi(argv[++current]);
 	      else if(!strcmp(argv[current], "-clause"))

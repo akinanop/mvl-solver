@@ -54,6 +54,7 @@ Formula::Formula(CommandLine * cline)
 //  DECSTACK.reserve(cline->NUM_VAR+1);
   RESTARTS = 0;
   LOG = cline->LOG;
+  // WATCH = cline->WATCH;
 }
 
 //BuildFunction
@@ -950,6 +951,14 @@ for(int i=0; i<unit->NumAtom; i++)
 
 //\\====================NON-CHRONOLOGICAL BACKTRACK=============================
 
+int Formula::WatchedLiterals(){
+  ;
+}
+
+
+
+
+// with restarts
 int Formula::NonChronoBacktrack(int restarts)
 { int restartCount = restarts;
   //int RESTARTS = 0;
