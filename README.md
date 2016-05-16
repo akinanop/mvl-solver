@@ -1,4 +1,8 @@
-# Finite Domain Satisfiablity Solver
+# Finite Domain Satisfiablity Solver 
+
+[![Build Status](https://travis-ci.org/akinanop/mvl-solver.svg?branch=master)](https://travis-ci.org/akinanop/mvl-solver)
+
+[![Coverage Status](https://coveralls.io/repos/github/akinanop/mvl-solver/badge.svg?branch=master)](https://coveralls.io/github/akinanop/mvl-solver?branch=master)
 
 To learn what is a finite satisfiability problem, go to the [wiki page](https://github.com/akinanop/mvl-solver/wiki). If you want to try out the solver, download the archive in the current folder and follow the instructions below. Click [here](https://github.com/akinanop/mvl-solver/wiki/Benchmarks) to see some problems you could solve. 
 
@@ -49,28 +53,28 @@ The solver accepts the problems in extended DIMACS CNF format, which is an exten
 
 ``` c This is a comment line  ```
 
-2. Problem line: This line contains information about the problem. It begins with a p. There is exactly one such line for each problem.
+2. Problem line: This line contains information about the problem. It begins with a p. There is exactly one such line for each problem and it should be the first non-comment line in the problem.
 
-```p cnf <NumVar> <NumClause>```
+```p mvcnf <NumVar> <NumClause>```
 
 where NumVar is the total number of variables in the problem, and NumClause is the number of
 clauses in the problem.
 
 3. Domain line: This line contains information about the domain size of a variable. It begins with a d
-and is followed by the variable and then by the domain size.
+and is followed by the variable and then by the domain size. The variables are represented by numbers from 1 to N where N is the total number of variables in the theory, and the domain by numbers from 0 to M, where M is the size of the domain minus one.
 
 ```d <VarName> <DomainSize>```
 
 where VarName is the variable name, and DomainSize is the size of the domain of the variable.
-There should be at most one domain life for each variable.
+There should be at most one domain life for each variable. 
 
-4. Clause line: each literal is of the form ```<VarName>=<DomainValue>``` or ```<VarName>!=<DomainValue>```. Each clause ends with a 0, which is used as an end-marker, and the variables are represented by numbers from 1 to N where N is the total number of variables in the theory.
+4. Clause line: each literal is of the form ```<VarName>=<DomainValue>``` or ```<VarName>!=<DomainValue>```. Each clause ends with a 0, which is used as an end-marker.
 
 **EXAMPLE**
 
 ```
 c This is a pigeonhole problem with 3 pigeons and 2 holes
-p cnf 3 5
+p mvcnf 3 5
 d 1 2
 d 2 2
 d 3 2
@@ -111,7 +115,7 @@ where :
  * - required fields
 ```
 
-EXAMPLE: ``` ./Solver -genben -var 4 -clause 18 -clausesize 2 -sat 0 -domain 2 -bool 1 -file "example.txt" ```
+EXAMPLE: ``` ./Solver -genben -var 4 -clause 18 -clausesize 2 -sat 1 -domain 2 -bool 1 -file "example_SAT" ```
 
 ### Finite Domain Solver with Non-Chronological Backtracking
 
@@ -131,7 +135,7 @@ where :
 
  * - required fields
 ```
-EXAMPLE: ``` ./mvl-solver -solvenc -file "example_SAT" ```
+*Example*: ``` ./mvl-solver -solvenc -file "example_SAT" ```
 
 
 ### Convert Boolean to Finite Domain

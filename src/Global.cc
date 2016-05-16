@@ -13,6 +13,12 @@
 
 using namespace std;
 //**********************************************************************//
+
+ void Log (char *message){ ; };    // logs a message to sdout
+void LogErr (char *message){ ; }; // logs a message; execution is interrupted
+
+
+
 //GetTime
 //This function returns time in seconds at which it was called
 double GetTime()
@@ -322,6 +328,10 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 	    {
         if (!strcmp(argv[current], "-restart"))
     cline->RESTARTS = atoi(argv[++current]);
+    else if(!strcmp(argv[current], "-verbose"))
+    cline->LOG = true;
+    else if(!strcmp(argv[current], "-wl"))
+    cline->WATCH = true;
 	      else if(!strcmp(argv[current], "-var"))
 		cline->NUM_VAR = atoi(argv[++current]);
 	      else if(!strcmp(argv[current], "-clause"))

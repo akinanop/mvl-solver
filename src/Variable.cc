@@ -1,6 +1,6 @@
 //**************************************************************
 //
-// Finite Domain Solver 
+// Finite Domain Solver
 //
 // File : Variable.cc
 //**************************************************************
@@ -47,8 +47,8 @@ Variable::Variable(int var, int domain)
   ATOMRECPOS = new VARRECORD *[DOMAINSIZE];
   ATOMRECNEG = new VARRECORD *[DOMAINSIZE];
   for(int i=0; i<DOMAINSIZE; i++)
-    {
-      ATOMLEVEL[i] = -1;
+    { // CHAMGED DEFAULT ATOMLEVEL TO -10
+      ATOMLEVEL[i] = -10;
       ATOMASSIGN[i] = 0;
       ATOMCNTPOS[i] = 0;
       ATOMCNTNEG[i] = 0;

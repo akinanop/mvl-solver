@@ -30,7 +30,10 @@ using namespace std;
 #define MAX_LINE 3000
 
 struct CommandLine
-{
+{ //watched litetarals option
+  bool WATCH;
+  //verbose
+  bool LOG;
   //Number of Variables in CNF File
   int NUM_VAR;
   //Number of Clauses in CNF File
@@ -89,5 +92,8 @@ void QuadraticEncode(CommandLine * cline);
 //This function is called to solve the finite domain problem
 //passed as the argument to the solver
 void SolveFinite(CommandLine * cline, string type);
+//logging
+void Log (char *message);    // logs a message to sdout
+void LogErr (char *message); // logs a message; execution is interrupted
 #endif
 //**********************************************************************//
