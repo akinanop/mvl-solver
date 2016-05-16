@@ -103,17 +103,22 @@ public:
   bool verifyModel();
   //checkSat : returns true if theory satisfied else false
   bool checkSat();
+  int watchedCheckSat(); // 1 sat, 0 falsif, 2 continue
   //checkConflict : return an integer value representing the conflict
   //clause else returns -1
   int checkConflict();
   //checkUnit : checks for unit clauses and adds clause id to unitlist
   void checkUnit();
+  Literal * watchedCheckUnit();
   //checkEntail : checks for entailed atom if any in the theory and
   //stores info in ENTAILLITEAL, returns true if finds one
   bool checkEntail(int var);
   //chooseLiteral : selects next branching literal from the current theory
   void addReason(int var, int val); // needed for analyzing coflict
+
   Literal * chooseLiteral();
+  Literal * watchedChooseLiteral();
+  void SwapPointer(Clause * clause);
   //reduceTheory : reduces the theory by satisfying literals/clauses
   void reduceTheory(int var, bool equals, int val);
   //satisfyClauses : reduces the theory by satisfying the clauses
@@ -155,6 +160,7 @@ public:
   int ChronoBacktrack(int level);
 // watched literals algo:
   int WatchedLiterals();
+
 };
 // End of Code
 //

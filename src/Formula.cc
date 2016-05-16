@@ -179,6 +179,12 @@ void Formula::BuildFunction(CommandLine * cline)
 		}
 	    }while(*lp);
 	  CLAUSELIST.push_back(temp_clause);
+    if (cline -> WATCH) {
+      temp_clause -> WATCHED[0] = temp_clause -> ATOM_LIST[0];
+      if (temp_clause -> NumAtom > 1) {
+      temp_clause -> WATCHED[1] = temp_clause -> ATOM_LIST[1];
+    } else temp_clause -> WATCHED[1] = NULL;
+  }
 	  atom_num = 0;
 	  ++clause_num;
 	}
@@ -948,11 +954,111 @@ for(int i=0; i<unit->NumAtom; i++)
 }
 
 
+// WATCHED LITERALS ALGORITHM
+// WE HAVE TO MODIFY SEVERAL FUNCTIONS:
+int Formula::watchedCheckSat(){
+  for ( int i; i < CLAUSELIST.size(); i++ ){
+    if ( CLAUSELIST[i] -> WATCHED[0] -> SAT == 0
+      && ( CLAUSELIST[i] -> WATCHED[1] -> SAT == 0
+        || CLAUSELIST[i] -> WATCHED[1] -> SAT == 2 ) ) return 0 ;
+    else if ( CLAUSELIST[i] -> WATCHED[0] -> SAT == 0 ) return 2 ;
+  }
+  return 1 ;
+}
+
+Literal * Formula::watchedCheckUnit(){
+  for ( int i; i < CLAUSELIST.size(); i++ ){
+    if ( CLAUSELIST[i] -> WATCHED[0] -> SAT == 2
+       && ( CLAUSELIST[i] -> WATCHED[1] == NULL
+      || CLAUSELIST[i] -> WATCHED[1] -> SAT == 2 ) )
+      return CLAUSELIST[i] -> WATCHED[0];
+
+    else if ( CLAUSELIST[i] -> WATCHED[0] -> SAT == 0
+      &&  CLAUSELIST[i] -> WATCHED[1] -> SAT == 2 )
+      return CLAUSELIST[i] -> WATCHED[1];
+}
+return NULL;
+  }
+
+
+Literal * Formula::watchedChooseLiteral(){;}
+//add new function to swap pointers
+void Formula::SwapPointer(Clause * clause){
+
+  if (clause -> WATCHED[1] -> SAT == 2){
+    for (int i; i < clause -> NumAtom; i++){
+      if ( clause -> ATOM_LIST[i] -> SAT == 2 && !LitisEqual(clause-> ATOM_LIST[i], clause -> WATCHED[1]))
+      clause -> WATCHED[0] =  clause-> ATOM_LIST[i]; }
+    }
+  else if (clause -> WATCHED[0] -> SAT == 2)
+  {
+
+    for (int i; i < clause -> NumAtom; i++){
+      if ( clause-> ATOM_LIST[i] -> SAT == 2 && !LitisEqual(clause-> ATOM_LIST[i], clause -> WATCHED[0]))
+      clause -> WATCHED[1] =  clause-> ATOM_LIST[i]; }
+
+  }
+
+  }
+
+bool Formula::LitisEqual(Literal * literal1, Literal * literal2){
+  if (literal1 -> VAR == literal2 -> VAR && literal1 -> VAL == literal2 -> VAL
+    && literal1 -> EQUAL == literal2 -> EQUAL) return true;
+  else return false;
+}
+
 
 //\\====================NON-CHRONOLOGICAL BACKTRACK=============================
 
 int Formula::WatchedLiterals(){
-  ;
+  while(true){
+    // if (LOG) cout<<"Number of clauses so far: "<<CLAUSELIST.size()<<endl;
+    //Check if theory satisfied
+    if(checkSat())
+      return 0; // add PrintModel(); - from DECSTACK
+    //Check if time out
+   TIME_E = GetTime();
+   if((TIME_E - TIME_S) > TIMELIMIT)
+     return 1;
+    //check if conflict
+
+    if(CONFLICT)
+      { if (LOG) cout << "There is a conflict at level: " << LEVEL << endl;
+       if (LOG) { cout<<"Conflicting clause: "<<  endl;
+       CLAUSELIST[CONFLICTINGCLAUSE] -> Print();}
+
+        if(LEVEL == 0) return 2;
+
+        LEVEL = backtrackLevel(analyzeConflict(CLAUSELIST[CONFLICTINGCLAUSE]));
+        if (LOG) cout << "We are backtracking to the level: " << LEVEL << endl;
+        BACKTRACKS++;
+        if (LOG) cout << "# of backtracks so far: "<<BACKTRACKS<<endl;
+        CONFLICT = false;
+        undoTheory(LEVEL);
+      }
+      // If there is a unit clause, propagate
+
+      checkUnit();
+      if(!UNITLIST.empty())
+        unitPropagation();
+
+      // otherwise choose a literal and propagate - no need for separate unit propagation
+  if(!CONFLICT)
+  {
+
+    Literal * atom = chooseLiteral();
+    if(atom)
+      {
+        DECISIONS++;
+        LEVEL++;
+        if (LOG) cout<<"Decision: "<<atom->VAR<<(atom->EQUAL?'=':'!')<<atom->VAL<<endl;
+        UNITCLAUSE = -1; // REASON for subsequent falsified atoms
+        reduceTheory(atom->VAR, atom->EQUAL, atom->VAL);
+    }
+
+  }
+  }
+
 }
 
 

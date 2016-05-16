@@ -1,6 +1,6 @@
 //**************************************************************
 //
-// Finite Domain Solver 
+// Finite Domain Solver
 //
 // File : Clause.h
 // Description : Contains code for creating clause to store atoms,
@@ -46,7 +46,8 @@ public:
   int NumAtom;
   int NumUnAss;
   int LEVEL;
-
+  //Watched Literals:
+  vector <Literal *> WATCHED;
   //Zero Argument Constructor
   Clause();
   //One Argument Constructor

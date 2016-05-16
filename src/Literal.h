@@ -1,6 +1,6 @@
 //**************************************************************
 //
-// Finite Domain Solver 
+// Finite Domain Solver
 //
 // File : Literal.h
 // Description : Contains code for Literal class. Literal contains a
@@ -39,14 +39,14 @@ public:
   int VAR;
   int VAL;
   bool EQUAL;
-  int INDEX;
+  int SAT; // whether literal is sat 1, falsified 0, undef 2
   //Zero argument constructor
-  Literal() { VAR = -1; VAL = -1; EQUAL = true; INDEX = -1;}
+  Literal() { VAR = -1; VAL = -1; EQUAL = true; SAT = 2;}
   //Two argument constructor
-  Literal(int vr, int vl) { VAR = vr; VAL = vl; EQUAL = true; INDEX = -1;}
+  Literal(int vr, int vl) { VAR = vr; VAL = vl; EQUAL = true; SAT = 2;}
   //Three argument constructor
   Literal(int vr, char ch, int vl)
-  { INDEX = -1;
+  { SAT = 2;
     VAR = vr; VAL = vl;
     if(ch == '=') EQUAL = true;
     else EQUAL = false;
