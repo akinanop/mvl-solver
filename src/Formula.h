@@ -99,7 +99,6 @@ public:
   bool hasClause(Clause * clause);
   //verifyModel : verifies the model that was found, if any. returns true
   //if corret
-
   bool verifyModel();
   //checkSat : returns true if theory satisfied else false
   bool checkSat();
@@ -115,16 +114,21 @@ public:
   bool checkEntail(int var);
   //chooseLiteral : selects next branching literal from the current theory
   void addReason(int var, int val); // needed for analyzing coflict
-
   Literal * chooseLiteral();
   Literal * watchedChooseLiteral();
   void SwapPointer(Clause * clause);
   //reduceTheory : reduces the theory by satisfying literals/clauses
   void reduceTheory(int var, bool equals, int val);
+  void watchedReduceTheory(Literal * literal, int var, bool equals, int val);
+
   //satisfyClauses : reduces the theory by satisfying the clauses
+  void watchedSatisfyLiteral(Literal * literal, int var, bool equals, int val);
+
   void satisfyClauses(int var, bool equals, int val);
   //removeLiteral : reduces the theory by removing literals from the claues
   void removeLiteral(int var, bool equals, int val);
+  void watchedFalsifyLiteral(Literal * literal, int var, bool equals, int val);
+
   //undoTheory : brings the theory back at the level stage
   void undoTheory(int level);
   //unsatisfyClauses : brings back the clauses that were satisfied before
@@ -138,7 +142,6 @@ public:
   bool Potent(Clause * clause);
   int backtrackLevel(Clause * clause);
   //whyFalse: return the literal inconsistent with the input literal that was added to the interpretation earliest
-
   Literal * whyFalse(Literal * literal);
   //resolve: Extended resolution
   Clause * resolve(Clause * clause, Literal * literal, Clause * reason);

@@ -40,16 +40,18 @@ public:
   int VAL;
   bool EQUAL;
   int SAT; // whether literal is sat 1, falsified 0, undef 2
+  int LEVEL;
   //Zero argument constructor
-  Literal() { VAR = -1; VAL = -1; EQUAL = true; SAT = 2;}
+  Literal() { VAR = -1; VAL = -1; EQUAL = true; SAT = 2; LEVEL = -10;}
   //Two argument constructor
-  Literal(int vr, int vl) { VAR = vr; VAL = vl; EQUAL = true; SAT = 2;}
+  Literal(int vr, int vl) { VAR = vr; VAL = vl; EQUAL = true; SAT = 2; LEVEL = -10;}
   //Three argument constructor
   Literal(int vr, char ch, int vl)
   { SAT = 2;
     VAR = vr; VAL = vl;
     if(ch == '=') EQUAL = true;
     else EQUAL = false;
+    LEVEL = -10;
   }
 
 

@@ -574,6 +574,52 @@ inline void Formula::satisfyClauses(int var, bool equals, int val)
   current = NULL;
 }
 
+//satisfyClauses
+inline void Formula::watchedSatisfyLiteral(Literal * literal, int var, bool equals, int val)
+{
+  int lit_var = -1;
+  bool lit_equal = false;
+  int lit_val = -1;
+  VARRECORD * current = NULL;
+  if(equals)
+    current = VARLIST[var]->ATOMRECPOS[val];
+  else
+    current = VARLIST[var]->ATOMRECNEG[val];
+  //for every clause that contains this literal, satisfy it
+  //and update the counts of the literals
+  while(current)
+    {
+      if(CLAUSELIST[current->c_num]->WATCHED[0]->SAT != 1)
+	{ if(!LitisEqual(CLAUSELIST[current->c_num]->WATCHED[1], literal))
+     CLAUSELIST[current->c_num]->WATCHED[0] = literal;
+     else { CLAUSELIST[current->c_num]->WATCHED[1] == CLAUSELIST[current->c_num]->WATCHED[0];
+     CLAUSELIST[current->c_num]->WATCHED[0] = literal;
+   }
+    }
+  current = current->next;
+}
+}
+
+
+//removeLiteral
+inline void Formula::watchedFalsifyLiteral(Literal * literal, int var, bool equals, int val)
+{
+  VARRECORD * current = NULL;
+  if(equals)
+    current = VARLIST[var]->ATOMRECPOS[val];
+  else
+    current = VARLIST[var]->ATOMRECNEG[val];
+
+      while(current)
+        {
+          if( CLAUSELIST[current->c_num]->WATCHED[0]->SAT != 1  &&
+    	( LitisEqual(CLAUSELIST[current->c_num]->WATCHED[0], literal)
+        || LitisEqual(CLAUSELIST[current->c_num]->WATCHED[1], literal)  ) ) SwapPointer(CLAUSELIST[current->c_num]);
+        current = current->next;
+
+        }
+    }
+
 //removeLiteral
 inline void Formula::removeLiteral(int var, bool equals, int val)
 {
@@ -963,6 +1009,7 @@ int Formula::watchedCheckSat(){
         || CLAUSELIST[i] -> WATCHED[1] -> SAT == 2 ) ) return 0 ;
     else if ( CLAUSELIST[i] -> WATCHED[0] -> SAT == 0 ) return 2 ;
   }
+  CONFLICT = true;
   return 1 ;
 }
 
@@ -981,7 +1028,11 @@ return NULL;
   }
 
 
-Literal * Formula::watchedChooseLiteral(){;}
+Literal * Formula::watchedChooseLiteral(){
+  for ( int i; i < CLAUSELIST.size(); i++ ){
+    if ( CLAUSELIST[i] -> WATCHED[0] -> SAT == 2) return  CLAUSELIST[i] -> WATCHED[0];
+  }
+}
 //add new function to swap pointers
 void Formula::SwapPointer(Clause * clause){
 
@@ -1007,21 +1058,111 @@ bool Formula::LitisEqual(Literal * literal1, Literal * literal2){
   else return false;
 }
 
+void Formula::watchedReduceTheory(Literal * literal, int var, bool equals, int val){
 
-//\\====================NON-CHRONOLOGICAL BACKTRACK=============================
+  if(equals)
+    {
+    if (LOG) cout<<"Reducing literal: "<<var<<"="<<val<<" at level "<<LEVEL<<endl;
+      //first satisfy all clauses with literal, and remove
+      //negate literal from clasues
+      //now keep track of the watched literals
+      watchedSatisfyLiteral(literal,var, equals, val);
+      watchedFalsifyLiteral(literal, var, !equals, val);
+      VARLIST[var]->ATOMASSIGN[val] = 1;
+      VARLIST[var]->ATOMLEVEL[val] = LEVEL;
+
+      VARLIST[var]->VAL = val;
+      VARLIST[var]->SAT = true; // means variable is assigned REDUNDANT!
+      VARLIST[var]->LEVEL = LEVEL; // value assigned a positive value at this level
+
+    VARLIST[var]->CLAUSEID[val] = UNITCLAUSE;
+  //    if (LOG) cout<<"The reason for the literal: "<<endl;
+    //  if (UNITCLAUSE > -1) CLAUSELIST[UNITCLAUSE]->Print(); else if (LOG) cout<<UNITCLAUSE<<endl;
+      //Add literal to DecisionStack
+      DECSTACK.push_back(new Literal(var, '=', val));
+
+      //foreach domain value x from dom(v) which is not assigned
+      //assign it
+
+      for(int i=0; i<val && !CONFLICT; i++)
+  {
+
+    if(VARLIST[var]->ATOMASSIGN[i] == 0)
+      {
+        satisfyClauses(var, !equals, i);
+        removeLiteral(var, equals, i);
+        VARLIST[var]->ATOMASSIGN[i] = -1;
+
+        VARLIST[var]->ATOMLEVEL[i] = LEVEL;
+
+        VARLIST[var]->CLAUSEID[i] = UNITCLAUSE;
+  //      if (LOG) cout<<"Set the reason for the literal "<<var<<(!equals?"=":"!")<<i<<endl;
+    //    if (UNITCLAUSE > -1) CLAUSELIST[UNITCLAUSE]->Print(); else if (LOG) cout<<-1<<endl;
+
+      }
+  }
+      for(int i=val+1; i<VARLIST[var]->DOMAINSIZE && !CONFLICT; i++)
+  {
+    if(VARLIST[var]->ATOMASSIGN[i] == 0)
+      {
+        satisfyClauses(var, !equals, i);
+        removeLiteral(var, equals, i);
+
+       VARLIST[var]->ATOMASSIGN[i] = -1;
+        VARLIST[var]->ATOMLEVEL[i] = LEVEL;
+      VARLIST[var]->CLAUSEID[i] = UNITCLAUSE;
+  //      if (LOG) cout<<"Set the reason for the literal "<<var<<(!equals?"=":"!")<<i<<endl;
+      //  if (UNITCLAUSE > -1) CLAUSELIST[UNITCLAUSE]->Print(); else if (LOG) cout<<-1<<endl;
+
+
+      }
+  }
+    }
+  else
+    {
+  // if (LOG) cout<<"Reducing: "<<var<<"!"<<val<<" at level "<<LEVEL<<endl;
+
+      //first satisfy all clauses with negate literal, and remove
+      //literal from claues
+      satisfyClauses(var, equals, val);
+      removeLiteral(var, !equals, val);
+      VARLIST[var]->ATOMASSIGN[val] = -1;
+      // reason and level should be assigned only once:
+
+     // if(VARLIST[var]->ATOMLEVEL[val] == -1)
+     VARLIST[var]->ATOMLEVEL[val] = LEVEL;
+  //   if(VARLIST[var]->CLAUSEID[val] == -10)
+     VARLIST[var]->CLAUSEID[val] = UNITCLAUSE;
+      //Add literal to DecisionStack
+  //    if (LOG) cout<<"Adding literal to the decision stack: "<<var<<"!"<<val<<endl;
+      DECSTACK.push_back(new Literal(var, '!', val));
+
+  }
+  //check Entailment on this variable
+  if(checkEntail(var))
+  {
+  ENTAILS++;
+  //if (LOG) cout<<"Entailment... "<<ENTAILLITERAL->VAR<<"="<<ENTAILLITERAL->VAL<<endl;
+  UNITCLAUSE = -2;
+  reduceTheory(ENTAILLITERAL->VAR, true, ENTAILLITERAL->VAL);
+
+  }
+}
+//\\====================Watched literals NON-CHRONOLOGICAL BACKTRACK=============================
 
 int Formula::WatchedLiterals(){
   while(true){
     // if (LOG) cout<<"Number of clauses so far: "<<CLAUSELIST.size()<<endl;
     //Check if theory satisfied
-    if(checkSat())
-      return 0; // add PrintModel(); - from DECSTACK
+    if(watchedCheckSat() == 1)
+      return 0; //
+
     //Check if time out
    TIME_E = GetTime();
    if((TIME_E - TIME_S) > TIMELIMIT)
      return 1;
-    //check if conflict
 
+    //check if conflict
     if(CONFLICT)
       { if (LOG) cout << "There is a conflict at level: " << LEVEL << endl;
        if (LOG) { cout<<"Conflicting clause: "<<  endl;
@@ -1038,22 +1179,23 @@ int Formula::WatchedLiterals(){
       }
       // If there is a unit clause, propagate
 
-      checkUnit();
-      if(!UNITLIST.empty())
+      if(watchedCheckUnit() != NULL)
         unitPropagation();
 
       // otherwise choose a literal and propagate - no need for separate unit propagation
   if(!CONFLICT)
   {
 
-    Literal * atom = chooseLiteral();
+    Literal * atom = watchedChooseLiteral();
     if(atom)
       {
         DECISIONS++;
         LEVEL++;
         if (LOG) cout<<"Decision: "<<atom->VAR<<(atom->EQUAL?'=':'!')<<atom->VAL<<endl;
         UNITCLAUSE = -1; // REASON for subsequent falsified atoms
-        reduceTheory(atom->VAR, atom->EQUAL, atom->VAL);
+        atom -> SAT = 1;
+        atom -> LEVEL = LEVEL;
+        watchedReduceTheory(atom, atom->VAR, atom->EQUAL, atom->VAL);
     }
 
   }
