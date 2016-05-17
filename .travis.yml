@@ -15,6 +15,7 @@ script:
 - cd src
 - make
 - ./Solver -solvenc -file ../benchmarks/Pigeonhole/pgn4
+after_success:
 - lcov --compat-libtool --directory . --capture --output-file coverage.info
 #- coveralls-lcov coverage.info
 #- cd /home/travis/
