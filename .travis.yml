@@ -14,9 +14,7 @@ install:
 script:
 - cd src
 - make
-- cd ../playground
 - ./Solver -solvenc -file ../benchmarks/Pigeonhole/pgn4
-- cd ../src
 - lcov --compat-libtool --directory . --capture --output-file coverage.info
 #- coveralls-lcov coverage.info
 #- cd /home/travis/
