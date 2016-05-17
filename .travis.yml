@@ -1,4 +1,4 @@
-#sudo: required
+sudo: required
 language: cpp
 notifications:
     email: false
@@ -8,11 +8,11 @@ compiler:
 install:
 #- cd /home/travis/
 # install latest LCOV (1.9 was failing for me) [1]
-#- sudo apt-get install -y lcov
+- sudo apt-get install -y lcov
 # install lcov to coveralls conversion + upload tool
 - gem install coveralls-lcov
 script:
- - cd src
+- cd src
 - make
 - cd ../playground
 - ./Solver -solvenc -file ../benchmarks/Pigeonhole/pgn4
