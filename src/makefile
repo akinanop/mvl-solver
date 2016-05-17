@@ -35,7 +35,7 @@ SolveFinite.o: SolveFinite.cc Formula.h
 
 # Cleaning object files, exe, and temp files
 clean:
-	rm -f Solver
 	rm -f *~* *.o *.a
 	rm -f core
+	rm -f *.gcda *.gcdo
 # End of Makefile
