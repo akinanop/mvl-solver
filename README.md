@@ -85,6 +85,28 @@ d 3 2
 
 ```
 
+### Finite Domain Solver with Non-Chronological Backtracking
+
+Use the following format to run the program. The solver accepts problems in [extended DIMACS format](https://github.com/akinanop/mvl-solver/wiki/Extended-DIMACS-format). Watched algorithm is a more efficient bookkeeping technique for backtracking, see [here](https://github.com/akinanop/mvl-solver/wiki/Watched-literals).
+
+``` ./mvl-solver -solvenc -verbose -restarts <int> -var <int> -clause <int> -file <string> -time <int> ```
+
+where :
+
+```
+  mvl-solver     : * name of executable
+  -solvenc       : * option stating to solve the finite domain problem
+  -file           : * name of the input file
+  -var            :  number of variables in benchmark problem
+  -clause         :  number of clauses in benchmark problem
+  -verbose        : turns on the verbose mode
+  -wl             : enable watched literals algorithma
+  -restarts       : restarts threshold, default - no restatrs; incompatible with -wl
+  -time           : amount of time allowed for solver to run (in seconds)
+
+ * - required fields
+```
+*Example*: ``` ./mvl-solver -solvenc -file "example_SAT" ```
 
 
 ### Generating Benchmark Problem
@@ -113,27 +135,9 @@ where :
  * - required fields
 ```
 
-EXAMPLE: ``` ./Solver -genben -var 4 -clause 18 -clausesize 2 -sat 1 -domain 2 -bool 1 -file "example_SAT" ```
+Example: ``` ./mvl-solver -genben -var 4 -clause 18 -clausesize 2 -sat 1 -domain 2 -bool 1 -file "example_SAT" ```
 
-### Finite Domain Solver with Non-Chronological Backtracking
 
-Use the following format to run the program. The solver accepts problems in [extended DIMACS format](https://github.com/akinanop/mvl-solver/wiki/Extended-DIMACS-format).
-
-``` ./mvl-solver -solvenc -var <int> -clause <int> -file <string> -time <int> ```
-
-where :
-
-```
-  mvl-solver     : * name of executable
-  -solvenc       : * option stating to solve the finite domain problem
-  -file           : * name of the input file
-  -var            :  number of variables in benchmark problem
-  -clause         :  number of clauses in benchmark problem
-  -time           : amount of time allowed for solver to run (in seconds)
-
- * - required fields
-```
-*Example*: ``` ./mvl-solver -solvenc -file "example_SAT" ```
 
 
 ### Convert Boolean to Finite Domain
