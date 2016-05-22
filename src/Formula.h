@@ -146,7 +146,7 @@ public:
   //resolve: Extended resolution
   Clause * resolve(Clause * clause, Literal * literal, Clause * reason);
   //maxLit: return the literal in C that was falsified last (?)
-  Literal * maxLit(Clause * clause);
+  vector<int> maxLit(Clause * clause);
   //unitPropagation : does BCP in Finite Domain, returns true if no conflict
   //else returns false
   bool LitisEqual(Literal * literal1, Literal * literal2);

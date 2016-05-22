@@ -9,7 +9,7 @@
 #include "Clause.h"
 #include <cstring>
 #include <stdexcept>
-
+#include <array>
 using namespace std;
 //**********************************************************************//
 //Default 0-arg constructor
@@ -894,7 +894,7 @@ Clause * Formula::analyzeConflict(Clause * clause)
   //if (LOG) cout<<csize<<endl;
 //  Literal * lastFalse = maxLit(clause); //Find latest falsified literal
   // Find the reason:
-  Literal * lastFalse = maxLit(clause);
+  Literal * lastFalse = clause->ATOM_LIST[ maxLit(clause)[0]];
  //if (LOG) cout<<"Latest falsified literal: "<<endl;
 //  max->Print();
  //if (LOG) cout<<"It's reason: "<<endl;
@@ -909,8 +909,9 @@ Clause * resolvent = new Clause();
   //  if (LOG) cout<<"Decision reason!"<<endl;
   //  lastFalse = maxLit(clause);
      Clause * chooseClause = new Clause();
-      chooseClause -> AddAtom(new Literal(lastFalse->VAR,'=',lastFalse->VAL));
-      chooseClause -> AddAtom(new Literal(lastFalse->VAR,'!',lastFalse->VAL));
+     Literal * falsifier = DECSTACK[maxLit(clause)[1]];
+      chooseClause -> AddAtom(new Literal(falsifier->VAR,'=',falsifier->VAL));
+      chooseClause -> AddAtom(new Literal(falsifier->VAR,'!',falsifier->VAL));
       resolvent = resolve(clause,lastFalse,chooseClause);
   }
 
@@ -947,9 +948,11 @@ Clause * resolvent = new Clause();
  return analyzeConflict(resolvent);
 }
 //Finding the literal falsified the latest in the clause
-Literal * Formula::maxLit(Clause * clause)
+vector<int> Formula::maxLit(Clause * clause)
 { //if (LOG) cout<<"maxLit on: "<<endl;
 //  clause->Print();
+  vector<int> result;
+  result.reserve(2);
   int index = 0;
   int clindex = 0;
   int decisions = DECSTACK.size();
@@ -965,8 +968,9 @@ Literal * Formula::maxLit(Clause * clause)
 
 }
 // if (VARLIST[clause->ATOM_LIST[clindex]->VAR]->CLAUSEID[clause->ATOM_LIST[clindex]->VAL]==-1)
-
-return clause->ATOM_LIST[clindex];
+result[0] = clindex;
+result[1] = index; //  literal in decstack that falsified ATOM_LIST[clindex]
+return  result ;//clause->ATOM_LIST[clindex];
 
 
 /* if (LOG) { cout<<"maxLit: "<<endl;
