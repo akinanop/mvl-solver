@@ -17,9 +17,9 @@ script:
 - ./Solver -solvenc -file ../benchmarks/Pigeonhole/pgn3
 - ./Solver -solvenc -wl -file ../benchmarks/Pigeonhole/pgn3
 - ./Solver -genben -var 2 -clause 3 -clausesize 2 -sat 1 -domain 2 -drand 1 -bool 0 -file output
-- ./Solver -linenc -file simple.txt -model simple_sat.txt
-- ./Solver -quadenc -file simple.txt -model simple_sat.txt
-- ./Solver -b2f -file simple_sat.txt -model simple.txt
+- ./Solver -linenc -file ../playground/simple.txt -model ../playground/simple_sat.txt
+- ./Solver -quadenc -file ../playground/simple.txt -model ../playground/simple_sat.txt
+- ./Solver -b2f -file ../playground/simple_sat.txt -model ../playground/simple.txt
 after_success:
 - lcov --compat-libtool --directory . --capture --output-file coverage.info
 #- coveralls-lcov coverage.info
