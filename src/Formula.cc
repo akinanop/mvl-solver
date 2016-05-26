@@ -9,7 +9,6 @@
 #include "Clause.h"
 #include <cstring>
 #include <stdexcept>
-#include <array>
 using namespace std;
 //**********************************************************************//
 //Default 0-arg constructor
@@ -575,29 +574,32 @@ inline void Formula::satisfyClauses(int var, bool equals, int val)
 }
 
 //satisfyClauses
-inline void Formula::watchedSatisfyLiteral(Literal * literal, int var, bool equals, int val)
+inline void Formula::watchedSatisfyLiteral(Literal * literal)
 {
-  int lit_var = -1;
-  bool lit_equal = false;
-  int lit_val = -1;
   VARRECORD * current = NULL;
-  if(equals)
-    current = VARLIST[var]->ATOMRECPOS[val];
+  // get clauses with atom var?val
+  if(literal -> EQUAL)
+    current = VARLIST[literal -> VAR]->ATOMRECPOS[literal -> VAL];
   else
-    current = VARLIST[var]->ATOMRECNEG[val];
-  //for every clause that contains this literal, satisfy it
-  //and update the counts of the literals
+    current = VARLIST[literal -> VAR]->ATOMRECNEG[literal -> VAL];
+  //for every clause that contains this literal update watched literals
   while(current)
     {
-      if(CLAUSELIST[current->c_num]->WATCHED[0]->SAT != 1)
-	{ if(!LitisEqual(CLAUSELIST[current->c_num]->WATCHED[1], literal))
-     CLAUSELIST[current->c_num]->WATCHED[0] = literal;
-     else { CLAUSELIST[current->c_num]->WATCHED[1] == CLAUSELIST[current->c_num]->WATCHED[0];
-     CLAUSELIST[current->c_num]->WATCHED[0] = literal;
-   }
+      Literal * watched1 = CLAUSELIST[current->c_num]->WATCHED[0];
+      Literal * watched2 = CLAUSELIST[current->c_num]->WATCHED[1];
+
+      if ( watched1 -> SAT != 1 )
+	{
+    if ( !LitisEqual(watched2, literal) ) watched1 = literal;
+
+    else {
+      watched2 = watched1;
+      watched1 = literal;
     }
-  current = current->next;
+  }
+  current = current -> next;
 }
+
 }
 
 
@@ -709,34 +711,31 @@ void Formula::undoTheory(int level)
     }
 }
 
-//unsatisfyClauses
+//unsatisfyClauses, used in undoTheory(level)
 inline void Formula::unsatisfyClauses(int var, bool equals, int val, int level)
 {
-  // if (LOG) cout<<"unsatisfy .. "<<var<<(equals?"=":"!")<<val<<endl;
   VARRECORD * current = NULL;
   int lit_var = -1;
   bool lit_equal = false;
   int lit_val = -1;
+
   if(equals)
-    current = VARLIST[var]->ATOMRECPOS[val];
+    current = VARLIST[var] -> ATOMRECPOS[val];
   else
-    current = VARLIST[var]->ATOMRECNEG[val];
-  while(current)
-    {
-      if(CLAUSELIST[current->c_num]->LEVEL > level)
-	{
-	  for(int i=0; i<CLAUSELIST[current->c_num]->NumAtom; i++)
-	    {
+    current = VARLIST[var] -> ATOMRECNEG[val];
+
+  while (current) {
+      if ( CLAUSELIST[current->c_num] -> LEVEL > level ) {
+	  for (int i=0; i<CLAUSELIST[current->c_num]->NumAtom; i++) {
+
 	      lit_var = CLAUSELIST[current->c_num]->ATOM_LIST[i]->VAR;
 	      lit_equal = CLAUSELIST[current->c_num]->ATOM_LIST[i]->EQUAL;
 	      lit_val = CLAUSELIST[current->c_num]->ATOM_LIST[i]->VAL;
 
-	      if((VARLIST[lit_var]->ATOMLEVEL[lit_val] > level)
-		 ||
-		 (VARLIST[lit_var]->ATOMASSIGN[lit_val] == 0))
+	      if ( ( VARLIST[lit_var]->ATOMLEVEL[lit_val] > level )
+		 || ( VARLIST[lit_var]->ATOMASSIGN[lit_val] == 0 ) ) // the condition seems wrong
 		{
-		  CLAUSELIST[current->c_num]->NumUnAss++;
-		  if(equals)
+		  if(lit_equal) // was if (equals) WRONG ?
 		    VARLIST[lit_var]->ATOMCNTPOS[lit_val]++;
 		  else
 		    VARLIST[lit_var]->ATOMCNTNEG[lit_val]++;
@@ -745,7 +744,7 @@ inline void Formula::unsatisfyClauses(int var, bool equals, int val, int level)
 	  CLAUSELIST[current->c_num]->LEVEL = -1;
 	  CLAUSELIST[current->c_num]->SAT = false;
 	}
-      current = current->next;
+    current = current->next;
     }
   current = NULL;
 }
@@ -864,17 +863,22 @@ Literal * Formula::whyFalse(Literal * atom){
   }
 }
 
+
+/////////// Resolution-based learning  \\\\\\\\\\\\\\\\\\\
+
 Clause * Formula::analyzeConflict(Clause * clause)
 {
-
+  /*
+  Check if there is exactly one atom falsified at the current level.
+  If yes, learn the clause. Then upon backtrack it becomes unit. Otherwise
+  continue analyzing the conflict.
+  */
 
   if (Potent(clause)) {
-   clause->NumUnAss = 0;
-
+   clause->NumUnAss = 0; // After backtracking the clause will be unit
    if (LOG) { cout<<"Learned a clause: "<<endl;
    clause->Print(); }
   //  if (LOG) cout<<"Size of the clause: "<< clause->NumAtom<<endl;
-
     CLAUSELIST.push_back(clause);
     int csize = clause->NumAtom;
     int CID = CLAUSELIST.size()-1;
@@ -882,7 +886,6 @@ Clause * Formula::analyzeConflict(Clause * clause)
       VARLIST[clause->ATOM_LIST[i]->VAR]->AddRecord(CID,
                  clause->ATOM_LIST[i]->VAL,
                  clause->ATOM_LIST[i]->EQUAL); }
-
     return clause;
 }
 
@@ -914,26 +917,6 @@ Clause * resolvent = new Clause();
       chooseClause -> AddAtom(new Literal(falsifier->VAR,'!',falsifier->VAL));
       resolvent = resolve(clause,lastFalse,chooseClause);
   }
-
-/*  if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] == -1 ){
-
-  // clause->NumUnAss = 0; //???
-    CLAUSELIST.push_back(clause);
-    int csize = clause->NumAtom;
-    int CID = CLAUSELIST.size()-1;
-   for(int i=0; i<csize; i++) {
-      VARLIST[clause->ATOM_LIST[i]->VAR]->AddRecord(CID,
-                 clause->ATOM_LIST[i]->VAL,
-                 clause->ATOM_LIST[i]->EQUAL);
-  }
-  if (LOG) cout<<"Decision reason!"<<endl;
-
-  return clause;
-
-} */
-
-
-
   else if(VARLIST[lastFalse->VAR]-> CLAUSEID[lastFalse->VAL] == -2){
     // if (LOG) cout<<"Entail reason!"<<endl;
     Clause * entailClause = new Clause();
@@ -1002,8 +985,6 @@ for(int i=0; i<unit->NumAtom; i++)
   UNITLIST.pop_front();
   if (!UNITLIST.empty()) unitLiteral(CLAUSELIST[UNITLIST.front()]);
   else return new Literal(-1,'!',-1);
-
-
 
 }
 
@@ -1077,7 +1058,7 @@ void Formula::watchedReduceTheory(Literal * literal, int var, bool equals, int v
     {
     if (LOG) cout<<"Reducing literal: "<<var<<"="<<val<<" at level "<<LEVEL<<endl;
 
-      watchedSatisfyLiteral(literal,var, equals, val);
+      watchedSatisfyLiteral(literal);
       watchedFalsifyLiteral(literal, var, !equals, val);
       VARLIST[var]->ATOMASSIGN[val] = 1;
       VARLIST[var]->ATOMLEVEL[val] = LEVEL;
@@ -1100,7 +1081,7 @@ void Formula::watchedReduceTheory(Literal * literal, int var, bool equals, int v
 
     if(VARLIST[var]->ATOMASSIGN[i] == 0)
       {
-        watchedSatisfyLiteral(literal,var, !equals, i);
+        watchedSatisfyLiteral(literal);
         watchedFalsifyLiteral(literal,var, equals, i);
         VARLIST[var]->ATOMASSIGN[i] = -1;
 
@@ -1116,7 +1097,7 @@ void Formula::watchedReduceTheory(Literal * literal, int var, bool equals, int v
   {
     if(VARLIST[var]->ATOMASSIGN[i] == 0)
       {
-        watchedSatisfyLiteral(literal,var, !equals, i);
+        watchedSatisfyLiteral(literal);
         watchedFalsifyLiteral(literal,var, equals, i);
 
        VARLIST[var]->ATOMASSIGN[i] = -1;
@@ -1135,7 +1116,7 @@ void Formula::watchedReduceTheory(Literal * literal, int var, bool equals, int v
 
       //first satisfy all clauses with negate literal, and remove
       //literal from claues
-      watchedSatisfyLiteral(literal,var, equals, val);
+      watchedSatisfyLiteral(literal);
       watchedFalsifyLiteral(literal, var, !equals, val);
       VARLIST[var]->ATOMASSIGN[val] = -1;
       // reason and level should be assigned only once:

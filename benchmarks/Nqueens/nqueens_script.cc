@@ -11,7 +11,7 @@ using namespace std;
 // n-queens as alldifferent
 
 int main(){
-  for(int queens=60; queens < 61; queens++){
+  for(int queens=40; queens < 50; queens++){
 
     string name = to_string(queens)+"queens";
 

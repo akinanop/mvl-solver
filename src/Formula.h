@@ -122,7 +122,7 @@ public:
   void watchedReduceTheory(Literal * literal, int var, bool equals, int val);
 
   //satisfyClauses : reduces the theory by satisfying the clauses
-  void watchedSatisfyLiteral(Literal * literal, int var, bool equals, int val);
+  void watchedSatisfyLiteral(Literal * literal);
 
   void satisfyClauses(int var, bool equals, int val);
   //removeLiteral : reduces the theory by removing literals from the claues

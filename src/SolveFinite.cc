@@ -76,8 +76,8 @@ void SolveFinite(CommandLine * cline, string type)
     cout<<"UNSAT"<<endl;
   fobj->PrintInfo();
   if(result == 0)
-   { cout<<"The model: "<<endl;
-     fobj->PrintModel();
+   { if(cline->MODEL) { cout<<"The model: "<<endl;
+     fobj->PrintModel(); }
       cout<<"Verifying model ... ";
        if(fobj->verifyModel())
  	cout<<"model is CORRECT"<<endl;

@@ -30,7 +30,9 @@ using namespace std;
 #define MAX_LINE 3000
 
 struct CommandLine
-{ //watched litetarals option
+{ // print model option
+  bool MODEL;
+  //watched litetarals option
   bool WATCH;
   //verbose
   bool LOG;
