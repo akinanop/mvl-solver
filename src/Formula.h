@@ -150,7 +150,7 @@ public:
   //else returns false
   bool LitisEqual(Literal * literal1, Literal * literal2);
   bool unitPropagation();
-// find unit literal in the unit clause
+  // find unit literal in the unit clause
   Literal * unitLiteral(Clause * clause);
   //NonChronoBacktrack : Extended DPLL algorithm with clause learning and
   //non chronological backtracking, returns backtrack level
@@ -160,7 +160,7 @@ public:
   int NonChronoBacktrackLoop(int level);
   //ChronoBacktrack : Extended DPLL algorithm without any learning
   int ChronoBacktrack(int level);
-// watched literals algo:
+  // watched literals algo:
   int WatchedLiterals();
 
 };
