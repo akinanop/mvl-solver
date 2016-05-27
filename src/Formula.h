@@ -87,7 +87,6 @@ public:
   bool HasAtom(Clause * clause, Literal * atom);
 
   void BuildFunction(CommandLine * cline);
-  void BuildFunction(string name);
   //PrintVar : prints the variable and its value
   void PrintVar();
   //PrintClause : prints the clauses in the theory
@@ -127,7 +126,9 @@ public:
   void satisfyClauses(int var, bool equals, int val);
   //removeLiteral : reduces the theory by removing literals from the claues
   void removeLiteral(int var, bool equals, int val);
-  void watchedFalsifyLiteral(Literal * literal, int var, bool equals, int val);
+  void watchedFalsifyLiteral(Literal * literal);
+  void watchedFalsifyLiteral(int var, bool equals, int val);
+  void watchedSatisfyLiteral(int var, bool equals, int val);
 
   //undoTheory : brings the theory back at the level stage
   void undoTheory(int level);
@@ -141,8 +142,6 @@ public:
   Clause * analyzeConflict(Clause * clause);
   bool Potent(Clause * clause);
   int backtrackLevel(Clause * clause);
-  //whyFalse: return the literal inconsistent with the input literal that was added to the interpretation earliest
-  Literal * whyFalse(Literal * literal);
   //resolve: Extended resolution
   Clause * resolve(Clause * clause, Literal * literal, Clause * reason);
   //maxLit: return the literal in C that was falsified last (?)
