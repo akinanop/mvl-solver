@@ -35,9 +35,9 @@ SolveFinite.o: ~/Desktop/mvl-solver/src/SolveFinite.cc ~/Desktop/mvl-solver/src/
 
 # Cleaning object files, exe, and temp files
 clean:
-	# rm -f Solver
+	rm -f Solver
 	rm -f *~* *.o *.a
 	# rm -f core
-	# rm -f *.gcno
-
+	rm -f *.gcno
+	rm -f *.gcda *.gcdo
 # End of Makefile
