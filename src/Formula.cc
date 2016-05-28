@@ -956,7 +956,7 @@ inline void Formula::watchedSatisfyLiteral(int var, bool equals, int val)
     // Resolve the clause and its latest falsified literal's reason
 
     // Latest falsified literal:
-    Literal* lastFalse = clause -> ATOM_LIST[maxLit ( clause )[0]];
+    Literal* lastFalse = clause -> ATOM_LIST[maxLit ( clause )[1]];
     int var = lastFalse -> VAR;
     int val = lastFalse -> VAL;
     Clause * resolvent = new Clause();
@@ -972,7 +972,7 @@ inline void Formula::watchedSatisfyLiteral(int var, bool equals, int val)
     Clause* reason = new Clause ();
     if ( VARLIST[var]-> CLAUSEID[val] == -1 ) {
       // Take literal that falsified lastFalse
-      Literal * falsifier = DECSTACK[maxLit(clause)[1]];
+      Literal * falsifier = DECSTACK[maxLit(clause)[0]];
       // Generate the reason clause:
       reason -> AddAtom ( new Literal ( falsifier -> VAR, '=', falsifier -> VAL ) );
       reason -> AddAtom ( new Literal ( falsifier -> VAR, '!', falsifier -> VAL ) );
@@ -992,34 +992,41 @@ inline void Formula::watchedSatisfyLiteral(int var, bool equals, int val)
     return analyzeConflict(resolvent);
   }
   //Finding the literal falsified the latest in the clause
-  vector<int> Formula::maxLit(Clause * clause)
-  { //if (LOG) cout<<"maxLit on: "<<endl;
+  vector<int> Formula::maxLit ( Clause* clause ) { //if (LOG) cout<<"maxLit on: "<<endl;
   //  clause->Print();
   vector<int> result;
   result.reserve(2);
-  int index = 0;
-  int clindex = 0;
+
+  int atom_index = 0;
+  int decision_index = 0;
+
   int decisions = DECSTACK.size();
 
-  for(int i=0; i<clause->NumAtom; i++)
-  { Literal * current = clause->ATOM_LIST[i];
-    for(int j=decisions-1; j<decisions && j > -1; j--)
-    {
-      if( ( (current->VAR == DECSTACK[j]->VAR && current->VAL == DECSTACK[j]->VAL && current->EQUAL != DECSTACK[j]->EQUAL)  || ( current->VAR == DECSTACK[j]->VAR && current->VAL != DECSTACK[j]->VAL && current->EQUAL == DECSTACK[j]->EQUAL && current->EQUAL )  )  && index <= j) { //TODO FIX
-        index = j; clindex = i;
+  for ( int i = 0; i < clause -> NumAtom; i++ ) {
+
+     Literal * atom = clause -> ATOM_LIST[i];
+
+    for ( int j = decisions - 1; j < decisions && j > -1; j-- ) {
+
+      if ( falsifies ( atom, DECSTACK[j] ) && decision_index <= j) { //TODO FIX
+        decision_index = j; atom_index = i;
       }
     }
 
   }
-  // if (VARLIST[clause->ATOM_LIST[clindex]->VAR]->CLAUSEID[clause->ATOM_LIST[clindex]->VAL]==-1)
-  result[0] = clindex;
-  result[1] = index; //  literal in decstack that falsified ATOM_LIST[clindex]
-  return  result ;//clause->ATOM_LIST[clindex];
-
+  result[0] = decision_index; // falsifier of the atom
+  result[1] = atom_index; //  atom in clause that falsified
+  return  result ;
 
   /* if (LOG) { cout<<"maxLit: "<<endl;
   clause->ATOM_LIST[clindex]->Print(); } */
 
+}
+
+bool Formula::falsifies ( Literal* literal, Literal* decision ) {
+  if ( literal -> VAR != decision -> VAR ) return false;
+  else if ( literal -> VAL != decision -> VAL && literal -> EQUAL != decision -> EQUAL ) return false;
+  else return true;
 }
 
 // Return unit literal in the unit clause
