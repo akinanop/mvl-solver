@@ -84,6 +84,8 @@ public:
   // 2-arg constructor
   Formula(int vars, int clauses);
   //BuildFunction : builds the theory using the input cnf file
+
+  int sat (Literal* literal);
   bool HasAtom(Clause * clause, Literal * atom);
 
   void BuildFunction(CommandLine * cline);

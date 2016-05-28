@@ -354,7 +354,7 @@ int Formula::checkConflict()
 
   //checkEntail
   bool Formula::checkEntail(int var)
-  {  // if (LOG) cout<<"Checking entailment..."<<endl;
+  {  if (LOG) cout<<"Checking entailment..."<<endl;
 
   int domainsize = 0;
   bool flag = false;
@@ -602,24 +602,24 @@ inline void Formula::watchedSatisfyLiteral(int var, bool equals, int val)
   }
 
   //satisfyClauses
-  inline void Formula::watchedSatisfyLiteral(Literal * literal)
-  {
+  inline void Formula::watchedSatisfyLiteral( Literal * literal ) {
+	  cout << "satisfying literal..."<< endl;
+
     VARRECORD * current = NULL;
-    literal -> SAT = 1;
-    literal -> LEVEL = LEVEL;
 
     // get clauses with occurences of atom var equal val
     if ( literal -> EQUAL )
     current = VARLIST[literal -> VAR]->ATOMRECPOS[literal -> VAL];
     else
     current = VARLIST[literal -> VAR]->ATOMRECNEG[literal -> VAL];
+
     //for every clause that contains this literal update watched literals
-    while(current)
-    {
+    while ( current ) {
+
       Literal * watched1 = CLAUSELIST[current->c_num]->WATCHED[0];
       Literal * watched2 = CLAUSELIST[current->c_num]->WATCHED[1];
 
-      if ( watched1 -> SAT != 1 )
+      if ( sat (watched1 ) != 1 )
       {
         if ( watched2 != NULL && !LitisEqual(watched2, literal) ) watched1 = literal;
 
@@ -638,56 +638,28 @@ inline void Formula::watchedSatisfyLiteral(int var, bool equals, int val)
 
     VARRECORD * current = NULL;
 
-
-    if ( literal -> EQUAL )
-    current = VARLIST[literal -> VAR]->ATOMRECPOS[literal -> VAL];
-    else
-    current = VARLIST[literal -> VAR]->ATOMRECNEG[literal -> VAL];
-
     int var = literal -> VAR;
-    int val = literal -> VAR;
+    int val = literal -> VAL;
     bool equals = literal -> EQUAL;
 
-    while ( current )
-    {
-      if ( !CLAUSELIST[current->c_num] -> SAT ) {
+    // Go through all occurrences of the literal in clauses and update watched literals
 
-        for ( int i = 0; i < CLAUSELIST[current->c_num] -> NumAtom; i++ ) {
-          Literal* falsified = CLAUSELIST[current->c_num] -> ATOM_LIST[i];
-          if ( falsified -> SAT == 2 && literal -> VAR == falsified -> VAR && literal -> VAL == falsified -> VAL && literal -> EQUAL != falsified -> EQUAL ) falsified -> SAT = 0;
+    if ( !equals ) current = VARLIST[var]->ATOMRECPOS[val];
+    else current = VARLIST[var]->ATOMRECNEG[val];
 
-          else if ( falsified -> SAT == 2 && literal -> VAR == falsified -> VAR && literal -> VAL != falsified -> VAL && literal -> EQUAL == falsified -> EQUAL && literal -> EQUAL) falsified -> SAT = 0;
-
-        }
-
-        CLAUSELIST[current->c_num]->NumUnAss--;
-        if ( equals )
-        VARLIST[var]->ATOMCNTPOS[val]--;
-        else
-        VARLIST[var]->ATOMCNTNEG[val]--;
-
-      }
-      current = current->next;
-    }
-
-
-    if ( literal -> EQUAL )
-    current = VARLIST[literal -> VAR]->ATOMRECPOS[literal -> VAL];
-    else
-    current = VARLIST[literal -> VAR]->ATOMRECNEG[literal -> VAL];
 
     while ( current ) {
 
       Literal* watched1 = CLAUSELIST[current->c_num] -> WATCHED[0];
       Literal* watched2 = CLAUSELIST[current->c_num] -> WATCHED[1];
 
-      if (     watchedCheckSat() != 0 &&
-watched1->SAT != 1  && ( LitisEqual( watched1, literal )
+      if ( sat (watched1) != 1  && ( LitisEqual( watched1, literal )
       || ( watched2 != NULL && LitisEqual( watched2, literal ) ) ) ) {
       SwapPointer ( CLAUSELIST[current->c_num] );
       }
     current = current->next;
     }
+    current = NULL;
   }
 
   inline void Formula::watchedFalsifyLiteral(int var, bool equals, int val) {
@@ -973,6 +945,10 @@ watched1->SAT != 1  && ( LitisEqual( watched1, literal )
         VARLIST[atom->VAR] -> AddRecord( cid, atom->VAL, atom->EQUAL);
       }
 
+      clause -> WATCHED[0] = clause -> ATOM_LIST[0];
+      if ( clause -> NumAtom > 1 ) clause -> WATCHED[1] = clause -> ATOM_LIST[1];
+      else clause -> WATCHED[1] = NULL;
+
       return clause;
 
     }
@@ -1071,28 +1047,46 @@ int Formula::watchedCheckSat () {
 
 // returns 1 if all watched1 is sat (1), 0 if some watched1 and watched2 falsified (0), otherwise 2 -undefined (2)
 
-  if (LOG) cout << "Checking satisfiability..." << endl;
+ if (LOG) cout << "Checking satisfiability..." << endl;
 
   for ( unsigned int  i = 0; i < CLAUSELIST.size(); i++ ) {
 
     Literal* watched1 = CLAUSELIST[i] -> WATCHED[0];
     Literal* watched2 = CLAUSELIST[i] -> WATCHED[1];
 
-    if ( watched1 -> SAT == 0
-      && (  watched2  == NULL || watched2 -> SAT == 0 ) ) {
+    if ( sat ( watched1 ) == 0
+      && (  watched2  == NULL || sat ( watched2 ) == 0 ) ) {
         if (LOG) cout << "Found conflict!" << endl;
+        CONFLICTINGCLAUSE = i;
         CONFLICT = true;
         return 0;
-      } else if ( watched1 -> SAT == 2 ) {
+      } else if ( sat (watched1 ) == 2 ) {
         return 2;
       }
     }
     return 1;
   }
 
-  Literal* Formula::watchedCheckUnit () {
 
-    // watched -> SAT == 2 unassigned, == 1 satisfied, == 0 falsified
+	int Formula::sat ( Literal* literal ) {
+
+		// computes literal -> SAT
+		// literal -> SAT == 2 unassigned, == 1 satisfied, == 0 falsified
+
+		int var = literal -> VAR;
+		int val = literal -> VAL;
+		int equals = 0;
+
+		if ( literal -> EQUAL) equals = 1;
+		else equals = -1;
+
+		if ( VARLIST[var] -> ATOMASSIGN[val] == equals ) return 1; // literal is satisfied
+		else if ( VARLIST[var] -> ATOMASSIGN[val] == 0 ) return 2; // unassigned
+		else return 0; //  literal is falsified
+
+	}
+
+  Literal* Formula::watchedCheckUnit () {
 
     if (LOG) cout << "Checking for units..." << endl;
 
@@ -1101,16 +1095,29 @@ int Formula::watchedCheckSat () {
       Literal* watched1 = CLAUSELIST[i] -> WATCHED[0];
       Literal* watched2 = CLAUSELIST[i] -> WATCHED[1];
 
-      if ( watched1 -> SAT == 2
-        && ( watched2 == NULL || watched2 -> SAT == 0 ) )
-        return watched1;
+      if ( sat ( watched1 ) == 2 // if watched1 unassigned
+        && ( watched2 == NULL || sat ( watched2 ) == 0 ) ){
 
-        else if ( watched1 -> SAT == 0 &&  watched2 == NULL ) {
+    	UNITCLAUSE = i;
+        return watched1;
+      } else if ( sat ( watched1 ) == 0 && sat ( watched2 ) == 2) {
+      	UNITCLAUSE = i;
+      	return watched2;
+      }
+
+       else if ( sat ( watched1 ) == 0 &&  watched2 == NULL ) {
+          CONFLICTINGCLAUSE = i;
           CONFLICT = true;
           return NULL;
         }
-        else if ( watched1 -> SAT == 0 && watched2 -> SAT == 2 ) return watched2;
+       else if ( sat ( watched1 ) == 0 &&  sat ( watched2 ) == 0 ) {
+           CONFLICTINGCLAUSE = i;
+           CONFLICT = true;
+           return NULL;
+           }
+
       }
+   //  cout << "No units..." << endl;
       return NULL;
     }
 
@@ -1122,7 +1129,7 @@ int Formula::watchedCheckSat () {
 
         Literal* watched1 = CLAUSELIST[i] -> WATCHED[0];
 
-        if ( watched1 -> SAT == 2) return  watched1;
+        if ( sat ( watched1 ) == 2) return  watched1;
       }
       return NULL;
     }
@@ -1133,34 +1140,31 @@ int Formula::watchedCheckSat () {
       Literal* watched1 = clause -> WATCHED[0];
       Literal* watched2 = clause -> WATCHED[1];
 
-      if ( watched2 != NULL && watched2 -> SAT == 2 ) {
+      if ( watched2 != NULL && sat ( watched2 )  == 2 ) {
         for ( int i; i < clause -> NumAtom; i++ ) {
 
           Literal* literal = clause -> ATOM_LIST[i];
 
-          if ( literal -> SAT == 2 && !LitisEqual( literal, watched2 ) )
+          if ( sat ( literal ) == 2 && !LitisEqual( literal, watched2 ) )
           watched1 = literal;
         }
       } else if ( watched1 -> SAT == 2 ) {
         for ( int i; i < clause -> NumAtom; i++ ) {
           Literal* literal = clause -> ATOM_LIST[i];
 
-          if ( literal -> SAT == 2 && !LitisEqual ( literal, watched1 ) )
+          if ( sat ( literal ) == 2 && !LitisEqual ( literal, watched1 ) )
           watched2 = literal;
         }
       }
     }
 
-    bool Formula::LitisEqual(Literal * literal1, Literal * literal2){
+    bool Formula::LitisEqual ( Literal* literal1, Literal * literal2 ) {
       if (literal1 -> VAR == literal2 -> VAR && literal1 -> VAL == literal2 -> VAL
         && literal1 -> EQUAL == literal2 -> EQUAL) return true;
         else return false;
       }
 
       void Formula::watchedReduceTheory ( Literal * literal, int var, bool equals, int val ) {
-
-        literal -> SAT = 1;
-        literal -> LEVEL = LEVEL;
 
         if ( equals ) {
           if ( LOG ) cout << "Reducing literal: " << var << "=" << val << " at level " << LEVEL << endl;
@@ -1178,6 +1182,7 @@ int Formula::watchedCheckSat () {
 
           // Set the reason for the literal:
           VARLIST[var]->CLAUSEID[val] = UNITCLAUSE;
+
           if ( LOG ) {
             cout << "The reason for the literal: " << endl;
             if ( UNITCLAUSE > -1 ) CLAUSELIST[UNITCLAUSE] -> Print();
@@ -1190,10 +1195,17 @@ int Formula::watchedCheckSat () {
 
           for ( int i = 0; i < val; i++ ) { // had && !CONFLICT in the condition - check!
 
+
             if ( VARLIST[var] -> ATOMASSIGN[i] == 0 ) {
 
-              watchedSatisfyLiteral(var, !equals, i);
-              watchedFalsifyLiteral(var, equals, i);
+
+
+            	Literal* neg = new Literal (var, '!', i );
+            	Literal* pos = new Literal (var, '=', i );
+
+
+              watchedSatisfyLiteral( neg );
+              watchedFalsifyLiteral( pos );
 
               VARLIST[var]->ATOMASSIGN[i] = -1;
               VARLIST[var]->ATOMLEVEL[i] = LEVEL;
@@ -1204,12 +1216,17 @@ int Formula::watchedCheckSat () {
           }
 
           for ( int i = val + 1; i < VARLIST[var] -> DOMAINSIZE; i++ ) {
+
             // had && !CONFLICT in the condition - check!
 
             if ( VARLIST[var] -> ATOMASSIGN[i] == 0 ) {
 
-              watchedSatisfyLiteral(var, !equals, i);
-              watchedFalsifyLiteral(var, equals, i);
+
+            	Literal* neg = new Literal ( var, '!', i );
+            	Literal* pos = new Literal ( var, '=', i );
+
+              watchedSatisfyLiteral(neg);
+              watchedFalsifyLiteral(pos);
 
               VARLIST[var]->ATOMASSIGN[i] = -1;
               VARLIST[var]->ATOMLEVEL[i] = LEVEL;
@@ -1226,9 +1243,7 @@ int Formula::watchedCheckSat () {
           //first satisfy all clauses with literal, and remove
           //literal from clauses
           watchedSatisfyLiteral ( literal );
-          cout << "satisfied" << endl;
           watchedFalsifyLiteral ( literal );
-          cout << "falsified" << endl;
 
 
           VARLIST[var]->ATOMASSIGN[val] = -1;
@@ -1301,12 +1316,12 @@ int Formula::watchedCheckSat () {
           if ( atom ) {
             DECISIONS++;
             LEVEL++;
+            // set REASON for subsequent falsified atoms
+
             UNITCLAUSE = -1;
             if ( LOG ) cout << "Decision: " << atom -> VAR << ( atom -> EQUAL ? '=' : '!' ) << atom -> VAL << endl;
 
-            // set REASON for subsequent falsified atoms
-            atom -> SAT = 1;
-            atom -> LEVEL = LEVEL;
+
             watchedReduceTheory ( atom, atom -> VAR, atom -> EQUAL, atom -> VAL );
           }
 

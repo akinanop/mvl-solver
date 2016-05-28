@@ -20,7 +20,7 @@ Clause::Clause()
   NumAtom = 0;
   NumUnAss = 0;
   LEVEL = -1;
-//  WATCHED.reserve(2);
+  WATCHED.reserve(2);
 }
 
 //One Argument Constructor
