@@ -38,8 +38,8 @@ class Clause
 public:
   //ATOM_LIST = vector of atoms
   //SAT = boolean variable true if clause satisfied else false
-  //NumAtom = number of atoms in clause
-  //NumUnAss = number of unassigned clause
+  //NumAtom = number of atoms in the clause
+  //NumUnAss = number of unassigned literals in the clause
   //LEVEL = Level at which the clause got satisfied, default -1
   vector <Literal *> ATOM_LIST;
   bool SAT;

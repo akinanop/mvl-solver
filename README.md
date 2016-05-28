@@ -1,8 +1,6 @@
 # Finite Domain Satisfiablity Solver 
 
-[![Build Status](https://travis-ci.org/akinanop/mvl-solver.svg?branch=master)](https://travis-ci.org/akinanop/mvl-solver)
-
-[![Coverage Status](https://coveralls.io/repos/github/akinanop/mvl-solver/badge.svg?branch=master)](https://coveralls.io/github/akinanop/mvl-solver?branch=master)
+[![Build Status](https://travis-ci.org/akinanop/mvl-solver.svg?branch=master)](https://travis-ci.org/akinanop/mvl-solver) [![Coverage Status](https://coveralls.io/repos/github/akinanop/mvl-solver/badge.svg?branch=master)](https://coveralls.io/github/akinanop/mvl-solver?branch=master)
 
 To learn what is a finite satisfiability problem, go to the [wiki page](https://github.com/akinanop/mvl-solver/wiki). If you want to try out the solver, download the archive in the current folder and follow the instructions below. Click [here](https://github.com/akinanop/mvl-solver/wiki/Benchmarks) to see some problems you could solve. 
 
@@ -18,7 +16,7 @@ Table of contents:
       * [Solve a problem](https://github.com/akinanop/mvl-solver#finite-domain-solver-with-non-chronological-backtracking)
       * [Convert between Boolean and Finite domain problems](https://github.com/akinanop/mvl-solver#convert-boolean-to-finite-domain)
 
-*Note*: This solver corrects and builds upon the unsound solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. Currently it implements [non-chronological backtracking with resolution-based learning](https://github.com/akinanop/mvl-solver/blob/master/literature/Algorithm%207.pdf).
+*Note*: This solver corrects and builds upon the unsound solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. Currently it implements [non-chronological backtracking with resolution-based learning](https://github.com/akinanop/mvl-solver/blob/master/literature/Algorithm%207.pdf) with the [watched literals](https://github.com/akinanop/mvl-solver/blob/master/literature/Watched%20literals.pdf) bookkeeping technique.
 
 Roughly, a quarter of the original code was modified. If you run ```dwdiff -s``` on the file containing the main functions, you get:
 
@@ -87,6 +85,28 @@ d 3 2
 
 ```
 
+### Finite Domain Solver with Non-Chronological Backtracking
+
+Use the following format to run the program. The solver accepts problems in [extended DIMACS format](https://github.com/akinanop/mvl-solver/wiki/Extended-DIMACS-format). Watched algorithm is a more efficient bookkeeping technique for backtracking, see [here](https://github.com/akinanop/mvl-solver/wiki/Watched-literals).
+
+``` ./mvl-solver -solvenc -verbose -restarts <int> -var <int> -clause <int> -file <string> -time <int> ```
+
+where :
+
+```
+  mvl-solver     : * name of executable
+  -solvenc       : * option stating to solve the finite domain problem
+  -file           : * name of the input file
+  -var            :  number of variables in benchmark problem
+  -clause         :  number of clauses in benchmark problem
+  -verbose        : turns on the verbose mode
+  -wl             : enable watched literals algorithma
+  -restarts       : restarts threshold, default - no restatrs; incompatible with -wl
+  -time           : amount of time allowed for solver to run (in seconds)
+
+ * - required fields
+```
+*Example*: ``` ./mvl-solver -solvenc -file "example_SAT" ```
 
 
 ### Generating Benchmark Problem
@@ -115,27 +135,9 @@ where :
  * - required fields
 ```
 
-EXAMPLE: ``` ./Solver -genben -var 4 -clause 18 -clausesize 2 -sat 1 -domain 2 -bool 1 -file "example_SAT" ```
+Example: ``` ./mvl-solver -genben -var 4 -clause 18 -clausesize 2 -sat 1 -domain 2 -bool 1 -file "example_SAT" ```
 
-### Finite Domain Solver with Non-Chronological Backtracking
 
-Use the following format to run the program. The solver accepts problems in [extended DIMACS format](https://github.com/akinanop/mvl-solver/wiki/Extended-DIMACS-format).
-
-``` ./mvl-solver -solvenc -var <int> -clause <int> -file <string> -time <int> ```
-
-where :
-
-```
-  mvl-solver     : * name of executable
-  -solvenc       : * option stating to solve the finite domain problem
-  -file           : * name of the input file
-  -var            :  number of variables in benchmark problem
-  -clause         :  number of clauses in benchmark problem
-  -time           : amount of time allowed for solver to run (in seconds)
-
- * - required fields
-```
-*Example*: ``` ./mvl-solver -solvenc -file "example_SAT" ```
 
 
 ### Convert Boolean to Finite Domain

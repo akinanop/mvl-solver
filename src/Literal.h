@@ -42,7 +42,7 @@ public:
   int SAT; // whether literal is sat 1, falsified 0, undef 2
   int LEVEL;
   //Zero argument constructor
-  Literal() { VAR = -1; VAL = -1; EQUAL = true; SAT = 2; LEVEL = -10;}
+  Literal() { VAR = -1; VAL = -1; EQUAL = false; SAT = 2; LEVEL = -10;}
   //Two argument constructor
   Literal(int vr, int vl) { VAR = vr; VAL = vl; EQUAL = true; SAT = 2; LEVEL = -10;}
   //Three argument constructor
