@@ -87,7 +87,7 @@ public:
   bool falsifies ( Literal* literal1, Literal* literal2 );
   int sat (Literal* literal);
   bool HasAtom(Clause * clause, Literal * atom);
-
+  void watchedUndoTheory ( int level );
   void BuildFunction(CommandLine * cline);
   //PrintVar : prints the variable and its value
   void PrintVar();

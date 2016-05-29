@@ -813,22 +813,55 @@ inline void Formula::watchedSatisfyLiteral(int var, bool equals, int val)
     }
   }
 
+
+  //undoTheory
+  void Formula::watchedUndoTheory ( int level ) {
+    //for each variable v
+    //for each domain d from dom(v) .. undo
+    for ( unsigned int  i = 1; i < VARLIST.size(); i++ ) {
+      for ( int j = 0; j < VARLIST[i] -> DOMAINSIZE; j++ ) {
+        //if this domain has been assigned at level this or greater undo
+        if ( VARLIST[i]->ATOMLEVEL[j] > level ) {
+
+          VARLIST[i] -> LEVEL = -1;
+          VARLIST[i] -> SAT = false;
+          VARLIST[i] -> VAL = -1;
+
+          VARLIST[i]->ATOMASSIGN[j] = 0;
+          VARLIST[i]->ATOMLEVEL[j] = -1;
+          VARLIST[i]->CLAUSEID[j] = -10;
+
+         if ( VARLIST[i]->ATOMASSIGN[j] == -1 )
+          addLiteral(i, true, j);
+          else
+          addLiteral(i, false, j);
+        }
+      }
+    }
+
+    //undo the decision stack
+    int decsize = DECSTACK.size();
+    for ( int i = decsize - 1; i > -1; i-- ) {
+      if ( VARLIST[DECSTACK[i] -> VAR] -> ATOMASSIGN[DECSTACK[i] -> VAL] == 0 ) {
+        DECSTACK.erase ( DECSTACK.begin() + i );
+      }
+    }
+  }
+
   //unsatisfyClauses, used in undoTheory(level)
-  inline void Formula::unsatisfyClauses(int var, bool equals, int val, int level)
-  {
+  inline void Formula::unsatisfyClauses ( int var, bool equals, int val, int level ) {
     VARRECORD * current = NULL;
+
     int lit_var = -1;
     bool lit_equal = false;
     int lit_val = -1;
 
-    if(equals)
-    current = VARLIST[var] -> ATOMRECPOS[val];
-    else
-    current = VARLIST[var] -> ATOMRECNEG[val];
+    if ( equals ) current = VARLIST[var] -> ATOMRECPOS[val];
+    else current = VARLIST[var] -> ATOMRECNEG[val];
 
-    while (current) {
-      if ( CLAUSELIST[current->c_num] -> LEVEL > level ) {
-        for (int i=0; i<CLAUSELIST[current->c_num]->NumAtom; i++) {
+    while ( current ) {
+      if ( CLAUSELIST[current -> c_num] -> LEVEL > level ) {
+        for ( int i = 0; i < CLAUSELIST[current -> c_num] -> NumAtom; i++ ) {
 
           lit_var = CLAUSELIST[current->c_num]->ATOM_LIST[i]->VAR;
           lit_equal = CLAUSELIST[current->c_num]->ATOM_LIST[i]->EQUAL;
@@ -854,25 +887,18 @@ inline void Formula::watchedSatisfyLiteral(int var, bool equals, int val)
   }
 
   //addLiteral : used when undoing the theory
-  inline void Formula::addLiteral(int var, bool equals, int val)
-  {
-    // if (LOG) cout<<"add .. "<<var<<(equals?"=":"!")<<val<<endl;
+  inline void Formula::addLiteral ( int var, bool equals, int val ) {
     VARRECORD * current = NULL;
     //for every record of this literal increase the number of
     //unassigned literals from unsatisfied clauses
-    if(equals)
-    current = VARLIST[var]->ATOMRECPOS[val];
-    else
-    current = VARLIST[var]->ATOMRECNEG[val];
-    while(current)
-    {
-      if(!CLAUSELIST[current->c_num]->SAT)
-      {
-        CLAUSELIST[current->c_num]->NumUnAss++;
-        if(equals)
-        VARLIST[var]->ATOMCNTPOS[val]++;
-        else
-        VARLIST[var]->ATOMCNTNEG[val]++;
+    if ( equals ) current = VARLIST[var]->ATOMRECPOS[val];
+    else current = VARLIST[var]->ATOMRECNEG[val];
+
+    while ( current ) {
+      if ( ! CLAUSELIST[current -> c_num] -> SAT ) {
+        CLAUSELIST[current -> c_num] -> NumUnAss++;
+        if ( equals ) VARLIST[var] -> ATOMCNTPOS[val]++;
+        else VARLIST[var] -> ATOMCNTNEG[val]++;
       }
       current = current->next;
     }
@@ -984,9 +1010,11 @@ inline void Formula::watchedSatisfyLiteral(int var, bool equals, int val)
         VARLIST[atom->VAR] -> AddRecord( cid, atom->VAL, atom->EQUAL);
       }
 
-      clause -> WATCHED[0] = clause -> ATOM_LIST[0];
-      if ( clause -> NumAtom > 1 ) clause -> WATCHED[1] = clause -> ATOM_LIST[1];
-      else clause -> WATCHED[1] = NULL;
+      clause -> WATCHED[0] = clause -> ATOM_LIST[maxLit( clause ) [0]];
+
+      if ( clause -> NumAtom == 1 ) clause -> WATCHED[1] = NULL;
+      else if ( maxLit( clause ) [0] < clause -> NumAtom - 1) clause -> WATCHED[1] = clause -> ATOM_LIST[maxLit( clause ) [0] + 1];
+      else clause -> WATCHED[1] = clause -> ATOM_LIST[maxLit( clause ) [0] - 1];
 
       return clause;
 
@@ -1348,7 +1376,7 @@ int Formula::watchedCheckSat () {
              cout << "# of backtracks so far: "<<BACKTRACKS<<endl;
            }
           CONFLICT = false;
-          undoTheory ( LEVEL );
+          watchedUndoTheory ( LEVEL );
         }
         // If there is a unit clause, propagate
         Literal* unit = watchedCheckUnit ();
