@@ -37,5 +37,5 @@ SolveFinite.o: SolveFinite.cc Formula.h
 clean:
 	rm -f *~* *.o *.a
 	rm -f core
-	rm -f *.gcda *.gcdo
+	rm -f *.gcda *.gcdo *.gcno
 # End of Makefile
