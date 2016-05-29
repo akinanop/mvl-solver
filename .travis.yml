@@ -17,7 +17,7 @@ script:
 - ./Solver -solvenc -file ../benchmarks/Pigeonhole/pgn3
 - ./Solver -solvenc -file ../benchmarks/Pigeonhole/pgn5
 - ./Solver -solvenc -wl -file ../benchmarks/Pigeonhole/pgn3
-- ./Solver -solvenc -file -wl ../benchmarks/Pigeonhole/pgn3
+- ./Solver -solvenc -wl -file ../benchmarks/Pigeonhole/pgn5
 - ./Solver -genben -var 2 -clause 3 -clausesize 2 -sat 1 -domain 2 -drand 1 -bool 0 -file output
 - ./Solver -linenc -file simple.txt -model simple_sat.txt
 - ./Solver -quadenc -file simple.txt -model simple_sat.txt
