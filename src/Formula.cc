@@ -827,14 +827,18 @@ inline void Formula::watchedSatisfyLiteral(int var, bool equals, int val)
           VARLIST[i] -> SAT = false;
           VARLIST[i] -> VAL = -1;
 
+
+
+         if ( VARLIST[i]->ATOMASSIGN[j] == -1 )
+          addLiteral(i, true, j);
+        else
+          addLiteral(i, false, j);
+
+          
           VARLIST[i]->ATOMASSIGN[j] = 0;
           VARLIST[i]->ATOMLEVEL[j] = -1;
           VARLIST[i]->CLAUSEID[j] = -10;
 
-         if ( VARLIST[i]->ATOMASSIGN[j] == -1 )
-          addLiteral(i, true, j);
-          else
-          addLiteral(i, false, j);
         }
       }
     }
@@ -1013,7 +1017,7 @@ inline void Formula::watchedSatisfyLiteral(int var, bool equals, int val)
       clause -> WATCHED[0] = clause -> ATOM_LIST[maxLit( clause ) [0]];
 
       if ( clause -> NumAtom == 1 ) clause -> WATCHED[1] = NULL;
-      else if ( maxLit( clause ) [0] < clause -> NumAtom - 1) clause -> WATCHED[1] = clause -> ATOM_LIST[maxLit( clause ) [0] + 1];
+      else if ( maxLit( clause ) [0] < clause -> NumAtom -  1) clause -> WATCHED[1] = clause -> ATOM_LIST[maxLit( clause ) [0] + 1];
       else clause -> WATCHED[1] = clause -> ATOM_LIST[maxLit( clause ) [0] - 1];
 
       return clause;
