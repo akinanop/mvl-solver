@@ -1095,7 +1095,7 @@ inline void Formula::watchedSatisfyLiteral(int var, bool equals, int val)
 
     for ( int j = 0; j < decisions; j++ ) {
 
-      if ( falsifies ( atom, DECSTACK[j] ) && decision_index <= j) {
+      if ( falsifies ( atom, DECSTACK[j] ) && decision_index <= j ) {
         decision_index = j; atom_index = i;
       }
     }
@@ -1110,8 +1110,11 @@ inline void Formula::watchedSatisfyLiteral(int var, bool equals, int val)
 }
 
 bool Formula::falsifies ( Literal* literal, Literal* decision ) {
+
   if ( literal -> VAR != decision -> VAR ) return false;
   else if ( literal -> VAL != decision -> VAL && literal -> EQUAL != decision -> EQUAL ) return false;
+  else if ( literal -> VAL == decision -> VAL && literal -> EQUAL == decision -> EQUAL ) return false;
+
   else return true;
 }
 
