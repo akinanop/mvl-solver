@@ -55,7 +55,7 @@ public:
   //Destructor
   ~Clause();
   //AddAtom : adds an literal to clause
-  void AddAtom(Literal * atom);
+  void addAtom(Literal * atom);
   //Print : function to print the clause
   void Print();
 

@@ -69,6 +69,7 @@ public:
   Literal * ENTAILLITERAL;
   list <int> UNITLIST;
   int UNITCLAUSE;
+  int INDEXCLAUSE; // for potent fn
   bool CONFLICT;
   int CONFLICTINGCLAUSE;
   vector <Literal *> DECSTACK;
@@ -86,7 +87,7 @@ public:
   //BuildFunction : builds the theory using the input cnf file
   bool falsifies ( Literal* literal1, Literal* literal2 );
   int sat (Literal* literal);
-  bool HasAtom(Clause * clause, Literal * atom);
+  bool hasAtom(Clause * clause, Literal * atom);
   void watchedUndoTheory ( int level );
   void BuildFunction(CommandLine * cline);
   //PrintVar : prints the variable and its value
@@ -142,7 +143,7 @@ public:
   //analyzeConflict : finds the conflict, learns and creates a conflict clause,
   //add's the clause to theory and returns a backtrack level
   Clause * analyzeConflict(Clause * clause);
-  bool Potent(Clause * clause);
+  bool potent(Clause * clause);
   int backtrackLevel(Clause * clause);
   //resolve: Extended resolution
   Clause * resolve(Clause * clause, Literal * literal, Clause * reason);
@@ -164,6 +165,7 @@ public:
   int ChronoBacktrack(int level);
   // watched literals algo:
   int WatchedLiterals();
+  Literal* lazyWatchedChooseLiteral ();
 
 };
 // End of Code

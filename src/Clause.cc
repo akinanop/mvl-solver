@@ -42,7 +42,7 @@ Clause::~Clause()
 }
 
 //AddAtom
-void Clause::AddAtom(Literal * atom)
+void Clause::addAtom(Literal * atom)
 {
   ATOM_LIST.push_back(atom);
   NumAtom++;
