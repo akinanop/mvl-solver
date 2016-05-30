@@ -74,7 +74,7 @@ public:
   vector <Literal *> DECSTACK;
   int RESTARTS;
   bool LOG; // verbose
-  //bool WATCH; //watched literals option
+  bool WATCH; //watched literals option
   // int ORIGINALFORMULA;
   //public variables and functions
   //Zero argument constructor

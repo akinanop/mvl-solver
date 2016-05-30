@@ -191,8 +191,8 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
   cline->DOMAIN_SIZE = 10;
   cline->DRAND = false;
   cline->BOOL_FINITE = false;
-  cline->FILE = "die";
-  cline->MODEL_FILE = "die";
+  cline->FILE = NULL;
+  cline->MODEL_FILE = NULL;
   cline->TIME = 3600; //1 hour = 60mins * 60secs
   cline->RESTARTS = 0;
   //Check if enough arguments supplied
@@ -233,16 +233,6 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 	      else
 		;
 	    }
-
-	  //check if required variables are specified
-	/*  if((cline->NUM_VAR == -1) || (cline->NUM_CLAUSE == -1) ||
-	     (!strcmp(cline->FILE, "die")))
-	    {
-	      cout<<"**** INCORRECT COMMANDLINE ****"<<endl;
-	      cout<<" Check Input format using : exe -help"<<endl;
-	      cout<<endl;
-	      exit(1);
-	    } */
 	}
 
       //If option is for converting boolean to finite domain
@@ -310,15 +300,6 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 		;
 	    }
 
-	  //check if required variables are specified
-	/*  if((cline->NUM_VAR == -1) || (cline->NUM_CLAUSE == -1) ||
-	     (cline->CLAUSE_SIZE == -1) || (!strcmp(cline->FILE, "die")))
-	    {
-	      cout<<"**** INCORRECT COMMANDLINE ****"<<endl;
-	      cout<<" Check Input format using : exe -help"<<endl;
-	      cout<<endl;
-	      exit(1);
-	    } */
 	}
 
       //If option is for solving a domain problem : Non Chronological Backtracking
@@ -352,15 +333,6 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 		;
 	    }
 
-	  //check if required variables are specified
-	/*  if((cline->NUM_VAR == -1) || (cline->NUM_CLAUSE == -1) ||
-	     (cline->CLAUSE_SIZE == -1) || (!strcmp(cline->FILE, "die")))
-	    {
-	      cout<<"**** INCORRECT COMMANDLINE ****"<<endl;
-	      cout<<" Check Input format using : exe -help"<<endl;
-	      cout<<endl;
-	      exit(1);
-	    } */
 	}
 
       else

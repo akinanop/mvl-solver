@@ -1,7 +1,7 @@
 //**************************************************************
 //
 // Finite Domain Solver
-//
+// Authors: H. A. Lal, N. Pona
 // File : Main.cc
 // Description : Main Driver program code
 //**************************************************************

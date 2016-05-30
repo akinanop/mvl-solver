@@ -1,6 +1,7 @@
 //**********************************************************************//
 //
 // Finite Domain Solver
+//
 // File : Formula.cc
 //
 //**********************************************************************//
@@ -32,6 +33,7 @@ Formula::Formula()
   DECSTACK.reserve(10);
   RESTARTS = 0;
   LOG = false;
+  WATCH = false;
 }
 
 //1-arg constructor
@@ -54,7 +56,7 @@ Formula::Formula(CommandLine * cline)
   //  DECSTACK.reserve(cline->NUM_VAR+1);
   RESTARTS = 0;
   LOG = cline->LOG;
-  // WATCH = cline->WATCH;
+  WATCH = cline->WATCH;
 }
 
 //BuildFunction
@@ -826,14 +828,6 @@ inline void Formula::watchedSatisfyLiteral(int var, bool equals, int val)
           VARLIST[i] -> LEVEL = -1;
           VARLIST[i] -> SAT = false;
           VARLIST[i] -> VAL = -1;
-
-
-
-         if ( VARLIST[i]->ATOMASSIGN[j] == -1 )
-          addLiteral(i, true, j);
-        else
-          addLiteral(i, false, j);
-
           
           VARLIST[i]->ATOMASSIGN[j] = 0;
           VARLIST[i]->ATOMLEVEL[j] = -1;
@@ -892,6 +886,7 @@ inline void Formula::watchedSatisfyLiteral(int var, bool equals, int val)
 
   //addLiteral : used when undoing the theory
   inline void Formula::addLiteral ( int var, bool equals, int val ) {
+	  // TODO
     VARRECORD * current = NULL;
     //for every record of this literal increase the number of
     //unassigned literals from unsatisfied clauses
@@ -911,7 +906,7 @@ inline void Formula::watchedSatisfyLiteral(int var, bool equals, int val)
 
 
   bool Formula::HasAtom(Clause * clause, Literal * atom)
-  {
+  { // TODO
     for(int i=0; i<clause->NumAtom;i++){
       if (clause->ATOM_LIST[i]->VAR == atom->VAR && clause->ATOM_LIST[i]->EQUAL == atom->EQUAL && clause->ATOM_LIST[i]->VAL == atom->VAL) return true;
     }
@@ -919,7 +914,7 @@ inline void Formula::watchedSatisfyLiteral(int var, bool equals, int val)
   }
 
   Clause * Formula::resolve(Clause * clause, Literal * literal, Clause * reason)
-  {
+  { // TODO
     Clause * resolvent = new Clause();
     // the literals from clause C that are satisfied by at least one interpretation that does not satisfy L
     for ( unsigned int i=0; i<clause->ATOM_LIST.size();i++ ) {
@@ -945,47 +940,59 @@ inline void Formula::watchedSatisfyLiteral(int var, bool equals, int val)
     return resolvent;
   }
 
-  // Check if there is exactly one atom falsified at the current level
   bool Formula::Potent ( Clause* clause ) {
-    // int index = 0;
+	/* Check if there is exactly one atom falsified at the current level */
+	int index = 0;
     int counter = 0;
     for ( int i = 0; i < clause -> NumAtom; i++ ) {
 
-      Literal* atom = clause->ATOM_LIST[i];
+      Literal* atom = clause -> ATOM_LIST[i];
 
-      if ( VARLIST[atom->VAR]->ATOMLEVEL[atom->VAL] == LEVEL ) {
-        //  index = i;
+      if ( VARLIST[atom -> VAR] -> ATOMLEVEL[atom -> VAL] == LEVEL ) {
         counter++;
+        index = i;
       }
     }
 
     if(counter != 1) return false;
-    else return true;
+    else {
+    	UNITCLAUSE = index;
+    	return true;
+    }
   }
 
   int Formula::backtrackLevel ( Clause * learnedClause ) {
 
-    if (LOG) cout << "Finding backtrack level..."<<endl;
+	/* returns the second highest level associated
+	  with a literal in the learnedClause */
+
+
+    if ( LOG ) cout << "Finding backtrack level..." << endl;
     int max = -1;
     int csize = learnedClause -> NumAtom;
 
-    //if learned clause has only one literal then backtrack to the level 0
+    /*
+     * Additional possibility: if learned clause has only one literal then backtrack to the level 0
     if ( csize == 1 )
     return 0;
+     */
 
     for ( int i = 0; i < csize; i++ ) {
 
       Literal* atom = learnedClause -> ATOM_LIST[i];
       int atom_level = VARLIST[atom -> VAR] -> ATOMLEVEL[atom -> VAL];
 
+      cout << atom_level << endl;
+
       if ( LEVEL > atom_level && max < atom_level )
       max = atom_level;
     }
 
-    if(max != -1)
-    return max;
-    else
-    return LEVEL--;
+    cout << max << endl;
+
+
+    if ( max != -1 ) return max;
+    else return LEVEL-1;
   }
 
   //--------------- Resolution-based clause learning ---------------------//
@@ -997,6 +1004,7 @@ inline void Formula::watchedSatisfyLiteral(int var, bool equals, int val)
     If yes, learn the clause: this way upon backtrack it becomes unit. Otherwise
     continue analyzing the conflict.
     */
+
     if ( Potent ( clause ) ) {
       // After backtracking the clause should be detected as unit
       clause -> NumUnAss = 0;
@@ -1014,11 +1022,15 @@ inline void Formula::watchedSatisfyLiteral(int var, bool equals, int val)
         VARLIST[atom->VAR] -> AddRecord( cid, atom->VAL, atom->EQUAL);
       }
 
-      clause -> WATCHED[0] = clause -> ATOM_LIST[maxLit( clause ) [0]];
+      clause -> WATCHED[0] = clause -> ATOM_LIST[UNITCLAUSE];
+      VARLIST[clause -> WATCHED[0] -> VAR] ->  ATOMASSIGN[clause -> WATCHED[0] -> VAL] = 0;
+
+      cout << "Watched1: " << endl;
+      clause -> WATCHED[0] -> Print();
 
       if ( clause -> NumAtom == 1 ) clause -> WATCHED[1] = NULL;
-      else if ( maxLit( clause ) [0] < clause -> NumAtom -  1) clause -> WATCHED[1] = clause -> ATOM_LIST[maxLit( clause ) [0] + 1];
-      else clause -> WATCHED[1] = clause -> ATOM_LIST[maxLit( clause ) [0] - 1];
+      else if ( UNITCLAUSE < clause -> NumAtom -  1) clause -> WATCHED[1] = clause -> ATOM_LIST[UNITCLAUSE + 1];
+      else clause -> WATCHED[1] = clause -> ATOM_LIST[UNITCLAUSE - 1];
 
       return clause;
 
@@ -1181,24 +1193,17 @@ int Formula::watchedCheckSat () {
 
     	UNITCLAUSE = i;
         return watched1;
-      } else if ( sat ( watched1 ) == 0 && sat ( watched2 ) == 2) {
+      }
+
+      else if ( sat ( watched1 ) == 0 && sat ( watched2 ) == 2) {
       	UNITCLAUSE = i;
       	return watched2;
       }
 
-       else if ( sat ( watched1 ) == 0 &&  watched2 == NULL ) {
-          CONFLICTINGCLAUSE = i;
-          CONFLICT = true;
-          return NULL;
-        }
-       else if ( sat ( watched1 ) == 0 &&  sat ( watched2 ) == 0 ) {
-           CONFLICTINGCLAUSE = i;
-           CONFLICT = true;
-           return NULL;
-           }
+
 
       }
-   //  cout << "No units..." << endl;
+      cout << "No units..." << endl;
       return NULL;
     }
 
@@ -1371,7 +1376,7 @@ int Formula::watchedCheckSat () {
            }
 
 
-          if ( LEVEL == 0 ) return 2;
+          if ( LEVEL == 0 ) { cout << "UNSAT" << endl; return 2; }
 
           LEVEL = backtrackLevel ( analyzeConflict ( CLAUSELIST[CONFLICTINGCLAUSE] ) );
           BACKTRACKS++;
@@ -1386,6 +1391,9 @@ int Formula::watchedCheckSat () {
         Literal* unit = watchedCheckUnit ();
         if ( unit ) {
           if ( LOG ) cout << "Found unit!" << endl;
+          unit -> Print();
+          cout << "Unit clause: "<<endl;
+          CLAUSELIST[UNITCLAUSE] -> Print();
           watchedReduceTheory ( unit, unit -> VAR, unit -> EQUAL, unit -> VAL );
         }
         // otherwise choose a literal and propagate - no need for separate unit propagation
