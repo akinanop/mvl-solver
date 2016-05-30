@@ -1,7 +1,10 @@
 
+### Urgent
 
+* Verify basic non-chronological algorithm
+* => Verify watched literals non-chronological algorithm
 
-### May-June 2016
+### June 2016
 
 Expected outcomes:
 
@@ -19,22 +22,14 @@ UK, September 6-10, 2010. Proceedings, pages 281–296, 2010. ```
 
 4. Replicate experiments from the aforementioned paper (see benchmarks).
 
-### Urgent
 
-* run basic solver on pgnhole problems - OK - as expected
-* graph coloring preliminary tests
-* verify algo on -1 -- see lit
-* run solver on nqueens again
 
 Easy tasks:
 
-* create more benchmarks (GT_n, latin square...) - OK
-* add separate functions for different # of restarts + command line option - OK
-* write human-friendly README - OK 
+* look for and create more benchmarks 
 * add pseudo-code for algos and motivation to the documentation (necessary for the esslli paper)
-* implement basic and extended watched literals
+* implement extended watched literals
 * run tests - OK - scripts are ready, just run them 
-* add verbose mode from command line - OK
 
 
 Moderate tasks:
