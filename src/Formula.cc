@@ -1282,7 +1282,7 @@ Literal* Formula::watchedCheckUnit () {
 
 
 	}
-	cout << "No units..." << endl;
+	if ( LOG ) cout << "No units..." << endl;
 	return NULL;
 }
 
@@ -1509,10 +1509,12 @@ int Formula::WatchedLiterals () {
 		// If there is a unit clause, propagate
 		Literal* unit = watchedCheckUnit ();
 		if ( unit ) {
-			if ( LOG ) cout << "Found unit!" << endl;
-			unit -> Print();
-			cout << "Unit clause: "<<endl;
-			CLAUSELIST[UNITCLAUSE] -> Print();
+			if ( LOG ) {
+				cout << "Found unit!" << endl;
+				unit -> Print();
+				cout << "Unit clause: "<<endl;
+				CLAUSELIST[UNITCLAUSE] -> Print();
+			}
 			watchedReduceTheory ( unit, unit -> VAR, unit -> EQUAL, unit -> VAL );
 		}
 		// otherwise choose a literal and propagate - no need for separate unit propagation

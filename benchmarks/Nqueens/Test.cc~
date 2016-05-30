@@ -12,7 +12,7 @@ void run_solver(int var, int clauses, string file)
   FILE * outp;
   outp = fopen("out4_60R_noR", "a");
 
-  string total =  "~/netshare/mvl-solver/./Solver -solvenc -file "+file;
+  string total =  "~/netshare/mvl-solver/./Solver -solvenc -var -file "+file;
   FILE* test = popen(total.c_str(), "r");
   while ( ! feof (test) )
        {
