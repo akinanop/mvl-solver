@@ -1252,6 +1252,14 @@ void Formula::SwapPointer ( Clause* clause ) {
 	}
 }
 
+bool Formula::LitIsEqual ( Literal* literal1, Literal * literal2 ) {
+
+	if (literal1 -> VAR == literal2 -> VAR && literal1 -> VAL == literal2 -> VAL
+			&& literal1 -> EQUAL == literal2 -> EQUAL) return true;
+
+	else return false;
+}
+
 void Formula::watchedReduceTheory ( Literal * literal, int var, bool equals, int val ) {
 
 	if ( equals ) {
@@ -1350,16 +1358,6 @@ void Formula::watchedReduceTheory ( Literal * literal, int var, bool equals, int
 		watchedReduceTheory ( ENTAILLITERAL, ENTAILLITERAL -> VAR, true, ENTAILLITERAL -> VAL );
 	}
 }
-
-bool Formula::LitIsEqual ( Literal* literal1, Literal * literal2 ) {
-
-	if (literal1 -> VAR == literal2 -> VAR && literal1 -> VAL == literal2 -> VAL
-			&& literal1 -> EQUAL == literal2 -> EQUAL) return true;
-
-	else return false;
-}
-
-
 //=================== Watched literals NON-CHRONOLOGICAL BACKTRACK ============================//
 
 int Formula::WatchedLiterals () {
@@ -1427,8 +1425,10 @@ int Formula::WatchedLiterals () {
 
 }
 
-// Resolution-based non-chronological backtracking algorithm  with restarts
 
+
+
+// // Resolution-based non-chronological backtracking algorithm  with restarts
 int Formula::NonChronoBacktrack ( int restarts ) {
 
 	int restartCount = restarts;
@@ -1438,7 +1438,7 @@ int Formula::NonChronoBacktrack ( int restarts ) {
 	// return 1 : if time out
 	// return 2 : if CONFLICT and later used as unsatisfied
 
-	while ( true ) {
+	while ( true ){
 
 		if ( checkSat() )
 			return 0;
@@ -1498,7 +1498,6 @@ int Formula::NonChronoBacktrack ( int restarts ) {
 				reduceTheory ( atom -> VAR, atom -> EQUAL, atom -> VAL);
 			}
 
-		}
 	}
 
 }
@@ -1535,9 +1534,10 @@ int Formula::NonChronoBacktrack() {
 
 			LEVEL = backtrackLevel ( analyzeConflict ( CLAUSELIST[CONFLICTINGCLAUSE]) );
 
+			BACKTRACKS++;
+
 			if ( LOG ) {
 				cout << "We are backtracking to the level: " << LEVEL << endl;
-				BACKTRACKS++;
 				cout << "# of backtracks so far: " << BACKTRACKS << endl;
 			}
 
