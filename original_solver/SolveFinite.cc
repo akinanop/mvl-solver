@@ -29,7 +29,7 @@ void SolveFinite(CommandLine * cline, string type)
   //Creating object
   fobj = new Formula(cline);
   //Building database
-  fobj->BuildFunction(cline);
+  fobj->BuildFormula(cline);
   //Compute Buildtime
   difftime = fobj->TIME_E - fobj->TIME_S;
   totaltime += difftime;

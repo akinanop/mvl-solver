@@ -54,8 +54,6 @@ public:
     LEVEL = -10;
   }
 
-
-
   //Print : function to print the atom
   void Print()
   {

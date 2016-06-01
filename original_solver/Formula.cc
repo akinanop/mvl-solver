@@ -51,7 +51,7 @@ Formula::Formula(CommandLine * cline)
 }
 
 //BuildFunction
-void Formula::BuildFunction(CommandLine * cline)
+void Formula::BuildFormula(CommandLine * cline)
 {
   //local variables
   ifstream infile;

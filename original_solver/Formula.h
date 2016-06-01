@@ -81,7 +81,7 @@ public:
   //One argument constructor
   Formula (CommandLine * cline);
   //BuildFunction : builds the theory using the input cnf file
-  void BuildFunction(CommandLine * cline);
+  void BuildFormula(CommandLine * cline);
   //PrintVar : prints the variable and its value
   void PrintVar();
   //PrintClause : prints the clauses in the theory

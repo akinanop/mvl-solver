@@ -89,7 +89,7 @@ public:
   int sat (Literal* literal);
   bool hasAtom(Clause * clause, Literal * atom);
   void watchedUndoTheory ( int level );
-  void BuildFunction(CommandLine * cline);
+  void BuildFormula(CommandLine * cline);
   //PrintVar : prints the variable and its value
   void PrintVar();
   //PrintClause : prints the clauses in the theory
@@ -98,7 +98,6 @@ public:
   void PrintInfo();
   // Print model
   void PrintModel();
-  bool hasClause(Clause * clause);
   //verifyModel : verifies the model that was found, if any. returns true
   //if corret
   bool verifyModel();
@@ -151,7 +150,7 @@ public:
   vector<int> maxLit(Clause * clause);
   //unitPropagation : does BCP in Finite Domain, returns true if no conflict
   //else returns false
-  bool LitisEqual(Literal * literal1, Literal * literal2);
+  bool LitIsEqual(Literal * literal1, Literal * literal2);
   bool unitPropagation();
   // find unit literal in the unit clause
   Literal * unitLiteral(Clause * clause);
