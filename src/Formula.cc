@@ -819,8 +819,8 @@ inline void Formula::watchedSatisfyLiteral ( int var, bool equals, int val ) {
 
 	// get clauses with the literal
 
-	if ( equals ) current = VARLIST[var]->ATOMRECPOS[val];
-	else current = VARLIST[var]->ATOMRECNEG[val];
+	if ( equals ) current = VARLIST[var] -> ATOMRECPOS[val];
+	else current = VARLIST[var] -> ATOMRECNEG[val];
 
 	/*
 	 * for every clause that contains this literal update watched literals, as described here:
@@ -831,9 +831,8 @@ inline void Formula::watchedSatisfyLiteral ( int var, bool equals, int val ) {
 
 		// assign the satisfied literal from the clause to be watched1
 
-
-		Literal * watched1 = CLAUSELIST[current->c_num]->WATCHED[0];
-		Literal * watched2 = CLAUSELIST[current->c_num]->WATCHED[1];
+		Literal* watched1 = CLAUSELIST[current->c_num]->WATCHED[0];
+		Literal* watched2 = CLAUSELIST[current->c_num]->WATCHED[1];
 
 		Literal* literal = NULL;
 
@@ -851,7 +850,7 @@ inline void Formula::watchedSatisfyLiteral ( int var, bool equals, int val ) {
 
 		if ( sat ( watched1 )  != 1 ) {
 
-			if ( ! LitIsEqual ( watched2, literal ) ) {
+			if ( watched2 != NULL && ! LitIsEqual ( watched2, literal ) ) {
 
 				watched1 = literal;
 
@@ -911,9 +910,9 @@ inline void Formula::watchedFalsifyLiteral ( int var, bool equals, int val ) {
 }
 
 void Formula::watchedUndoTheory ( int level ) { // FIXME
-	//for each variable v
-	//for each domain d from dom(v) .. undo
+
 	for ( unsigned int  i = 1; i < VARLIST.size(); i++ ) {
+
 		for ( int j = 0; j < VARLIST[i] -> DOMAINSIZE; j++ ) {
 			//if this domain has been assigned at level this or greater undo
 			if ( VARLIST[i]->ATOMLEVEL[j] > level ) {
@@ -921,7 +920,6 @@ void Formula::watchedUndoTheory ( int level ) { // FIXME
 				VARLIST[i] -> LEVEL = -1;
 				VARLIST[i] -> SAT = false;
 				VARLIST[i] -> VAL = -1;
-
 				VARLIST[i]->ATOMASSIGN[j] = 0;
 				VARLIST[i]->ATOMLEVEL[j] = -1;
 				VARLIST[i]->CLAUSEID[j] = -10;
@@ -929,7 +927,6 @@ void Formula::watchedUndoTheory ( int level ) { // FIXME
 			}
 		}
 	}
-
 	//undo the decision stack
 	int decsize = DECSTACK.size();
 	for ( int i = decsize - 1; i > -1; i-- ) {
@@ -988,7 +985,6 @@ Clause* Formula::analyzeConflict ( Clause * clause ) {
 			}
 		}
 
-
 		return clause;
 
 	}
@@ -1013,6 +1009,10 @@ Clause* Formula::analyzeConflict ( Clause * clause ) {
 	if ( VARLIST[var]-> CLAUSEID[val] == -1 ) {
 		// Take literal in the decstack that falsified lastFalse
 		Literal * falsifier = DECSTACK[maxLit ( clause )[1]];
+
+		cout << "Falsifier: " << endl;
+		falsifier -> Print();
+
 		// Generate the reason clause:
 		reason -> addAtom ( new Literal ( falsifier -> VAR, '=', falsifier -> VAL ) );
 		reason -> addAtom ( new Literal ( falsifier -> VAR, '!', falsifier -> VAL ) );
@@ -1051,6 +1051,7 @@ vector<int> Formula::maxLit ( Clause* clause ) {
 	for ( int i = 0; i < clause -> NumAtom; i++ ) {
 
 		Literal * atom = clause -> ATOM_LIST[i];
+
 		decision_index = VARLIST[atom -> VAR] -> ATOMINDEX[atom -> VAL];
 
 		if ( max_decision_index < decision_index ) {
@@ -1263,18 +1264,27 @@ bool Formula::LitIsEqual ( Literal* literal1, Literal * literal2 ) {
 void Formula::watchedReduceTheory ( Literal * literal, int var, bool equals, int val ) {
 
 	if ( equals ) {
-		if ( LOG ) cout << "Reducing literal: " << var << "=" << val << " at level " << LEVEL << endl;
-		// satisfy literal in the clauses where it appears
-		watchedSatisfyLiteral ( literal );
-		// remove literal from the clauses where it's negation appears
-		watchedFalsifyLiteral ( literal );
 
-		// TODO: change analyzeConflict such that we don't need this bookeeping, use only watched literals info:
+		if ( LOG ) cout << "Reducing literal: " << var << "=" << val << " at level " << LEVEL << endl;
+
+		// update watched literals:
+		watchedSatisfyLiteral ( literal ); // set the literal to watched1 - then checkSat == 1
+		watchedFalsifyLiteral ( var, ! equals, val ); // if one of the watched literals falsified, swap watched literals
+
+		for ( int i = 0; i < VARLIST[var] -> DOMAINSIZE && i != val && ! CONFLICT; i++ ) {
+
+			watchedFalsifyLiteral ( var, equals, i);
+
+		}
+
+
+
 		VARLIST[var]->ATOMASSIGN[val] = 1;
 		VARLIST[var]->ATOMLEVEL[val] = LEVEL;
 		VARLIST[var]->VAL = val;
 		VARLIST[var]->SAT = true; // means variable is assigned. REDUNDANT!
 		VARLIST[var]->LEVEL = LEVEL; // value assigned a positive value at this level
+
 
 		// Set the reason for the literal:
 		VARLIST[var]->CLAUSEID[val] = UNITCLAUSE;
@@ -1286,46 +1296,42 @@ void Formula::watchedReduceTheory ( Literal * literal, int var, bool equals, int
 		}
 		// Add literal to the decision stack
 		DECSTACK.push_back(literal);
+		VARLIST[var] -> ATOMINDEX[val] = DECSTACK.size() - 1; // to use in maxLit
+
 
 		//for each different domain value x from dom(var) which is not assigned (0) assign it
 
-		for ( int i = 0; i < val; i++ ) { // had && !CONFLICT in the condition - check!
-
+		for ( int i = 0; i < val && ! CONFLICT; i++ ) {
 
 			if ( VARLIST[var] -> ATOMASSIGN[i] == 0 ) {
 
-				Literal* neg = new Literal (var, '!', i );
-				Literal* pos = new Literal (var, '=', i );
-
-
-				watchedSatisfyLiteral( neg );
-				watchedFalsifyLiteral( pos );
+				watchedSatisfyLiteral ( var, !equals, i );
+				watchedFalsifyLiteral ( var, equals, i );
 
 				VARLIST[var]->ATOMASSIGN[i] = -1;
 				VARLIST[var]->ATOMLEVEL[i] = LEVEL;
+
 				// Set the same reason:
 				VARLIST[var]->CLAUSEID[i] = UNITCLAUSE;
+				VARLIST[var] -> ATOMINDEX[i] = DECSTACK.size() - 1; // to use in maxLit
+
+
 			}
 		}
 
-		for ( int i = val + 1; i < VARLIST[var] -> DOMAINSIZE; i++ ) {
-
-			// had && !CONFLICT in the condition - check!
+		for ( int i = val + 1; i < VARLIST[var] -> DOMAINSIZE && ! CONFLICT; i++ ) {
 
 			if ( VARLIST[var] -> ATOMASSIGN[i] == 0 ) {
 
-
-				Literal* neg = new Literal ( var, '!', i );
-				Literal* pos = new Literal ( var, '=', i );
-
-				watchedSatisfyLiteral(neg);
-				watchedFalsifyLiteral(pos);
+				watchedSatisfyLiteral ( var, !equals, i );
+				watchedFalsifyLiteral ( var, equals, i );
 
 				VARLIST[var]->ATOMASSIGN[i] = -1;
 				VARLIST[var]->ATOMLEVEL[i] = LEVEL;
 
-				// Set the same reason:
 				VARLIST[var] -> CLAUSEID[i] = UNITCLAUSE;
+				VARLIST[var] -> ATOMINDEX[i] = DECSTACK.size() - 1; // to use in maxLit
+
 
 			}
 		}
@@ -1333,30 +1339,29 @@ void Formula::watchedReduceTheory ( Literal * literal, int var, bool equals, int
 
 		if (LOG) cout << "Reducing: " << var << "!" << val << " at level " << LEVEL << endl;
 
-		//first satisfy all clauses with literal, and remove
-		//literal from clauses
 		watchedSatisfyLiteral ( literal );
 		watchedFalsifyLiteral ( literal );
 
-
 		VARLIST[var]->ATOMASSIGN[val] = -1;
 		VARLIST[var]->ATOMLEVEL[val] = LEVEL;
-
 		// Set the reason:
 		VARLIST[var]->CLAUSEID[val] = UNITCLAUSE;
-
 		//Add literal to decision stack:
 		DECSTACK.push_back(literal);
+		VARLIST[var] -> ATOMINDEX[val] = DECSTACK.size() - 1; // to use in maxLit
+
+
+		//check Entailment on this variable
+		if ( checkEntail ( var ) ) {
+			if (LOG) cout << "Entailment... " << ENTAILLITERAL -> VAR << "=" << ENTAILLITERAL -> VAL << endl;
+			ENTAILS++;
+			// Set the reason:
+			UNITCLAUSE = -2;
+			watchedReduceTheory ( ENTAILLITERAL, ENTAILLITERAL -> VAR, true, ENTAILLITERAL -> VAL );
+		}
 
 	}
-	//check Entailment on this variable
-	if ( checkEntail ( var ) ) {
-		if (LOG) cout << "Entailment... " << ENTAILLITERAL -> VAR << "=" << ENTAILLITERAL -> VAL << endl;
-		ENTAILS++;
-		// Set the reason:
-		UNITCLAUSE = -2;
-		watchedReduceTheory ( ENTAILLITERAL, ENTAILLITERAL -> VAR, true, ENTAILLITERAL -> VAL );
-	}
+
 }
 //=================== Watched literals NON-CHRONOLOGICAL BACKTRACK ============================//
 
@@ -1364,7 +1369,7 @@ int Formula::WatchedLiterals () {
 
 	// returns 0 if sat, 1 if timeout, 2 if unsat
 
-	if (LOG) cout << "Solving with watched literal algorithm..." << endl;
+	if ( LOG ) cout << "Solving with the watched literal algorithm..." << endl;
 
 	while ( true ) {
 		//Check if the theory satisfied
@@ -1376,7 +1381,6 @@ int Formula::WatchedLiterals () {
 		if ( ( TIME_E - TIME_S ) > TIMELIMIT )
 			return 1;
 
-		//check if conflict
 		if ( CONFLICT ) {
 
 			if ( LOG ) {
