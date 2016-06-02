@@ -1,4 +1,4 @@
-// This is a script to generate an n-queens sat problem in dimacs cnf format
+// This is a script to generate an n-queens sat problem
 #include <vector>
 #include <stack>
 #include <sstream>
