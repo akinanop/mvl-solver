@@ -1,0 +1,253 @@
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+benchmarks/Graph_Coloring/MYC/myciel3_N3.dimacs 	0.0005	Solving with the watched literal algorithm...
+Checking satisfiability...
+Checking for units...
+No units...
+Decision: 6=0
+Reducing literal: 6=0 at level 1
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking for units...
+Found unit!
+2!=0
+Unit clause: 
+2!=0
+6!=0
+
+Reducing: 2!0 at level 1
+Checking entailment...
+Checking satisfiability...
+Checking for units...
+Found unit!
+4!=0
+Unit clause: 
+4!=0
+6!=0
+
+Reducing: 4!0 at level 1
+Checking entailment...
+Checking satisfiability...
+Checking for units...
+Found unit!
+11!=0
+Unit clause: 
+6!=0
+11!=0
+
+Reducing: 11!0 at level 1
+Checking entailment...
+Checking satisfiability...
+Checking for units...
+No units...
+Decision: 7=0
+Reducing literal: 7=0 at level 2
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking for units...
+Found unit!
+1!=0
+Unit clause: 
+1!=0
+7!=0
+
+Reducing: 1!0 at level 2
+Checking entailment...
+Checking satisfiability...
+Checking for units...
+Found unit!
+3!=0
+Unit clause: 
+3!=0
+7!=0
+
+Reducing: 3!0 at level 2
+Checking entailment...
+Checking satisfiability...
+Checking for units...
+No units...
+Decision: 8=0
+Reducing literal: 8=0 at level 3
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking for units...
+Found unit!
+5!=0
+Unit clause: 
+5!=0
+8!=0
+
+Reducing: 5!0 at level 3
+Checking entailment...
+Checking satisfiability...
+Checking for units...
+No units...
+Decision: 9=0
+Reducing literal: 9=0 at level 4
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking for units...
+No units...
+Decision: 10=0
+Reducing literal: 10=0 at level 5
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking for units...
+No units...
+Decision: 1=1
+Reducing literal: 1=1 at level 6
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking for units...
+Found unit!
+2!=1
+Unit clause: 
+1!=1
+2!=1
+
+Reducing: 2!1 at level 6
+Checking entailment...
+Entailment... 2=2
+Reducing literal: 2=2 at level 6
+The reason for the literal: 
+-2
+Checking satisfiability...
+Checking for units...
+Found unit!
+4!=1
+Unit clause: 
+1!=1
+4!=1
+
+Reducing: 4!1 at level 6
+Checking entailment...
+Entailment... 4=2
+Reducing literal: 4=2 at level 6
+The reason for the literal: 
+-2
+Checking satisfiability...
+Checking for units...
+Found unit!
+3!=2
+Unit clause: 
+2!=2
+3!=2
+
+Reducing: 3!2 at level 6
+Checking entailment...
+Entailment... 3=1
+Reducing literal: 3=1 at level 6
+The reason for the literal: 
+-2
+Checking satisfiability...
+Checking for units...
+Found unit!
+5!=1
+Unit clause: 
+3!=1
+5!=1
+
+Reducing: 5!1 at level 6
+Checking entailment...
+Entailment... 5=2
+Reducing literal: 5=2 at level 6
+The reason for the literal: 
+-2
+Checking satisfiability...
+Found conflict!
+There is a conflict at level: 6
+Conflicting clause: 
+4!=2
+5!=2
+
+Latest falsified literal: 
+4!=2
+It's reason: 
+-2
+Resolvent:
+5!=2
+4=0
+4=1
+
+Latest falsified literal: 
+5!=2
+It's reason: 
+-2
+Resolvent:
+4=0
+4=1
+5=0
+5=1
+
+Latest falsified literal: 
+4=0
+It's reason: 
+11
+Resolvent:
+4=1
+5=0
+5=1
+6!=0
+
+Latest falsified literal: 
+4=1
+It's reason: 
+21
+Resolvent:
+5=0
+5=1
+6!=0
+1!=1
+
+Latest falsified literal: 
+5=0
+It's reason: 
+13
+Resolvent:
+5=1
+6!=0
+1!=1
+8!=0
+
+Latest falsified literal: 
+5=1
+It's reason: 
+27
+Resolvent:
+6!=0
+1!=1
+8!=0
+3!=1
+
+Latest falsified literal: 
+6!=0
+It's reason: 
+-1
+Falsify: 
+6=0
+Resolvent:
+1!=1
+8!=0
+3!=1
+6!=0
+
+Latest falsified literal: 
+1!=1
+It's reason: 
+-1
+Falsify: 
+6=0
+Resolvent:
+8!=0
+3!=1
+6!=0
+6=0

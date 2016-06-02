@@ -76,7 +76,7 @@ public:
   int RESTARTS;
   bool LOG; // verbose
   bool WATCH; //watched literals option
-  // int ORIGINALFORMULA;
+  int INDEX; // temp, to fix wl algo
   //public variables and functions
   //Zero argument constructor
   Formula();

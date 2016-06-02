@@ -736,7 +736,7 @@ int Formula::backtrackLevel ( Clause * learnedClause ) {
 
 	int max = -1;
 	int csize = learnedClause -> NumAtom;
-
+	INDEX = 0;
 	/*
 	 * Additional possibility: if learned clause has only one literal then backtrack to the level 0
     if ( csize == 1 )
@@ -748,9 +748,14 @@ int Formula::backtrackLevel ( Clause * learnedClause ) {
 		Literal* atom = learnedClause -> ATOM_LIST[i];
 		int atom_level = VARLIST[atom -> VAR] -> ATOMLEVEL[atom -> VAL];
 
-		if ( LEVEL > atom_level && max < atom_level )
+		if ( LEVEL > atom_level && max < atom_level ) {
 			max = atom_level;
+			INDEX = i;
+		}
+
 	}
+
+	cout << "INDEX: " << INDEX << endl;
 
 	if ( max != -1 ) return max;
 	else return LEVEL-1;
@@ -917,6 +922,7 @@ void Formula::watchedUndoTheory ( int level ) { // FIXME
 			//if this domain has been assigned at level this or greater undo
 			if ( VARLIST[i]->ATOMLEVEL[j] > level ) {
 
+				cout << "unassign " << i << " " << j <<endl;
 				VARLIST[i] -> LEVEL = -1;
 				VARLIST[i] -> SAT = false;
 				VARLIST[i] -> VAL = -1;
@@ -973,15 +979,20 @@ Clause* Formula::analyzeConflict ( Clause * clause ) {
 			if ( LOG ) {
 				cout << "Latest falsified literal (now watched): " << endl;
 				clause -> ATOM_LIST[INDEXCLAUSE] -> Print ();
+				cout << "watched literal 1:"<<endl;
+				clause -> WATCHED[0] -> Print();
+
+
 			}
 
 			Literal* watched1 = clause -> WATCHED[0];
-
-
-
 			VARLIST[watched1 -> VAR] ->  ATOMWATCH[watched1 -> VAL] = 1;
 
-			if ( clause -> NumAtom == 1 ) clause -> WATCHED[1]  = NULL;
+			if ( clause -> NumAtom == 1 ) {
+				clause -> WATCHED[1]  = NULL;
+				cout << "no watched2" << endl;
+
+			}
 
 			else if ( INDEXCLAUSE < clause -> NumAtom - 1) {
 
@@ -991,11 +1002,12 @@ Clause* Formula::analyzeConflict ( Clause * clause ) {
 
 			}
 			else {
-				clause -> WATCHED[1] = clause -> ATOM_LIST[clause -> NumAtom - 1];
+				clause -> WATCHED[1] = clause -> ATOM_LIST[INDEXCLAUSE - 1];
 				Literal* watched2 = clause -> WATCHED[1];
 				VARLIST[watched2 -> VAR] ->  ATOMWATCH[watched2 -> VAL] = 1;
 
 			}
+
 
 		}
 
@@ -1253,21 +1265,24 @@ void Formula::SwapPointer ( Clause* clause ) {
 	Literal* watched2 = clause -> WATCHED[1];
 
 	if ( watched2 != NULL && sat ( watched2 )  == 2 ) {
+
 		for ( int i; i < clause -> NumAtom; i++ ) {
 
 			Literal* literal = clause -> ATOM_LIST[i];
 
-			if ( sat ( literal ) == 2 && !LitIsEqual( literal, watched2 ) ) {
-				watched1 = literal;
+			if (  VARLIST[literal -> VAR] -> ATOMASSIGN[literal -> VAL] == 0 && ! LitIsEqual ( literal, watched2 ) ) {
+				clause -> WATCHED[0] = literal;
 				VARLIST[literal -> VAR] -> ATOMWATCH[literal -> VAL] = 1;
 			}
 		}
-	} else if ( watched1 -> SAT == 2 ) {
+	} else if ( watched2 != NULL && sat ( watched1 ) == 2 ) {
+
 		for ( int i; i < clause -> NumAtom; i++ ) {
+
 			Literal* literal = clause -> ATOM_LIST[i];
 
-			if ( sat ( literal ) == 2 && !LitIsEqual ( literal, watched1 ) ) {
-				watched2 = literal;
+			if ( sat ( literal ) == 2 && ! LitIsEqual ( literal, watched1 ) ) {
+				clause -> WATCHED[1] = literal;
 				VARLIST[literal -> VAR] -> ATOMWATCH[literal -> VAL] = 2;
 			}
 		}
@@ -1361,14 +1376,14 @@ void Formula::watchedReduceTheory ( Literal * literal, int var, bool equals, int
 		if (LOG) cout << "Reducing: " << var << "!" << val << " at level " << LEVEL << endl;
 
 		watchedSatisfyLiteral ( literal );
-		watchedFalsifyLiteral ( literal );
+		watchedFalsifyLiteral ( var, ! equals, val );
 
-		VARLIST[var]->ATOMASSIGN[val] = -1;
-		VARLIST[var]->ATOMLEVEL[val] = LEVEL;
+		VARLIST[var] -> ATOMASSIGN[val] = -1;
+		VARLIST[var] -> ATOMLEVEL[val] = LEVEL;
 		// Set the reason:
-		VARLIST[var]->CLAUSEID[val] = UNITCLAUSE;
+		VARLIST[var] -> CLAUSEID[val] = UNITCLAUSE;
 		//Add literal to decision stack:
-		DECSTACK.push_back(literal);
+		DECSTACK.push_back ( literal );
 		VARLIST[var] -> ATOMINDEX[val] = DECSTACK.size() - 1; // to use in maxLit
 
 
@@ -1413,7 +1428,15 @@ int Formula::WatchedLiterals () {
 
 			if ( LEVEL == 0 ) { cout << "UNSAT" << endl; return 2; }
 
-			LEVEL = backtrackLevel ( analyzeConflict ( CLAUSELIST[CONFLICTINGCLAUSE] ) );
+			Clause* learned = analyzeConflict ( CLAUSELIST[CONFLICTINGCLAUSE] );
+			LEVEL = backtrackLevel ( learned );
+
+			if ( learned -> NumAtom > 1) {
+			learned -> WATCHED[1] = learned -> ATOM_LIST[INDEX];
+			cout << "watched2: "<<endl;
+			learned -> WATCHED[1] -> Print();
+			}
+
 			BACKTRACKS++;
 			if ( LOG ) {
 				cout << "We are backtracking to the level: " << LEVEL << endl;
