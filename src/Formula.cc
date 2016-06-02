@@ -968,23 +968,31 @@ Clause* Formula::analyzeConflict ( Clause * clause ) {
 
 		if ( WATCH ) {
 
+			clause -> WATCHED[0] = clause -> ATOM_LIST[INDEXCLAUSE]; // latest falsified atom, to become unit upon backtrack
+
+			if ( LOG ) {
+				cout << "Latest falsified literal (now watched): " << endl;
+				clause -> ATOM_LIST[INDEXCLAUSE] -> Print ();
+			}
+
 			Literal* watched1 = clause -> WATCHED[0];
-			Literal* watched2 = clause -> WATCHED[1];
 
 
-			watched1 = clause -> ATOM_LIST[INDEXCLAUSE]; // latest falsified atom, to become unit upon backtrack
+
 			VARLIST[watched1 -> VAR] ->  ATOMWATCH[watched1 -> VAL] = 1;
 
-			if ( clause -> NumAtom == 1 ) watched2 = NULL;
+			if ( clause -> NumAtom == 1 ) clause -> WATCHED[1]  = NULL;
 
 			else if ( INDEXCLAUSE < clause -> NumAtom - 1) {
 
-				watched2 = clause -> ATOM_LIST[INDEXCLAUSE + 1];
+				clause -> WATCHED[1] = clause -> ATOM_LIST[INDEXCLAUSE + 1];
+				Literal* watched2 = clause -> WATCHED[1];
 				VARLIST[watched2 -> VAR] ->  ATOMWATCH[watched2 -> VAL] = 1;
 
 			}
 			else {
 				clause -> WATCHED[1] = clause -> ATOM_LIST[clause -> NumAtom - 1];
+				Literal* watched2 = clause -> WATCHED[1];
 				VARLIST[watched2 -> VAR] ->  ATOMWATCH[watched2 -> VAL] = 1;
 
 			}
@@ -1015,9 +1023,6 @@ Clause* Formula::analyzeConflict ( Clause * clause ) {
 	if ( VARLIST[var]-> CLAUSEID[val] == -1 ) {
 		// Take literal in the decstack that falsified lastFalse
 		Literal * falsifier = DECSTACK[maxLit ( clause )[1]];
-
-		cout << "Falsifier: " << endl;
-		falsifier -> Print();
 
 		// Generate the reason clause:
 		reason -> addAtom ( new Literal ( falsifier -> VAR, '=', falsifier -> VAL ) );
@@ -1156,28 +1161,34 @@ int Formula::sat ( Literal* literal ) {
 
 Literal* Formula::watchedCheckUnit () {
 
-	if (LOG) cout << "Checking for units..." << endl;
+	if ( LOG ) cout << "Checking for units..." << endl;
 
 	for ( unsigned int i = 0; i < CLAUSELIST.size(); i++ ) {
 
 		Literal* watched1 = CLAUSELIST[i] -> WATCHED[0];
 		Literal* watched2 = CLAUSELIST[i] -> WATCHED[1];
 
-		if ( watched1 != NULL ) cout << "!" << endl;
-
+		if ( watched1 == NULL ) {
+			cout << "watched1 null" << " in clause:" << endl; // FIXME
+			// in the learned clause watched1 not assigned
+			CLAUSELIST[i] -> Print();
+		}
 		if ( sat ( watched1 ) == 2 // if watched1 unassigned
-				&& ( watched2 == NULL || sat ( watched2 ) == 0 ) ){
+				&& ( watched2 == NULL || sat ( watched2 ) == 0 ) ) {
+			cout << "Found unit" << endl;
 			UNITCLAUSE = i;
 			return watched1;
 		}
 
-		else if ( sat ( watched1 ) == 0 && ( watched2 == NULL || sat ( watched2 ) == 0 ) ) {
+	/*	else if ( sat ( watched1 ) == 0 && ( watched2 == NULL || sat ( watched2 ) == 0 ) ) {
+					cout << "Found conflict" << endl;
 					CONFLICTINGCLAUSE = i;
 					CONFLICT = true;
 					return NULL;
-				}
+				} */
 
 		else if ( sat ( watched1 ) == 0 && sat ( watched2 ) == 2 ) {
+			cout << "Found unit" << endl;
 			UNITCLAUSE = i;
 			return watched2;
 		}
@@ -1423,7 +1434,7 @@ int Formula::WatchedLiterals () {
 			watchedReduceTheory ( unit, unit -> VAR, unit -> EQUAL, unit -> VAL );
 		}
 		// otherwise choose a literal and propagate - no need for separate unit propagation
-		else if ( !CONFLICT ) {
+		else if ( ! CONFLICT ) {
 			Literal * atom = chooseLiteral ();
 			if ( atom ) {
 				DECISIONS++;
