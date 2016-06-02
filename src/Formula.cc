@@ -968,21 +968,27 @@ Clause* Formula::analyzeConflict ( Clause * clause ) {
 
 		if ( WATCH ) {
 
-			clause -> WATCHED[0] = clause -> ATOM_LIST[INDEXCLAUSE];
-			VARLIST[clause -> WATCHED[0] -> VAR] ->  ATOMWATCH[clause -> WATCHED[0] -> VAL] = 1;
+			Literal* watched1 = clause -> WATCHED[0];
+			Literal* watched2 = clause -> WATCHED[1];
 
-			if ( clause -> NumAtom == 1 ) clause -> WATCHED[1] = NULL;
-			else if ( INDEXCLAUSE < clause -> NumAtom -  1) {
 
-				clause -> WATCHED[1] = clause -> ATOM_LIST[INDEXCLAUSE + 1];
-				VARLIST[clause -> WATCHED[1] -> VAR] ->  ATOMWATCH[clause -> WATCHED[1] -> VAL] = 1;
+			watched1 = clause -> ATOM_LIST[INDEXCLAUSE]; // latest falsified atom, to become unit upon backtrack
+			VARLIST[watched1 -> VAR] ->  ATOMWATCH[watched1 -> VAL] = 1;
+
+			if ( clause -> NumAtom == 1 ) watched2 = NULL;
+
+			else if ( INDEXCLAUSE < clause -> NumAtom - 1) {
+
+				watched2 = clause -> ATOM_LIST[INDEXCLAUSE + 1];
+				VARLIST[watched2 -> VAR] ->  ATOMWATCH[watched2 -> VAL] = 1;
 
 			}
 			else {
-				clause -> WATCHED[1] = clause -> ATOM_LIST[INDEXCLAUSE - 1];
-				VARLIST[clause -> WATCHED[1] -> VAR] ->  ATOMWATCH[clause -> WATCHED[1] -> VAL] = 1;
+				clause -> WATCHED[1] = clause -> ATOM_LIST[clause -> NumAtom - 1];
+				VARLIST[watched2 -> VAR] ->  ATOMWATCH[watched2 -> VAL] = 1;
 
 			}
+
 		}
 
 		return clause;
@@ -1122,7 +1128,7 @@ int Formula::watchedCheckSat () {
 
 			return 0;
 
-		} else if ( sat (watched1 ) == 2 ) {
+		} else if ( sat ( watched1 ) == 2 ) {
 			return 2;
 		}
 	}
@@ -1157,20 +1163,24 @@ Literal* Formula::watchedCheckUnit () {
 		Literal* watched1 = CLAUSELIST[i] -> WATCHED[0];
 		Literal* watched2 = CLAUSELIST[i] -> WATCHED[1];
 
+		if ( watched1 != NULL ) cout << "!" << endl;
+
 		if ( sat ( watched1 ) == 2 // if watched1 unassigned
 				&& ( watched2 == NULL || sat ( watched2 ) == 0 ) ){
-
 			UNITCLAUSE = i;
 			return watched1;
 		}
 
-		else if ( sat ( watched1 ) == 0 && sat ( watched2 ) == 2) {
+		else if ( sat ( watched1 ) == 0 && ( watched2 == NULL || sat ( watched2 ) == 0 ) ) {
+					CONFLICTINGCLAUSE = i;
+					CONFLICT = true;
+					return NULL;
+				}
+
+		else if ( sat ( watched1 ) == 0 && sat ( watched2 ) == 2 ) {
 			UNITCLAUSE = i;
 			return watched2;
 		}
-
-
-
 	}
 	if ( LOG ) cout << "No units..." << endl;
 	return NULL;
@@ -1396,7 +1406,7 @@ int Formula::WatchedLiterals () {
 			BACKTRACKS++;
 			if ( LOG ) {
 				cout << "We are backtracking to the level: " << LEVEL << endl;
-				cout << "# of backtracks so far: "<<BACKTRACKS<<endl;
+				cout << "# of backtracks so far: " << BACKTRACKS << endl;
 			}
 			CONFLICT = false;
 			watchedUndoTheory ( LEVEL );

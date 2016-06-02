@@ -1,9 +1,0 @@
-set terminal pngcairo
-set output "4_100queens_backtracks.png"
-set ylabel "Backtracks"
-set xlabel "N-queens"
-set xrange [0:100]
-set yrange [0:5000]
-plot "results4_100noR_home" using 4:2 with lines title "No Restarts",\
-"results4_200R50" using 4:2 with lines title "Restarts on 50",\
-"results4_200R200" using 4:2 with lines title "Restarts on 200"
