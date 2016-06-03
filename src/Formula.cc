@@ -910,8 +910,54 @@ inline void Formula::watchedFalsifyLiteral ( Literal* literal ) {
 
 inline void Formula::watchedFalsifyLiteral ( int var, bool equals, int val ) {
 
+
 	// temporary
-	watchedFalsifyLiteral ( new Literal ( var, equals, val) );
+
+	Literal* literal= new Literal ( var, equals, val);
+
+	VARRECORD* current = NULL;
+
+	// Go through all occurrences of the literal in clauses and update watched literals
+
+	if ( equals ) current = VARLIST[var] -> ATOMRECPOS[val];
+	else current = VARLIST[var] -> ATOMRECNEG[val];
+
+	while ( current ) {
+
+		Literal* watched1 = CLAUSELIST[current -> c_num] -> WATCHED[0];
+		Literal* watched2 = CLAUSELIST[current -> c_num] -> WATCHED[1];
+
+		if ( sat ( watched1 ) != 1 ) {
+
+			if ( watched2 == NULL ) {
+				cout << "wl2 null" << endl;
+			}
+
+			else if ( watched1 -> VAR == var && watched1 -> VAL == val  && watched1 -> EQUAL == equals ) {
+
+				SwapPointer ( CLAUSELIST[current -> c_num] );
+
+			}
+
+
+
+			else if ( watched2 -> VAR == var && watched2 -> VAL == val  && watched2 -> EQUAL == equals ) {
+
+				SwapPointer ( CLAUSELIST[current -> c_num] );
+
+			}
+
+			else {
+				cout << "No need for wl maintaning" << endl;
+			}
+		}
+
+
+		current = current -> next;
+	}
+
+	current = NULL;
+
 }
 
 void Formula::watchedUndoTheory ( int level ) { // FIXME
@@ -1187,7 +1233,8 @@ Literal* Formula::watchedCheckUnit () {
 		}
 		if ( sat ( watched1 ) == 2 // if watched1 unassigned
 				&& ( watched2 == NULL || sat ( watched2 ) == 0 ) ) {
-			cout << "Found unit" << endl;
+			cout << "Found unit, watched1" << endl;
+			 if ( watched2 != NULL ) watched2 -> Print();
 			UNITCLAUSE = i;
 			return watched1;
 		}
@@ -1200,7 +1247,7 @@ Literal* Formula::watchedCheckUnit () {
 				} */
 
 		else if ( sat ( watched1 ) == 0 && sat ( watched2 ) == 2 ) {
-			cout << "Found unit" << endl;
+			cout << "Found unit, watched2" << endl;
 			UNITCLAUSE = i;
 			return watched2;
 		}
@@ -1259,10 +1306,22 @@ Literal * Formula::lazyWatchedChooseLiteral () {
 
 void Formula::SwapPointer ( Clause* clause ) {
 
+	if ( LOG ) cout << "Swapping watched literals..." << endl;
+
 	// Swap watched1 and watched2
 
 	Literal* watched1 = clause -> WATCHED[0];
+	if ( LOG ) {
+		cout << "Watched 1: " << endl;
+		watched1 -> Print();
+	}
+
 	Literal* watched2 = clause -> WATCHED[1];
+
+	if ( LOG && watched2 != NULL) {
+			cout << "Watched 2: " << endl;
+			watched2 -> Print();
+		}
 
 	if ( watched2 != NULL && sat ( watched2 )  == 2 ) {
 
@@ -1287,6 +1346,18 @@ void Formula::SwapPointer ( Clause* clause ) {
 			}
 		}
 	}
+
+		if ( LOG ) {
+			cout << "Swapped result: " << endl;
+			cout << "Watched 1: " << endl;
+			watched1 -> Print();
+		}
+
+
+		if ( LOG && watched2 != NULL) {
+				cout << "Watched 2: " << endl;
+				watched2 -> Print();
+			}
 }
 
 bool Formula::LitIsEqual ( Literal* literal1, Literal * literal2 ) {
@@ -1373,7 +1444,7 @@ void Formula::watchedReduceTheory ( Literal * literal, int var, bool equals, int
 		}
 	} else {
 
-		if (LOG) cout << "Reducing: " << var << "!" << val << " at level " << LEVEL << endl;
+		if ( LOG ) cout << "Reducing: " << var << "!" << val << " at level " << LEVEL << endl;
 
 		watchedSatisfyLiteral ( literal );
 		watchedFalsifyLiteral ( var, ! equals, val );
