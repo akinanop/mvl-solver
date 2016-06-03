@@ -131,7 +131,8 @@ public:
   void watchedFalsifyLiteral(Literal * literal);
   void watchedFalsifyLiteral(int var, bool equals, int val);
   void watchedSatisfyLiteral(int var, bool equals, int val);
-
+  // Assign watched literals to a (learned) clause
+  void assignWatched ( Clause* clause );
   //undoTheory : brings the theory back at the level stage
   void undoTheory(int level);
   //unsatisfyClauses : brings back the clauses that were satisfied before
