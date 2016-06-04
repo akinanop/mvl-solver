@@ -1,0 +1,80 @@
+c Plingeling Parallel SAT Solver
+c 
+c Version b85 3ee2a39cc143d07ea0a989cedd5008dd097a4068
+c 
+c Copyright (C) 2010-2014 Armin Biere JKU Linz Austria.
+c All rights reserved.
+c 
+c released Mon Nov  9 11:01:53 CET 2015
+c compiled Fri Jun  3 17:16:39 CEST 2016
+c 
+c gcc (Ubuntu 4.8.4-2ubuntu1~14.04.3) 4.8.4
+c -Wall -O3 -DNLGLOG -DNDEBUG -DNCHKSOL -DNLGLDRUPLIG -DNLGLYALSAT
+c Linux nika-Latitude-3440 3.19.0-18-generic x86_64
+c 
+c - W    0.0 assuming cores = core * physical ids in '/proc/cpuinfo' = 2
+c - W    0.0 USING 2 WORKER THREADS
+c - W    0.0 3950228 KB total memory according to /proc/meminfo
+c - W    0.0 soft memory limit set to 1286 MB
+c - W    0.0 default garbage collection limit 1
+c - W    0.0 sharing of units enabled
+c - W    0.0 sharing of clauses enabled
+c - W    0.0 sharing of equivalences enabled
+c - W    0.0 parsing ../mvl-solver/benchmarks/Pigeonhole/sat-pigeon-hole/hole100.sat
+c - W    0.2 clause length between 2 and 99
+c - W    0.2 average literal occurrence 50.00
+c - W    0.2 literal occurrence standard deviation 49.00
+c - W    0.2 relative literal occurrence standard deviation 98.00%
+c - W    0.2 instance does not seem to be uniform random
+c - W    0.2 trying to clone worker 1 from worker 0
+c - W    0.2 prediction: 10 MB to be cloned + allocated 10 MB = 20 MB
+c - W    0.2 13 MB total allocated memory after cloning worker 1 from worker 0
+c - W    0.2 simplifying original formula with worker 0
+c 1 S    0.0    9900   490150         0       0      0     0    0     0    6   0%      0    0    0    0    0%
+c 
+c    seconds         irredundant          redundant clauses       height      sat         jl' fast slow fast/
+c            variables clauses conflicts large ternary binary glue        MB         it"      glue glue  slow
+c 
+c 0 S    0.0    9900   490150         0       0      0     0    0     0    6   0%      0    0    0    0    0%
+c 
+c    seconds         irredundant          redundant clauses       height      sat         jl' fast slow fast/
+c            variables clauses conflicts large ternary binary glue        MB         it"      glue glue  slow
+c 
+c 1 S    1.0    9900   490150      2637    2498      0     0   44  2243   15   2%     26 2194   93    4 2519%
+c 0 S    1.0    9801   490051      1147    1086      0     0   23   847   17   3%      7  839   92    2 5719%
+c 1 S    2.0    9900   490150      5723    5294      0     0   69  3532   19   2%     71 3352   89    8 1151%
+c 0 S    2.0    9801   490051      3701    3507      0     0   55  2010   23   3%     41 1946   94    5 1835%
+c 1 S    5.0    9900   490150     16341   14061      0     0   85  4664   44   2%    213 3888   86   19  455%
+c 0 P    5.1    9801   490051     10000    9026      0     0   85  3068   26   3%    131 2764   97   13  730%
+c 0 S   10.0    9800   490050     14258   12525      0     0   90  3270   36   3%    187 2785   91   18  498%
+c 1 S   10.0    9900   490150     30986   26200      0     0   88  4750   52   2%    376 3212   92   32  286%
+c 0 S   20.0    9800   490050     43996   38446      0     0   93  3417  101   3%    492 1874   92   45  203%
+c 1 S   20.0    9900   490150     59222   49639      0     0   99  4751  106   2%    603 2131   97   53  183%
+c 1 S   30.0    9900   490150    109257   40598      0     0  110  4604   74   2%    828  903  156   80  195%
+c 0 S   30.0    9800   490050     96038   31741      0     0  105  3323   61   3%    784  752  125   73  171%
+c 0 S   40.1    9800   490050    120490   26131      0     0   93  3514   54   3%    859  670   91   80  114%
+c 1 S   40.2    9900   490150    159920   27502      0     0   96  4677   56   2%    933  453   87   91   96%
+c 0 S   50.0    9800   490050    177172   45340      0     0   97  3517  112   3%    954  325  155   88  177%
+c 1 S   50.1    9900   490150    205235   27787      0     0   89  4741   63   2%    979  297   92   93   99%
+c 0 S   60.0    9800   490050    220488   47482      0     0   97  3618  135   3%    988  247  136   90  151%
+c 1 S   60.3    9900   490150    254342   32000      0     0  104  4757  105   2%   1003  182   87   98   88%
+c 1 S  120.0    9900   490150    487472   38270      0     0   89  4922  168   2%   1023  124   89   97   91%
+c 0 S  120.1    9800   490050    469295   60387      0     0  103  3480  121   3%   1023    0  173   94  185%
+c 1 S  180.2    9900   490150    721752   59781      0     0  124  4941  224   3%   1024   -9   81  100   81%
+c 0 S  180.2    9800   490050    734215   65234      0     0   93  3288  189   3%   1024  -53   94   94  100%
+c 1 S  240.0    9900   490150    886517   35789      0     0  137  4722  150   3%   1024 -150  111  102  109%
+c 0 S  240.1    9800   490050    914347   62667      0     0  121  3410  279   4%   1024  146  129   97  133%
+c 0 S  300.9    9800   490050   1008340   61871      0     0   93  3400  164   3%   1024    9   93   95   98%
+c 1 S  300.9    9900   490150   1023754   56751      0     0   93  4910  284   2%   1024   83   95   99   96%
+c s UNKNOWN
+c 2421 termination checks
+c
+c units: 0 found, 0 publications, 1608 syncs, 0 flushed
+c clauses: 0 clauses added, 0 collected 0%, 0 gcs
+c equivalences: 0 found, 21 syncs
+c
+c 41057698 decisions, 2142921 conflicts, 6361.4 conflicts/sec
+c 1637957190 propagations, 0.5 megaprops/sec
+c 631.6 process time, 94% utilization
+c
+c 336.9 seconds, 1241.0 MB

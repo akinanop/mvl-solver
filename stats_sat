@@ -1,0 +1,45 @@
+c Lingeling SAT Solver
+c 
+c Version b85 3ee2a39cc143d07ea0a989cedd5008dd097a4068
+c 
+c Copyright (C) 2010-2014 Armin Biere JKU Linz Austria.
+c All rights reserved.
+c 
+c released Mon Nov  9 11:01:53 CET 2015
+c compiled Fri Jun  3 17:16:39 CEST 2016
+c 
+c gcc (Ubuntu 4.8.4-2ubuntu1~14.04.3) 4.8.4
+c -Wall -O3 -DNLGLOG -DNDEBUG -DNCHKSOL -DNLGLDRUPLIG -DNLGLYALSAT
+c Linux nika-Latitude-3440 3.19.0-18-generic x86_64
+c 
+c reading input file ../mvl-solver/benchmarks/Pigeonhole/sat-pigeon-hole/hole50.sat
+c no embedded options
+c found 'p cnf 2450 60075' header
+c read 2450 variables, 60075 clauses, 122500 literals in 0.00 seconds
+c 
+c  seconds         irredundant          redundant clauses       height      sat         jl' fast slow fast/
+c          variables clauses conflicts large ternary binary glue        MB         it"      glue glue  slow
+c 
+c S    0.0    2450    60075         0       0      0     0    0     0    1   0%      0    0    0    0    0%
+c 
+c  seconds         irredundant          redundant clauses       height      sat         jl' fast slow fast/
+c          variables clauses conflicts large ternary binary glue        MB         it"      glue glue  slow
+c 
+s UNSATISFIABLE
+c
+c    0.024 100% simplifying
+c    0.000   0% search
+c ==================================
+c    0.024 100% all
+c 
+c             0 conflicts,           0.0 confs/sec
+c             0 ternaries,           0.0 confs/ternary
+c             0 binaries,            0.0 confs/binary
+c             0 iterations,          0.0 confs/iteration
+c 
+c             0 reductions,          0.0 redus/sec,      0.0 confs/reduction
+c             0 restarts,            0.0 rests/sec,      0.0 confs/restart
+c             0 decisions,           0.0 decis/sec,      0.0 decis/conflict
+c             0 propagations,        0.0 props/sec,      0.0 props/decision
+c 
+c 0.0 seconds, 2.0 MB
