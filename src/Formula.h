@@ -163,8 +163,8 @@ public:
   int NonChronoBacktrackLoop(int level);
   //ChronoBacktrack : Extended DPLL algorithm without any learning
   int ChronoBacktrack(int level);
-  // watched literals algo:
-  int WatchedLiterals();
+  // watched literals algo from Jain:
+  int WatchedLiterals( int restarts );
   Literal* lazyWatchedChooseLiteral ();
 
 };

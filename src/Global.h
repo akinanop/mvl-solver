@@ -57,8 +57,10 @@ struct CommandLine
   char * MODEL_FILE;
   //Time limit
   int TIME;
-
+  // Number of backtracks at which the search is started from the level 0
   int RESTARTS;
+  // For th watched literals algo from Sellmann and Jain 2010
+  bool CMV_WATCHED;
 };
 
 //Global Declaration - Functions

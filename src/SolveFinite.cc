@@ -55,7 +55,7 @@ void SolveFinite(CommandLine * cline, string type)
       //3. NonChronological Backtracking with Clause learning - "loop version"
     //  result = fobj->NonChronoBacktrack(0); "recursive version"
       if ( cline->WATCH ) {
-    	  result = fobj->WatchedLiterals();
+    	  result = fobj-> WatchedLiterals ( cline -> RESTARTS );
       }
       else if (cline->RESTARTS != 0) {
         result = fobj->NonChronoBacktrack(cline->RESTARTS);

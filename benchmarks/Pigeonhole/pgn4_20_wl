@@ -1,0 +1,214 @@
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Pigeonhole/pgn4 	0.0055	UNSAT
+0.0001	 0.0056	
+
+UNSAT
+
+Decisions   : 5
+Backtracks  : 5
+Entails     : 16
+Variables   : 4
+Clauses     : 23
+Restarts   : 0
+
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Pigeonhole/pgn5 	0.0031	UNSAT
+0.0005	 0.0036	
+
+UNSAT
+
+Decisions   : 17
+Backtracks  : 17
+Entails     : 53
+Variables   : 5
+Clauses     : 57
+Restarts   : 0
+
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Pigeonhole/pgn6 	0.0040	UNSAT
+0.0053	 0.0093	
+
+UNSAT
+
+Decisions   : 49
+Backtracks  : 49
+Entails     : 166
+Variables   : 6
+Clauses     : 124
+Restarts   : 0
+
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Pigeonhole/pgn7 	0.0037	UNSAT
+0.0157	 0.0194	
+
+UNSAT
+
+Decisions   : 129
+Backtracks  : 129
+Entails     : 487
+Variables   : 7
+Clauses     : 255
+Restarts   : 0
+
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Pigeonhole/pgn8 	0.0037	UNSAT
+0.0883	 0.0920	
+
+UNSAT
+
+Decisions   : 321
+Backtracks  : 321
+Entails     : 1352
+Variables   : 8
+Clauses     : 517
+Restarts   : 0
+
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Pigeonhole/pgn9 	0.0039	UNSAT
+0.5182	 0.5221	
+
+UNSAT
+
+Decisions   : 769
+Backtracks  : 769
+Entails     : 3593
+Variables   : 9
+Clauses     : 1057
+Restarts   : 0
+
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Pigeonhole/pgn10 	0.0043	UNSAT
+3.8795	 3.8838	
+
+UNSAT
+
+Decisions   : 1793
+Backtracks  : 1793
+Entails     : 9226
+Variables   : 10
+Clauses     : 2198
+Restarts   : 0
+
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Pigeonhole/pgn11 	0.0074	UNSAT
+31.1170	 31.1244	
+
+UNSAT
+
+Decisions   : 4097
+Backtracks  : 4097
+Entails     : 23051
+Variables   : 11
+Clauses     : 4647
+Restarts   : 0
+
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Pigeonhole/pgn12 	0.0075	UNSAT
+231.8946	 231.9021	
+
+UNSAT
+
+Decisions   : 9217
+Backtracks  : 9217
+Entails     : 56332
+Variables   : 12
+Clauses     : 9943
+Restarts   : 0
+
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Pigeonhole/pgn13 	0.0086	UNSAT
+1487.0098	 1487.0184	
+
+UNSAT
+
+Decisions   : 20481
+Backtracks  : 20481
+Entails     : 135181
+Variables   : 13
+Clauses     : 21417
+Restarts   : 0
+
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Pigeonhole/pgn14 	0.0064	3600.0013	 3600.0076	
+
+TIMEOUT
+
+Decisions   : 30708
+Backtracks  : 30703
+Entails     : 204893
+Variables   : 14
+Clauses     : 31886
+Restarts   : 0
+
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Pigeonhole/pgn15 	0.0091	3600.0067	 3600.0158	
+
+TIMEOUT
+
+Decisions   : 30672
+Backtracks  : 30667
+Entails     : 204588
+Variables   : 15
+Clauses     : 32137
+Restarts   : 0
+

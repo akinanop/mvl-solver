@@ -164,7 +164,44 @@ void Formula::BuildFormula ( CommandLine* cline ) {
 			}while(*lp);
 			CLAUSELIST.push_back(temp_clause);
 
+
+ 			// watch literals that concern different variable
+			if ( cline -> CMV_WATCHED ) {
+
+				Literal* watched1 = temp_clause -> ATOM_LIST[0];
+				temp_clause -> WATCHED[0] = watched1;
+				// we will be choosing a watched literal as a decision literal, thus track watched literals:
+				VARLIST[watched1 -> VAR] -> ATOMWATCH[watched1 -> VAL] = 1;
+
+				Literal* watched2 = NULL; // if only one literal, watched2 is null
+
+				if ( temp_clause -> NumAtom > 1 ) {
+					// be default assign the second literal:
+
+					temp_clause -> WATCHED[1] = temp_clause -> ATOM_LIST[1];
+					watched2 = temp_clause -> WATCHED[1];
+					VARLIST[watched2 -> VAR] -> ATOMWATCH[watched2 -> VAL] = 2;
+
+					for ( int i = 1; i < temp_clause -> NumAtom; i++) {
+
+						if ( temp_clause -> ATOM_LIST[i] -> VAR != watched1 -> VAR ) {
+
+								temp_clause -> WATCHED[1] = temp_clause -> ATOM_LIST[i];
+								watched2 = temp_clause -> WATCHED[1];
+								VARLIST[watched2 -> VAR] -> ATOMWATCH[watched2 -> VAL] = 2;
+								break;
+
+						}
+					}
+
+
+				}
+				else temp_clause -> WATCHED[1] = NULL; // if only one literal in the clause, watched2 is null
+
+			}
+
 			// with watched literals option, assign first two literals in the clause to watched1 and watched2
+
 
 			if ( cline -> WATCH ) {
 
@@ -181,6 +218,8 @@ void Formula::BuildFormula ( CommandLine* cline ) {
 
 				} else temp_clause -> WATCHED[1] = NULL; // if only one literal, watched2 is null
 			}
+
+
 			atom_num = 0;
 			++clause_num;
 		}
@@ -1457,7 +1496,9 @@ void Formula::watchedReduceTheory ( Literal * literal, int var, bool equals, int
 }
 //=================== Watched literals NON-CHRONOLOGICAL BACKTRACK ============================//
 
-int Formula::WatchedLiterals () {
+int Formula::WatchedLiterals ( int restarts ) {
+
+	int restartCount = restarts;
 
 	// returns 0 if sat, 1 if timeout, 2 if unsat
 
@@ -1469,9 +1510,9 @@ int Formula::WatchedLiterals () {
 			return 0; //
 
 		//Check if time out
-		TIME_E = GetTime();
+	/*	TIME_E = GetTime();
 		if ( ( TIME_E - TIME_S ) > TIMELIMIT )
-			return 1;
+			return 1; */
 
 		if ( CONFLICT ) {
 
@@ -1499,8 +1540,15 @@ int Formula::WatchedLiterals () {
 				cout << "# of backtracks so far: " << BACKTRACKS << endl;
 			}
 			CONFLICT = false;
-			watchedUndoTheory ( LEVEL );
-		}
+
+			if ( BACKTRACKS == restartCount ) {
+				//	cout << "restarting" << endl;
+				watchedUndoTheory ( 0 );
+				restartCount = BACKTRACKS + restarts;
+				RESTARTS++;
+			}
+			else watchedUndoTheory ( LEVEL );
+					}
 		// If there is a unit clause, propagate
 		Literal* unit = watchedCheckUnit ();
 		if ( unit ) {
