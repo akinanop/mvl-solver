@@ -195,6 +195,11 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
   cline->MODEL_FILE = NULL;
   cline->TIME = 3600; //1 hour = 60mins * 60secs
   cline->RESTARTS = 0;
+  cline -> CMV_WATCHED = false;
+  cline -> LOG = false;
+  cline -> MODEL = false;
+
+
   //Check if enough arguments supplied
   if(argc < 2)
   {

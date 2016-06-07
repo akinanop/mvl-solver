@@ -875,6 +875,8 @@ inline void Formula::watchedSatisfyLiteral ( int var, bool equals, int val ) {
 
 		// assign the satisfied literal from the clause to be watched1
 
+		Clause* clause = CLAUSELIST[current->c_num];
+
 		Literal* watched1 = CLAUSELIST[current->c_num]->WATCHED[0];
 		Literal* watched2 = CLAUSELIST[current->c_num]->WATCHED[1];
 
@@ -892,16 +894,16 @@ inline void Formula::watchedSatisfyLiteral ( int var, bool equals, int val ) {
 			}
 		}
 
-		if ( sat ( watched1 )  != 1 ) {
+		if ( sat ( CLAUSELIST[current->c_num]->WATCHED[0] )  != 1 ) {
 
-			if ( watched2 != NULL && ! LitIsEqual ( watched2, literal ) ) {
+			if ( CLAUSELIST[current->c_num]->WATCHED[1] != NULL && ! LitIsEqual ( CLAUSELIST[current->c_num]->WATCHED[1], literal ) ) {
 
-				watched1 = literal;
+				CLAUSELIST[current->c_num]->WATCHED[0] = literal;
 
 			} else {
 
-				watched2 = watched1;
-				watched1 = literal;
+				CLAUSELIST[current->c_num]->WATCHED[1] = CLAUSELIST[current->c_num]->WATCHED[0];
+				CLAUSELIST[current->c_num]->WATCHED[0] = literal;
 			}
 		}
 		current = current -> next;
@@ -949,6 +951,8 @@ inline void Formula::watchedFalsifyLiteral ( Literal* literal ) {
 
 inline void Formula::watchedFalsifyLiteral ( int var, bool equals, int val ) {
 
+
+//	cout << "Falsifying " << var << ( equals ? "=" : "!" ) << val << endl;
 	VARRECORD* current = NULL;
 
 	// Go through all occurrences of the literal in clauses and update watched literals
@@ -958,18 +962,26 @@ inline void Formula::watchedFalsifyLiteral ( int var, bool equals, int val ) {
 
 	while ( current ) {
 
+		// CLAUSELIST[current -> c_num] -> Print();
+
 		Literal* watched1 = CLAUSELIST[current -> c_num] -> WATCHED[0];
 		Literal* watched2 = CLAUSELIST[current -> c_num] -> WATCHED[1];
 
 		if ( sat ( watched1 ) != 1 &&  watched2 != NULL  )  {
 
-			 if ( watched1 -> VAR == var && watched1 -> VAL == val  && watched1 -> EQUAL == equals ) {
+			/*
+			 *if the clause is not sat, and literal = watched1 or literal = watched2,
+			  it means that watched1 is falsified, need to replace it by a unassigned literal
+			  if available
+			 */
 
-				SwapPointer ( CLAUSELIST[current -> c_num] );
+			 if ( watched1 -> VAR == var && watched1 -> VAL == val  && watched1 -> EQUAL == equals ) {
+				SwapPointer ( current -> c_num );
+
 
 			} else if ( watched2 -> VAR == var && watched2 -> VAL == val  && watched2 -> EQUAL == equals ) {
 
-				SwapPointer ( CLAUSELIST[current -> c_num] );
+				SwapPointer ( current -> c_num);
 
 			}
 		}
@@ -1194,28 +1206,33 @@ int Formula::watchedCheckSat () {
 
 	// returns 1 if all watched1 is sat (1), 0 if some watched1 and watched2 falsified (0), otherwise 2 -undefined (2)
 
-	// if (LOG) cout << "Checking satisfiability..." << endl;
+	if (LOG) cout << "Checking satisfiability..." << endl;
+
+     int counter = 0;
 
 	for ( unsigned int  i = 0; i < CLAUSELIST.size(); i++ ) {
 
 		Literal* watched1 = CLAUSELIST[i] -> WATCHED[0];
 		Literal* watched2 = CLAUSELIST[i] -> WATCHED[1];
 
+
 		if ( sat ( watched1 ) == 0
 				&& (  watched2  == NULL || sat ( watched2 ) == 0 ) ) {
 
-		//	if (LOG) cout << "Found conflict!" << endl;
+			if (LOG) cout << "Found conflict!" << endl;
 
 			CONFLICTINGCLAUSE = i;
 			CONFLICT = true;
 
 			return 0;
 
-		} else if ( sat ( watched1 ) == 2 ) {
-			return 2;
-		}
+		} else if ( sat ( watched1 ) == 2 &&  watched2 == NULL  ) counter++;
+		  else if ( sat ( watched1 ) == 2   ) counter++ ;
+	      else if ( watched2 != NULL && sat ( watched2 ) == 2   ) counter++ ;
 	}
-	return 1;
+
+	if ( counter > 0 ) return 2;
+	else return 1;
 }
 
 
@@ -1322,33 +1339,17 @@ Literal * Formula::lazyWatchedChooseLiteral () {
 
 void Formula::SwapPointer ( Clause* clause ) {
 
-	// if ( LOG ) cout << "Swapping watched literals..." << endl;
-
-	// Swap watched1 and watched2
-
-/*	Literal* watched1 = clause -> WATCHED[0];
-
-	if ( LOG ) {
-		cout << "Watched 1: " << endl;
-		watched1 -> Print();
-	}
-
-	Literal* watched2 = clause -> WATCHED[1];
-
-	if ( LOG && watched2 != NULL) {
-			cout << "Watched 2: " << endl;
-			watched2 -> Print();
-		} */
 	Literal* watched1 = clause -> WATCHED[0];
 	Literal* watched2 = clause -> WATCHED[1];
 
 
 	if ( watched2 != NULL && sat ( watched2 )  == 2 ) {
 
+		// if watched2 unassigned, watched1 falsified
+
 		for ( int i = 0; i < clause -> NumAtom; i++ ) {
 
 			Literal* literal = clause -> ATOM_LIST[i];
-			// cout << VARLIST[literal -> VAR] -> ATOMASSIGN[literal -> VAL] <<endl;
 
 			if (  VARLIST[literal -> VAR] -> ATOMASSIGN[literal -> VAL] == 0 && ! LitIsEqual ( literal, watched2 ) ) {
 
@@ -1359,10 +1360,9 @@ void Formula::SwapPointer ( Clause* clause ) {
 				break;
 			}
 		}
-	} else if ( watched2 != NULL && VARLIST[watched1 -> VAR] -> ATOMASSIGN[watched1 -> VAL] == 0 ) {
+	} else if ( watched2 != NULL && sat ( watched1 )  == 2  ) {
 
 	//	cout << "watched1 unassigned" << endl;
-
 
 		for ( int i; i < clause -> NumAtom; i++ ) {
 
@@ -1373,7 +1373,70 @@ void Formula::SwapPointer ( Clause* clause ) {
 				VARLIST[literal -> VAR] -> ATOMWATCH[literal -> VAL] = 2;
 			}
 		}
+	} else {
+		CONFLICT = true;
+		cout << "conflict"<< endl;
 	}
+
+		/* if ( LOG ) {
+			cout << "Swapped result: " << endl;
+			cout << "Watched 1: " << endl;
+			clause -> WATCHED[0] -> Print();
+		}
+
+
+		if ( LOG && clause -> WATCHED[1] != NULL) {
+				cout << "Watched 2: " << endl;
+				clause -> WATCHED[1] -> Print();
+			} */
+}
+
+void Formula::SwapPointer ( int clause_num ) {
+
+    Clause* clause = CLAUSELIST[clause_num];
+
+	Literal* watched1 = clause -> WATCHED[0];
+	Literal* watched2 = clause -> WATCHED[1];
+
+
+	if ( watched2 != NULL && sat ( watched2 )  == 2 ) {
+
+		// if watched2 unassigned, watched1 falsified
+
+		for ( int i = 0; i < clause -> NumAtom; i++ ) {
+
+			Literal* literal = clause -> ATOM_LIST[i];
+
+			if (  VARLIST[literal -> VAR] -> ATOMASSIGN[literal -> VAL] == 0 && ! LitIsEqual ( literal, watched2 ) ) {
+
+
+				clause -> WATCHED[0] = literal;
+
+				VARLIST[literal -> VAR] -> ATOMWATCH[literal -> VAL] = 1;
+				break;
+			}
+		}
+	} else if ( watched2 != NULL && sat ( watched1 )  == 2  ) {
+
+	//	cout << "watched1 unassigned" << endl;
+
+		for ( int i = 0; i < clause -> NumAtom; i++ ) {
+
+			Literal* literal = clause -> ATOM_LIST[i];
+
+			if ( sat ( literal ) == 2 && ! LitIsEqual ( literal, watched1 ) ) {
+				clause -> WATCHED[1] = literal;
+				VARLIST[literal -> VAR] -> ATOMWATCH[literal -> VAL] = 2;
+			}
+		}
+	} else if ( sat ( watched2 ) == 0 && sat ( watched1 )  == 0 ) {if ( LOG ) cout << "conflict" <<endl;}
+
+
+		/* if ( sat ( clause -> WATCHED[0] ) == 0 && ( clause -> WATCHED[1] == NULL || sat ( clause -> WATCHED[1] ) == 0 ) ) {
+		CONFLICT = true;
+		CONFLICTINGCLAUSE = clause_num; */
+		// cout << "conflict"<< endl;
+//	}
 
 		/* if ( LOG ) {
 			cout << "Swapped result: " << endl;
@@ -1400,14 +1463,14 @@ void Formula::watchedReduceTheory ( Literal * literal, int var, bool equals, int
 
 	if ( equals ) {
 
-		if ( LOG ) cout << "Reducing literal: " << var << "=" << val << " at level " << LEVEL << endl;
+		if ( LOG ) cout << var << "=" << val << " at level " << LEVEL << endl;
 
-		VARLIST[var]->ATOMASSIGN[val] = 1;
-		VARLIST[var]->ATOMLEVEL[val] = LEVEL;
-		VARLIST[var]->VAL = val;
-		VARLIST[var]->SAT = true; // means variable is assigned. REDUNDANT!
-		VARLIST[var]->LEVEL = LEVEL; // value assigned a positive value at this level
-		VARLIST[var]->CLAUSEID[val] = UNITCLAUSE; 		// Set the reason for the literal
+		VARLIST[var] -> ATOMASSIGN[val] = 1;
+		VARLIST[var] -> ATOMLEVEL[val] = LEVEL;
+		VARLIST[var] -> VAL = val;
+		VARLIST[var] -> SAT = true; // means variable is assigned. REDUNDANT!
+		VARLIST[var] -> LEVEL = LEVEL; // value assigned a positive value at this level
+		VARLIST[var] -> CLAUSEID[val] = UNITCLAUSE; 		// Set the reason for the literal
 		DECSTACK.push_back(literal); 		// Add literal to the decision stack
 		VARLIST[var] -> ATOMINDEX[val] = DECSTACK.size() - 1; // to use in maxLit
 
@@ -1421,7 +1484,7 @@ void Formula::watchedReduceTheory ( Literal * literal, int var, bool equals, int
 
 		// update watched literals:
 
-		watchedSatisfyLiteral ( literal ); // set the literal to watched1 - then checkSat == 1
+		watchedSatisfyLiteral ( var, equals, val ); // set the literal to watched1 - then checkSat == 1
 		watchedFalsifyLiteral ( var, ! equals, val ); // if one of the watched literals falsified, swap watched literals
 
 		//for each different domain value x from dom(var) which is not assigned (0) assign it
@@ -1466,7 +1529,7 @@ void Formula::watchedReduceTheory ( Literal * literal, int var, bool equals, int
 		}
 	} else {
 
-		if ( LOG ) cout << "Reducing: " << var << "!" << val << " at level " << LEVEL << endl;
+		if ( LOG ) cout << var << "!" << val << " at level " << LEVEL << endl;
 
 		VARLIST[var] -> ATOMASSIGN[val] = -1;
 		VARLIST[var] -> ATOMLEVEL[val] = LEVEL;
@@ -1480,11 +1543,9 @@ void Formula::watchedReduceTheory ( Literal * literal, int var, bool equals, int
 		watchedFalsifyLiteral ( var, ! equals, val );
 
 
-
-
 		//check Entailment on this variable
 		if ( checkEntail ( var ) ) {
-			if (LOG) cout << "Entailment... " << ENTAILLITERAL -> VAR << "=" << ENTAILLITERAL -> VAL << endl;
+			if ( LOG ) cout << "Entailment... " << ENTAILLITERAL -> VAR << "=" << ENTAILLITERAL -> VAL << endl;
 			ENTAILS++;
 			// Set the reason:
 			UNITCLAUSE = -2;
@@ -1510,9 +1571,9 @@ int Formula::WatchedLiterals ( int restarts ) {
 			return 0; //
 
 		//Check if time out
-	/*	TIME_E = GetTime();
+		TIME_E = GetTime();
 		if ( ( TIME_E - TIME_S ) > TIMELIMIT )
-			return 1; */
+			return 1;
 
 		if ( CONFLICT ) {
 
@@ -1530,8 +1591,6 @@ int Formula::WatchedLiterals ( int restarts ) {
 
 			if ( learned -> NumAtom > 1) {
 			learned -> WATCHED[1] = learned -> ATOM_LIST[INDEX];
-			// cout << "watched2: "<<endl;
-			// learned -> WATCHED[1] -> Print();
 			}
 
 			BACKTRACKS++;
@@ -1559,6 +1618,7 @@ int Formula::WatchedLiterals ( int restarts ) {
 				CLAUSELIST[UNITCLAUSE] -> Print();
 			} */
 			watchedReduceTheory ( unit, unit -> VAR, unit -> EQUAL, unit -> VAL );
+
 		}
 		// otherwise choose a literal and propagate - no need for separate unit propagation
 		else if ( ! CONFLICT ) {

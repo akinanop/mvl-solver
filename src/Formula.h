@@ -117,7 +117,9 @@ public:
   void addReason(int var, int val); // needed for analyzing coflict
   Literal * chooseLiteral();
   Literal * watchedChooseLiteral();
-  void SwapPointer(Clause * clause);
+  void SwapPointer( Clause* clause );
+  void SwapPointer( int clause );
+
   //reduceTheory : reduces the theory by satisfying literals/clauses
   void reduceTheory(int var, bool equals, int val);
   void watchedReduceTheory(Literal * literal, int var, bool equals, int val);
