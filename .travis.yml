@@ -18,6 +18,14 @@ script:
 - ./Solver -solvenc -file ../benchmarks/Pigeonhole/instances/pgn5
 - ./Solver -solvenc -wl -file ../benchmarks/Pigeonhole/instances/pgn3
 - ./Solver -solvenc -wl -file ../benchmarks/Pigeonhole/instances/pgn5
+- ./Solver -solvenc -file ../benchmarks/Nqueens/instances/9queens
+- ./Solver -solvenc -file ../benchmarks/Nqueens/instances/34queens
+- ./Solver -solvenc -wl -file ../benchmarks/Nqueens/instances/9queens
+- ./Solver -solvenc -wl -file ../benchmarks/Nqueens/instances/34queens
+- ./Solver -solvenc -file ../benchmarks/Graph_Coloring/instances/myciel7_N3.dimacs 
+- ./Solver -solvenc -wl -file ../benchmarks/Graph_Coloring/instances/myciel7_N3.dimacs 
+- ./Solver -solvenc -file ../benchmarks/Graph_Coloring/instances/myciel7_N8.dimacs 
+- ./Solver -solvenc -wl -file ../benchmarks/Graph_Coloring/instances/myciel7_N8.dimacs 
 - ./Solver -genben -var 2 -clause 3 -clausesize 2 -sat 1 -domain 2 -drand 1 -bool 0 -file output
 - ./Solver -linenc -file ../simple.txt -model ../simple_sat.txt
 - ./Solver -quadenc -file ../simple.txt -model ../simple_sat.txt
