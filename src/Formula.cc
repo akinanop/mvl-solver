@@ -1572,8 +1572,8 @@ int Formula::WatchedLiterals ( int restarts ) {
 
 		//Check if time out
 		TIME_E = GetTime();
-		if ( ( TIME_E - TIME_S ) > TIMELIMIT )
-			return 1;
+	//	if ( ( TIME_E - TIME_S ) > TIMELIMIT )
+		//	return 1;
 
 		if ( CONFLICT ) {
 
