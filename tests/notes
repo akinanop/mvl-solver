@@ -1,3 +1,26 @@
+
+nika@logic-9:~/netshare/mvl-solver$ minisat benchmarks/Pigeonhole/sat-pigeon-hole/hole10.cnf
+WARNING: for repeatability, setting FPU to use double precision
+============================[ Problem Statistics ]=============================
+|                                                                             |
+|  Number of variables:           110                                         |
+|  Number of clauses:             561                                         |
+|  Parse time:                   0.00 s                                       |
+|  Eliminated clauses:           0.00 Mb                                      |
+|  Simplification time:          0.00 s                                       |
+|                                                                             |
+===============================================================================
+restarts              : 16383
+conflicts             : 10854816       (120358 /sec)
+decisions             : 12971137       (0.00 % random) (143823 /sec)
+propagations          : 143704864      (1593392 /sec)
+conflict literals     : 379464743      (9.05 % deleted)
+Memory used           : 21.00 MB
+CPU time              : 90.188 s
+
+UNSATISFIABLE
+
+
 nika@logic-9:~/netshare/mvl-solver$ ./Solver -solvenc -wl -file benchmarks/Pigeonhole/instances/pgn15
 
 ************************************************************************
@@ -6,7 +29,7 @@ Finite Domain Sat Solver
 
 ************************************************************************
 benchmarks/Pigeonhole/instances/pgn15 	0.0094	UNSAT
-71349.9551	 71349.9645	
+71349.9551	 71349.9645
 
 UNSAT
 
@@ -16,4 +39,3 @@ Entails     : 745487
 Variables   : 15
 Clauses     : 99775
 Restarts   : 0
-

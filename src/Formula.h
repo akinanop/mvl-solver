@@ -76,6 +76,8 @@ public:
   int RESTARTS;
   bool LOG; // verbose
   bool WATCH; //watched literals option
+  bool CMV; //watched literals option
+
   int INDEX; // temp, to fix wl algo
   //public variables and functions
   //Zero argument constructor
@@ -168,6 +170,17 @@ public:
   // watched literals algo from Jain:
   int WatchedLiterals( int restarts );
   Literal* lazyWatchedChooseLiteral ();
+
+  void tempSwapPointer ( int clause_num );
+  inline void tempwatchedFalsifyLiteral ( int var, bool equals, int val );
+  void tempassignWatched ( Clause* clause );
+  int tempwatchedCheckSat () ;
+
+  Literal* tempwatchedCheckUnit () ;
+  Literal * templazyWatchedChooseLiteral ();
+  int tempWatchedLiterals ( int restarts );
+
+
 
 };
 // End of Code

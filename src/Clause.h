@@ -48,6 +48,10 @@ public:
   int LEVEL;
   //Watched Literals:
   vector <Literal *> WATCHED;
+  // use indexes instead lists
+  int watched1;
+  int watched2;
+
   //Zero Argument Constructor
   Clause();
   //One Argument Constructor

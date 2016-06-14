@@ -21,6 +21,8 @@ Clause::Clause()
   NumUnAss = 0;
   LEVEL = -1;
   WATCHED.reserve(2);
+  watched1 = 0;
+  watched2 = -1;
 }
 
 //One Argument Constructor
@@ -32,6 +34,8 @@ Clause::Clause(int size)
   NumUnAss = 0;
   LEVEL = -1;
   WATCHED.reserve(2);
+  watched1 = 0;
+  watched2 = -1;
 
 }
 

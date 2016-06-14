@@ -3,6 +3,7 @@
 
 * Verify basic non-chronological algorithm
 * => Verify watched literals non-chronological algorithm
+* Implement wl from CMV paper
 
 ### June 2016
 
@@ -34,8 +35,8 @@ Easy tasks:
 
 Moderate tasks:
 
-* check for unnecessary backtracks in the resolution based algo (there are more compared to the FDSolver)
-* implement unique implication variable algorithm -- have to add new data structure
+* implement unique implication variable algorithm -- maybe have to add new data structure:
+	* compare to the current algorithm
 
 Difficult task:
 
