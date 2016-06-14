@@ -194,7 +194,7 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 	cline->FILE = NULL;
 	cline->MODEL_FILE = NULL;
 	cline->TIME = 3600; //1 hour = 60mins * 60secs
-	cline->RESTARTS = 0;
+	cline -> RESTARTS = 0;
 	cline -> WATCH = false;
 	cline -> CMV = false;
 	cline -> LOG = false;
@@ -318,9 +318,9 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 				else if(!strcmp(argv[current], "-verbose"))
 					cline->LOG = true;
 				else if(!strcmp(argv[current], "-cmv"))
-					cline->CMV = true;
+					cline -> CMV = true;
 				else if(!strcmp(argv[current], "-wl"))
-					cline->WATCH = true;
+					cline -> WATCH = true;
 				else if(!strcmp(argv[current], "-model"))
 					cline->MODEL = true;
 				else if(!strcmp(argv[current], "-var"))

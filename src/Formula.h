@@ -69,7 +69,7 @@ public:
   Literal * ENTAILLITERAL;
   list <int> UNITLIST;
   int UNITCLAUSE;
-  int INDEXCLAUSE; // for potent fn
+  int LASTFALSE; // for potent fn
   bool CONFLICT;
   int CONFLICTINGCLAUSE;
   vector <Literal *> DECSTACK;
@@ -78,7 +78,7 @@ public:
   bool WATCH; //watched literals option
   bool CMV; //watched literals option
 
-  int INDEX; // temp, to fix wl algo
+  int WATCHED2; // temp, to fix wl algo
   //public variables and functions
   //Zero argument constructor
   Formula();
@@ -171,14 +171,19 @@ public:
   int WatchedLiterals( int restarts );
   Literal* lazyWatchedChooseLiteral ();
 
+  // CMV watched literals algorithm:
+
+
   void tempSwapPointer ( int clause_num );
   inline void tempwatchedFalsifyLiteral ( int var, bool equals, int val );
   void tempassignWatched ( Clause* clause );
   int tempwatchedCheckSat () ;
+  inline void tempwatchedSatisfyLiteral ( int var, bool equals, int val );
 
   Literal* tempwatchedCheckUnit () ;
   Literal * templazyWatchedChooseLiteral ();
   int tempWatchedLiterals ( int restarts );
+  inline void tempwatchedSatisfyLiteral( Literal * literal );
 
 
 

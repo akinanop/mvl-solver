@@ -75,7 +75,7 @@ public:
   int LEVEL;
   //  array storing index (decstack size) at which literal is falsified
   int * ATOMWATCH; // 0 if not watched, 1 if is watched1, 2 if watched2
-  int * ATOMINDEX;
+  int * ATOMINDEX; // order at which atoms where was falsified
   int * ATOMLEVEL;
   int * ATOMASSIGN;
   int * ATOMCNTPOS; // need this for choosing a decision literal

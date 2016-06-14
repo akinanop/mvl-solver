@@ -21,8 +21,8 @@ Clause::Clause()
   NumUnAss = 0;
   LEVEL = -1;
   WATCHED.reserve(2);
-  watched1 = 0;
-  watched2 = -1;
+  W1 = 0;
+  W2 = -1;
 }
 
 //One Argument Constructor
@@ -34,8 +34,8 @@ Clause::Clause(int size)
   NumUnAss = 0;
   LEVEL = -1;
   WATCHED.reserve(2);
-  watched1 = 0;
-  watched2 = -1;
+  W1 = 0;
+  W2 = -1;
 
 }
 
@@ -114,21 +114,6 @@ inline int Clause::getLevel()
   return LEVEL;
 }
 
-bool Clause::LitisEqual(Literal * literal1, Literal * literal2){
-  if(literal1->VAR == literal2->VAR && literal1->VAL == literal2->VAL && literal1->EQUAL == literal2->EQUAL) return true;
-   else return false;
-}
-
-bool Clause::ClauseisEqual(Clause * clause1,Clause * clause2)
-{
-  if(clause1->NumAtom != clause2->NumAtom) return false;
-
-  for(int i=0; i<clause1->NumAtom; i++)
-  {
-    if(!LitisEqual(clause1->ATOM_LIST[i], clause2->ATOM_LIST[i])) return false;
-  }
-  return true;
-}
 
 //setLevel
 inline void Clause::setLevel(int level)

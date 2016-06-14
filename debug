@@ -1,0 +1,2463 @@
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+benchmarks/Pigeonhole/instances/pgn5 	0.0095	Solving with the watched literal algorithm...
+Checking satisfiability...
+Decision: 1=0
+1=0 at level 1
+The reason for the literal: 
+-1
+Checking satisfiability...
+2!0 at level 1
+Checking satisfiability...
+3!0 at level 1
+Checking satisfiability...
+4!0 at level 1
+Checking satisfiability...
+5!0 at level 1
+Checking satisfiability...
+Decision: 2=1
+2=1 at level 2
+The reason for the literal: 
+-1
+Checking satisfiability...
+3!1 at level 2
+Checking satisfiability...
+4!1 at level 2
+Checking satisfiability...
+5!1 at level 2
+Checking satisfiability...
+Decision: 3=2
+3=2 at level 3
+The reason for the literal: 
+-1
+Checking satisfiability...
+4!2 at level 3
+Entailment... 4=3
+4=3 at level 3
+The reason for the literal: 
+-2
+Checking satisfiability...
+5!2 at level 3
+Entailment... 5=3
+5=3 at level 3
+The reason for the literal: 
+-2
+Checking satisfiability...
+Found conflict!
+There is a conflict at level: 3
+Conflicting clause: 
+5!=3
+4!=3
+
+Latest falsified literal: 
+5!=3
+It's reason: 
+-2
+Resolvent:
+4!=3
+5=0
+5=1
+5=2
+
+Latest falsified literal: 
+5=2
+It's reason: 
+28
+Resolvent:
+4!=3
+5=0
+5=1
+3!=2
+
+Latest falsified literal: 
+4!=3
+It's reason: 
+-2
+Resolvent:
+5=0
+5=1
+3!=2
+4=0
+4=1
+4=2
+
+Latest falsified literal: 
+4=2
+It's reason: 
+25
+Resolvent:
+5=0
+5=1
+3!=2
+4=0
+4=1
+
+Learned a clause: 
+5=0
+5=1
+3!=2
+4=0
+4=1
+
+Latest falsified literal (now watched): 
+3!=2
+watched2 in learned clause: 
+4=0
+Finding backtrack level...
+watched2 in learned clause: 
+5=1
+We are backtracking to the level: 2
+# of backtracks so far: 1
+3!2 at level 2
+Entailment... 3=3
+3=3 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+4!3 at level 2
+Entailment... 4=2
+4=2 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+5!2 at level 2
+Entailment... 5=3
+5=3 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+Found conflict!
+There is a conflict at level: 2
+Conflicting clause: 
+5!=3
+3!=3
+
+Latest falsified literal: 
+5!=3
+It's reason: 
+-2
+Resolvent:
+3!=3
+5=0
+5=1
+5=2
+
+Latest falsified literal: 
+5=2
+It's reason: 
+29
+Resolvent:
+3!=3
+5=0
+5=1
+4!=2
+
+Latest falsified literal: 
+4!=2
+It's reason: 
+-2
+Resolvent:
+3!=3
+5=0
+5=1
+4=0
+4=1
+4=3
+
+Latest falsified literal: 
+4=3
+It's reason: 
+35
+Resolvent:
+3!=3
+5=0
+5=1
+4=0
+4=1
+
+Latest falsified literal: 
+3!=3
+It's reason: 
+-2
+Resolvent:
+5=0
+5=1
+4=0
+4=1
+3=0
+3=1
+3=2
+
+Latest falsified literal: 
+3=2
+It's reason: 
+40
+Resolvent:
+5=0
+5=1
+4=0
+4=1
+3=0
+3=1
+
+Latest falsified literal: 
+5=1
+It's reason: 
+17
+Resolvent:
+5=0
+4=0
+4=1
+3=0
+3=1
+2!=1
+
+Latest falsified literal: 
+4=1
+It's reason: 
+14
+Resolvent:
+5=0
+4=0
+3=0
+3=1
+2!=1
+
+Latest falsified literal: 
+3=1
+It's reason: 
+12
+Resolvent:
+5=0
+4=0
+3=0
+2!=1
+
+Learned a clause: 
+5=0
+4=0
+3=0
+2!=1
+
+Latest falsified literal (now watched): 
+2!=1
+watched2 in learned clause: 
+5=0
+Finding backtrack level...
+watched2 in learned clause: 
+5=0
+We are backtracking to the level: 1
+# of backtracks so far: 2
+2!1 at level 1
+Checking satisfiability...
+Decision: 2=2
+2=2 at level 2
+The reason for the literal: 
+-1
+Checking satisfiability...
+3!2 at level 2
+Checking satisfiability...
+4!2 at level 2
+Checking satisfiability...
+5!2 at level 2
+Checking satisfiability...
+Decision: 3=1
+3=1 at level 3
+The reason for the literal: 
+-1
+Checking satisfiability...
+4!1 at level 3
+Entailment... 4=3
+4=3 at level 3
+The reason for the literal: 
+-2
+Checking satisfiability...
+5!1 at level 3
+Entailment... 5=3
+5=3 at level 3
+The reason for the literal: 
+-2
+Checking satisfiability...
+Found conflict!
+There is a conflict at level: 3
+Conflicting clause: 
+5!=3
+4!=3
+
+Latest falsified literal: 
+5!=3
+It's reason: 
+-2
+Resolvent:
+4!=3
+5=0
+5=1
+5=2
+
+Latest falsified literal: 
+5=1
+It's reason: 
+18
+Resolvent:
+4!=3
+5=0
+5=2
+3!=1
+
+Latest falsified literal: 
+4!=3
+It's reason: 
+-2
+Resolvent:
+5=0
+5=2
+3!=1
+4=0
+4=1
+4=2
+
+Latest falsified literal: 
+4=1
+It's reason: 
+15
+Resolvent:
+5=0
+5=2
+3!=1
+4=0
+4=2
+
+Learned a clause: 
+5=0
+5=2
+3!=1
+4=0
+4=2
+
+Latest falsified literal (now watched): 
+3!=1
+watched2 in learned clause: 
+4=0
+Finding backtrack level...
+watched2 in learned clause: 
+5=2
+We are backtracking to the level: 2
+# of backtracks so far: 3
+3!1 at level 2
+Entailment... 3=3
+3=3 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+4!3 at level 2
+Entailment... 4=1
+4=1 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+5!1 at level 2
+Entailment... 5=3
+5=3 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+Found conflict!
+There is a conflict at level: 2
+Conflicting clause: 
+5!=3
+3!=3
+
+Latest falsified literal: 
+5!=3
+It's reason: 
+-2
+Resolvent:
+3!=3
+5=0
+5=1
+5=2
+
+Latest falsified literal: 
+5=1
+It's reason: 
+19
+Resolvent:
+3!=3
+5=0
+5=2
+4!=1
+
+Latest falsified literal: 
+4!=1
+It's reason: 
+-2
+Resolvent:
+3!=3
+5=0
+5=2
+4=0
+4=2
+4=3
+
+Latest falsified literal: 
+4=3
+It's reason: 
+35
+Resolvent:
+3!=3
+5=0
+5=2
+4=0
+4=2
+
+Latest falsified literal: 
+3!=3
+It's reason: 
+-2
+Resolvent:
+5=0
+5=2
+4=0
+4=2
+3=0
+3=1
+3=2
+
+Latest falsified literal: 
+3=1
+It's reason: 
+42
+Resolvent:
+5=0
+5=2
+4=0
+4=2
+3=0
+3=2
+
+Latest falsified literal: 
+5=2
+It's reason: 
+27
+Resolvent:
+5=0
+4=0
+4=2
+3=0
+3=2
+2!=2
+
+Latest falsified literal: 
+4=2
+It's reason: 
+24
+Resolvent:
+5=0
+4=0
+3=0
+3=2
+2!=2
+
+Latest falsified literal: 
+3=2
+It's reason: 
+22
+Resolvent:
+5=0
+4=0
+3=0
+2!=2
+
+Learned a clause: 
+5=0
+4=0
+3=0
+2!=2
+
+Latest falsified literal (now watched): 
+2!=2
+watched2 in learned clause: 
+5=0
+Finding backtrack level...
+watched2 in learned clause: 
+5=0
+We are backtracking to the level: 1
+# of backtracks so far: 4
+2!2 at level 1
+Entailment... 2=3
+2=3 at level 1
+The reason for the literal: 
+-2
+Checking satisfiability...
+3!3 at level 1
+Checking satisfiability...
+4!3 at level 1
+Checking satisfiability...
+5!3 at level 1
+Checking satisfiability...
+Decision: 3=1
+3=1 at level 2
+The reason for the literal: 
+-1
+Checking satisfiability...
+4!1 at level 2
+Entailment... 4=2
+4=2 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+5!1 at level 2
+Entailment... 5=2
+5=2 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+Found conflict!
+There is a conflict at level: 2
+Conflicting clause: 
+5!=2
+4!=2
+
+Latest falsified literal: 
+5!=2
+It's reason: 
+-2
+Resolvent:
+4!=2
+5=0
+5=1
+5=3
+
+Latest falsified literal: 
+5=1
+It's reason: 
+18
+Resolvent:
+4!=2
+5=0
+5=3
+3!=1
+
+Latest falsified literal: 
+4!=2
+It's reason: 
+-2
+Resolvent:
+5=0
+5=3
+3!=1
+4=0
+4=1
+4=3
+
+Latest falsified literal: 
+4=1
+It's reason: 
+15
+Resolvent:
+5=0
+5=3
+3!=1
+4=0
+4=3
+
+Learned a clause: 
+5=0
+5=3
+3!=1
+4=0
+4=3
+
+Latest falsified literal (now watched): 
+3!=1
+watched2 in learned clause: 
+4=0
+Finding backtrack level...
+watched2 in learned clause: 
+5=0
+We are backtracking to the level: 1
+# of backtracks so far: 5
+3!1 at level 1
+Entailment... 3=2
+3=2 at level 1
+The reason for the literal: 
+-2
+Checking satisfiability...
+4!2 at level 1
+Entailment... 4=1
+4=1 at level 1
+The reason for the literal: 
+-2
+Checking satisfiability...
+5!1 at level 1
+Entailment... 5=2
+5=2 at level 1
+The reason for the literal: 
+-2
+Checking satisfiability...
+Found conflict!
+There is a conflict at level: 1
+Conflicting clause: 
+5!=2
+3!=2
+
+Latest falsified literal: 
+5!=2
+It's reason: 
+-2
+Resolvent:
+3!=2
+5=0
+5=1
+5=3
+
+Latest falsified literal: 
+5=1
+It's reason: 
+19
+Resolvent:
+3!=2
+5=0
+5=3
+4!=1
+
+Latest falsified literal: 
+4!=1
+It's reason: 
+-2
+Resolvent:
+3!=2
+5=0
+5=3
+4=0
+4=2
+4=3
+
+Latest falsified literal: 
+4=2
+It's reason: 
+25
+Resolvent:
+3!=2
+5=0
+5=3
+4=0
+4=3
+
+Latest falsified literal: 
+3!=2
+It's reason: 
+-2
+Resolvent:
+5=0
+5=3
+4=0
+4=3
+3=0
+3=1
+3=3
+
+Latest falsified literal: 
+3=1
+It's reason: 
+44
+Resolvent:
+5=0
+5=3
+4=0
+4=3
+3=0
+3=3
+
+Latest falsified literal: 
+5=3
+It's reason: 
+37
+Resolvent:
+5=0
+4=0
+4=3
+3=0
+3=3
+2!=3
+
+Latest falsified literal: 
+4=3
+It's reason: 
+34
+Resolvent:
+5=0
+4=0
+3=0
+3=3
+2!=3
+
+Latest falsified literal: 
+3=3
+It's reason: 
+32
+Resolvent:
+5=0
+4=0
+3=0
+2!=3
+
+Latest falsified literal: 
+2!=3
+It's reason: 
+-2
+Resolvent:
+5=0
+4=0
+3=0
+2=0
+2=1
+2=2
+
+Latest falsified literal: 
+2=2
+It's reason: 
+43
+Resolvent:
+5=0
+4=0
+3=0
+2=0
+2=1
+
+Latest falsified literal: 
+2=1
+It's reason: 
+41
+Resolvent:
+5=0
+4=0
+3=0
+2=0
+
+Latest falsified literal: 
+5=0
+It's reason: 
+6
+Resolvent:
+4=0
+3=0
+2=0
+1!=0
+
+Latest falsified literal: 
+4=0
+It's reason: 
+3
+Resolvent:
+3=0
+2=0
+1!=0
+
+Latest falsified literal: 
+3=0
+It's reason: 
+1
+Resolvent:
+2=0
+1!=0
+
+Latest falsified literal: 
+2=0
+It's reason: 
+0
+Resolvent:
+1!=0
+
+Learned a clause: 
+1!=0
+
+Latest falsified literal (now watched): 
+1!=0
+Finding backtrack level...
+We are backtracking to the level: 0
+# of backtracks so far: 6
+1!0 at level 0
+Checking satisfiability...
+Decision: 1=1
+1=1 at level 1
+The reason for the literal: 
+-1
+Checking satisfiability...
+2!1 at level 1
+Checking satisfiability...
+3!1 at level 1
+Checking satisfiability...
+4!1 at level 1
+Checking satisfiability...
+5!1 at level 1
+Checking satisfiability...
+Decision: 2=0
+2=0 at level 2
+The reason for the literal: 
+-1
+Checking satisfiability...
+3!0 at level 2
+Checking satisfiability...
+4!0 at level 2
+Checking satisfiability...
+5!0 at level 2
+Checking satisfiability...
+3!2 at level 2
+Entailment... 3=3
+3=3 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+4!3 at level 2
+Entailment... 4=2
+4=2 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+5!2 at level 2
+Entailment... 5=3
+5=3 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+Found conflict!
+There is a conflict at level: 2
+Conflicting clause: 
+5!=3
+3!=3
+
+Latest falsified literal: 
+5!=3
+It's reason: 
+-2
+Resolvent:
+3!=3
+5=0
+5=1
+5=2
+
+Latest falsified literal: 
+5=2
+It's reason: 
+29
+Resolvent:
+3!=3
+5=0
+5=1
+4!=2
+
+Latest falsified literal: 
+4!=2
+It's reason: 
+-2
+Resolvent:
+3!=3
+5=0
+5=1
+4=0
+4=1
+4=3
+
+Latest falsified literal: 
+4=3
+It's reason: 
+35
+Resolvent:
+3!=3
+5=0
+5=1
+4=0
+4=1
+
+Latest falsified literal: 
+3!=3
+It's reason: 
+-2
+Resolvent:
+5=0
+5=1
+4=0
+4=1
+3=0
+3=1
+3=2
+
+Latest falsified literal: 
+3=2
+It's reason: 
+40
+Resolvent:
+5=0
+5=1
+4=0
+4=1
+3=0
+3=1
+
+Latest falsified literal: 
+5=0
+It's reason: 
+7
+Resolvent:
+5=1
+4=0
+4=1
+3=0
+3=1
+2!=0
+
+Latest falsified literal: 
+4=0
+It's reason: 
+4
+Resolvent:
+5=1
+4=1
+3=0
+3=1
+2!=0
+
+Latest falsified literal: 
+3=0
+It's reason: 
+2
+Resolvent:
+5=1
+4=1
+3=1
+2!=0
+
+Learned a clause: 
+5=1
+4=1
+3=1
+2!=0
+
+Latest falsified literal (now watched): 
+2!=0
+watched2 in learned clause: 
+5=1
+Finding backtrack level...
+watched2 in learned clause: 
+5=1
+We are backtracking to the level: 1
+# of backtracks so far: 7
+2!0 at level 1
+Checking satisfiability...
+Decision: 2=2
+2=2 at level 2
+The reason for the literal: 
+-1
+Checking satisfiability...
+3!2 at level 2
+Checking satisfiability...
+4!2 at level 2
+Checking satisfiability...
+5!2 at level 2
+Checking satisfiability...
+Decision: 3=0
+3=0 at level 3
+The reason for the literal: 
+-1
+Checking satisfiability...
+4!0 at level 3
+Entailment... 4=3
+4=3 at level 3
+The reason for the literal: 
+-2
+Checking satisfiability...
+5!0 at level 3
+Entailment... 5=3
+5=3 at level 3
+The reason for the literal: 
+-2
+Checking satisfiability...
+Found conflict!
+There is a conflict at level: 3
+Conflicting clause: 
+5!=3
+4!=3
+
+Latest falsified literal: 
+5!=3
+It's reason: 
+-2
+Resolvent:
+4!=3
+5=0
+5=1
+5=2
+
+Latest falsified literal: 
+5=0
+It's reason: 
+8
+Resolvent:
+4!=3
+5=1
+5=2
+3!=0
+
+Latest falsified literal: 
+4!=3
+It's reason: 
+-2
+Resolvent:
+5=1
+5=2
+3!=0
+4=0
+4=1
+4=2
+
+Latest falsified literal: 
+4=0
+It's reason: 
+5
+Resolvent:
+5=1
+5=2
+3!=0
+4=1
+4=2
+
+Learned a clause: 
+5=1
+5=2
+3!=0
+4=1
+4=2
+
+Latest falsified literal (now watched): 
+3!=0
+watched2 in learned clause: 
+4=1
+Finding backtrack level...
+watched2 in learned clause: 
+5=2
+We are backtracking to the level: 2
+# of backtracks so far: 8
+3!0 at level 2
+Entailment... 3=3
+3=3 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+4!3 at level 2
+Entailment... 4=0
+4=0 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+5!0 at level 2
+Entailment... 5=3
+5=3 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+Found conflict!
+There is a conflict at level: 2
+Conflicting clause: 
+5!=3
+3!=3
+
+Latest falsified literal: 
+5!=3
+It's reason: 
+-2
+Resolvent:
+3!=3
+5=0
+5=1
+5=2
+
+Latest falsified literal: 
+5=0
+It's reason: 
+9
+Resolvent:
+3!=3
+5=1
+5=2
+4!=0
+
+Latest falsified literal: 
+4!=0
+It's reason: 
+-2
+Resolvent:
+3!=3
+5=1
+5=2
+4=1
+4=2
+4=3
+
+Latest falsified literal: 
+4=3
+It's reason: 
+35
+Resolvent:
+3!=3
+5=1
+5=2
+4=1
+4=2
+
+Latest falsified literal: 
+3!=3
+It's reason: 
+-2
+Resolvent:
+5=1
+5=2
+4=1
+4=2
+3=0
+3=1
+3=2
+
+Latest falsified literal: 
+3=0
+It's reason: 
+47
+Resolvent:
+5=1
+5=2
+4=1
+4=2
+3=1
+3=2
+
+Latest falsified literal: 
+5=2
+It's reason: 
+27
+Resolvent:
+5=1
+4=1
+4=2
+3=1
+3=2
+2!=2
+
+Latest falsified literal: 
+4=2
+It's reason: 
+24
+Resolvent:
+5=1
+4=1
+3=1
+3=2
+2!=2
+
+Latest falsified literal: 
+3=2
+It's reason: 
+22
+Resolvent:
+5=1
+4=1
+3=1
+2!=2
+
+Learned a clause: 
+5=1
+4=1
+3=1
+2!=2
+
+Latest falsified literal (now watched): 
+2!=2
+watched2 in learned clause: 
+5=1
+Finding backtrack level...
+watched2 in learned clause: 
+5=1
+We are backtracking to the level: 1
+# of backtracks so far: 9
+2!2 at level 1
+Entailment... 2=3
+2=3 at level 1
+The reason for the literal: 
+-2
+Checking satisfiability...
+3!3 at level 1
+Checking satisfiability...
+4!3 at level 1
+Checking satisfiability...
+5!3 at level 1
+Checking satisfiability...
+Decision: 3=0
+3=0 at level 2
+The reason for the literal: 
+-1
+Checking satisfiability...
+4!0 at level 2
+Entailment... 4=2
+4=2 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+5!0 at level 2
+Entailment... 5=2
+5=2 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+Found conflict!
+There is a conflict at level: 2
+Conflicting clause: 
+5!=2
+4!=2
+
+Latest falsified literal: 
+5!=2
+It's reason: 
+-2
+Resolvent:
+4!=2
+5=0
+5=1
+5=3
+
+Latest falsified literal: 
+5=0
+It's reason: 
+8
+Resolvent:
+4!=2
+5=1
+5=3
+3!=0
+
+Latest falsified literal: 
+4!=2
+It's reason: 
+-2
+Resolvent:
+5=1
+5=3
+3!=0
+4=0
+4=1
+4=3
+
+Latest falsified literal: 
+4=0
+It's reason: 
+5
+Resolvent:
+5=1
+5=3
+3!=0
+4=1
+4=3
+
+Learned a clause: 
+5=1
+5=3
+3!=0
+4=1
+4=3
+
+Latest falsified literal (now watched): 
+3!=0
+watched2 in learned clause: 
+4=1
+Finding backtrack level...
+watched2 in learned clause: 
+5=1
+We are backtracking to the level: 1
+# of backtracks so far: 10
+3!0 at level 1
+Entailment... 3=2
+3=2 at level 1
+The reason for the literal: 
+-2
+Checking satisfiability...
+4!2 at level 1
+Entailment... 4=0
+4=0 at level 1
+The reason for the literal: 
+-2
+Checking satisfiability...
+5!0 at level 1
+Entailment... 5=2
+5=2 at level 1
+The reason for the literal: 
+-2
+Checking satisfiability...
+Found conflict!
+There is a conflict at level: 1
+Conflicting clause: 
+5!=2
+3!=2
+
+Latest falsified literal: 
+5!=2
+It's reason: 
+-2
+Resolvent:
+3!=2
+5=0
+5=1
+5=3
+
+Latest falsified literal: 
+5=0
+It's reason: 
+9
+Resolvent:
+3!=2
+5=1
+5=3
+4!=0
+
+Latest falsified literal: 
+4!=0
+It's reason: 
+-2
+Resolvent:
+3!=2
+5=1
+5=3
+4=1
+4=2
+4=3
+
+Latest falsified literal: 
+4=2
+It's reason: 
+25
+Resolvent:
+3!=2
+5=1
+5=3
+4=1
+4=3
+
+Latest falsified literal: 
+3!=2
+It's reason: 
+-2
+Resolvent:
+5=1
+5=3
+4=1
+4=3
+3=0
+3=1
+3=3
+
+Latest falsified literal: 
+3=0
+It's reason: 
+49
+Resolvent:
+5=1
+5=3
+4=1
+4=3
+3=1
+3=3
+
+Latest falsified literal: 
+5=3
+It's reason: 
+37
+Resolvent:
+5=1
+4=1
+4=3
+3=1
+3=3
+2!=3
+
+Latest falsified literal: 
+4=3
+It's reason: 
+34
+Resolvent:
+5=1
+4=1
+3=1
+3=3
+2!=3
+
+Latest falsified literal: 
+3=3
+It's reason: 
+32
+Resolvent:
+5=1
+4=1
+3=1
+2!=3
+
+Latest falsified literal: 
+2!=3
+It's reason: 
+-2
+Resolvent:
+5=1
+4=1
+3=1
+2=0
+2=1
+2=2
+
+Latest falsified literal: 
+2=2
+It's reason: 
+48
+Resolvent:
+5=1
+4=1
+3=1
+2=0
+2=1
+
+Latest falsified literal: 
+2=0
+It's reason: 
+46
+Resolvent:
+5=1
+4=1
+3=1
+2=1
+
+Latest falsified literal: 
+5=1
+It's reason: 
+16
+Resolvent:
+4=1
+3=1
+2=1
+1!=1
+
+Latest falsified literal: 
+4=1
+It's reason: 
+13
+Resolvent:
+3=1
+2=1
+1!=1
+
+Latest falsified literal: 
+3=1
+It's reason: 
+11
+Resolvent:
+2=1
+1!=1
+
+Latest falsified literal: 
+2=1
+It's reason: 
+10
+Resolvent:
+1!=1
+
+Learned a clause: 
+1!=1
+
+Latest falsified literal (now watched): 
+1!=1
+Finding backtrack level...
+We are backtracking to the level: 0
+# of backtracks so far: 11
+1!1 at level 0
+Checking satisfiability...
+Decision: 1=2
+1=2 at level 1
+The reason for the literal: 
+-1
+Checking satisfiability...
+2!2 at level 1
+Checking satisfiability...
+3!2 at level 1
+Checking satisfiability...
+4!2 at level 1
+Checking satisfiability...
+5!2 at level 1
+Checking satisfiability...
+Decision: 2=0
+2=0 at level 2
+The reason for the literal: 
+-1
+Checking satisfiability...
+3!0 at level 2
+Checking satisfiability...
+4!0 at level 2
+Checking satisfiability...
+5!0 at level 2
+Checking satisfiability...
+3!1 at level 2
+Entailment... 3=3
+3=3 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+4!3 at level 2
+Entailment... 4=1
+4=1 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+5!1 at level 2
+Entailment... 5=3
+5=3 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+Found conflict!
+There is a conflict at level: 2
+Conflicting clause: 
+5!=3
+3!=3
+
+Latest falsified literal: 
+5!=3
+It's reason: 
+-2
+Resolvent:
+3!=3
+5=0
+5=1
+5=2
+
+Latest falsified literal: 
+5=1
+It's reason: 
+19
+Resolvent:
+3!=3
+5=0
+5=2
+4!=1
+
+Latest falsified literal: 
+4!=1
+It's reason: 
+-2
+Resolvent:
+3!=3
+5=0
+5=2
+4=0
+4=2
+4=3
+
+Latest falsified literal: 
+4=3
+It's reason: 
+35
+Resolvent:
+3!=3
+5=0
+5=2
+4=0
+4=2
+
+Latest falsified literal: 
+3!=3
+It's reason: 
+-2
+Resolvent:
+5=0
+5=2
+4=0
+4=2
+3=0
+3=1
+3=2
+
+Latest falsified literal: 
+3=1
+It's reason: 
+42
+Resolvent:
+5=0
+5=2
+4=0
+4=2
+3=0
+3=2
+
+Latest falsified literal: 
+5=0
+It's reason: 
+7
+Resolvent:
+5=2
+4=0
+4=2
+3=0
+3=2
+2!=0
+
+Latest falsified literal: 
+4=0
+It's reason: 
+4
+Resolvent:
+5=2
+4=2
+3=0
+3=2
+2!=0
+
+Latest falsified literal: 
+3=0
+It's reason: 
+2
+Resolvent:
+5=2
+4=2
+3=2
+2!=0
+
+Learned a clause: 
+5=2
+4=2
+3=2
+2!=0
+
+Latest falsified literal (now watched): 
+2!=0
+watched2 in learned clause: 
+5=2
+Finding backtrack level...
+watched2 in learned clause: 
+5=2
+We are backtracking to the level: 1
+# of backtracks so far: 12
+2!0 at level 1
+Checking satisfiability...
+Decision: 2=1
+2=1 at level 2
+The reason for the literal: 
+-1
+Checking satisfiability...
+3!1 at level 2
+Checking satisfiability...
+4!1 at level 2
+Checking satisfiability...
+5!1 at level 2
+Checking satisfiability...
+3!0 at level 2
+Entailment... 3=3
+3=3 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+4!3 at level 2
+Entailment... 4=0
+4=0 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+5!0 at level 2
+Entailment... 5=3
+5=3 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+Found conflict!
+There is a conflict at level: 2
+Conflicting clause: 
+5!=3
+3!=3
+
+Latest falsified literal: 
+5!=3
+It's reason: 
+-2
+Resolvent:
+3!=3
+5=0
+5=1
+5=2
+
+Latest falsified literal: 
+5=0
+It's reason: 
+9
+Resolvent:
+3!=3
+5=1
+5=2
+4!=0
+
+Latest falsified literal: 
+4!=0
+It's reason: 
+-2
+Resolvent:
+3!=3
+5=1
+5=2
+4=1
+4=2
+4=3
+
+Latest falsified literal: 
+4=3
+It's reason: 
+35
+Resolvent:
+3!=3
+5=1
+5=2
+4=1
+4=2
+
+Latest falsified literal: 
+3!=3
+It's reason: 
+-2
+Resolvent:
+5=1
+5=2
+4=1
+4=2
+3=0
+3=1
+3=2
+
+Latest falsified literal: 
+3=0
+It's reason: 
+47
+Resolvent:
+5=1
+5=2
+4=1
+4=2
+3=1
+3=2
+
+Latest falsified literal: 
+5=1
+It's reason: 
+17
+Resolvent:
+5=2
+4=1
+4=2
+3=1
+3=2
+2!=1
+
+Latest falsified literal: 
+4=1
+It's reason: 
+14
+Resolvent:
+5=2
+4=2
+3=1
+3=2
+2!=1
+
+Latest falsified literal: 
+3=1
+It's reason: 
+12
+Resolvent:
+5=2
+4=2
+3=2
+2!=1
+
+Learned a clause: 
+5=2
+4=2
+3=2
+2!=1
+
+Latest falsified literal (now watched): 
+2!=1
+watched2 in learned clause: 
+5=2
+Finding backtrack level...
+watched2 in learned clause: 
+5=2
+We are backtracking to the level: 1
+# of backtracks so far: 13
+2!1 at level 1
+Entailment... 2=3
+2=3 at level 1
+The reason for the literal: 
+-2
+Checking satisfiability...
+3!3 at level 1
+Checking satisfiability...
+4!3 at level 1
+Checking satisfiability...
+5!3 at level 1
+Checking satisfiability...
+Decision: 3=0
+3=0 at level 2
+The reason for the literal: 
+-1
+Checking satisfiability...
+4!0 at level 2
+Entailment... 4=1
+4=1 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+5!0 at level 2
+Entailment... 5=1
+5=1 at level 2
+The reason for the literal: 
+-2
+Checking satisfiability...
+Found conflict!
+There is a conflict at level: 2
+Conflicting clause: 
+5!=1
+4!=1
+
+Latest falsified literal: 
+5!=1
+It's reason: 
+-2
+Resolvent:
+4!=1
+5=0
+5=2
+5=3
+
+Latest falsified literal: 
+5=0
+It's reason: 
+8
+Resolvent:
+4!=1
+5=2
+5=3
+3!=0
+
+Latest falsified literal: 
+4!=1
+It's reason: 
+-2
+Resolvent:
+5=2
+5=3
+3!=0
+4=0
+4=2
+4=3
+
+Latest falsified literal: 
+4=0
+It's reason: 
+5
+Resolvent:
+5=2
+5=3
+3!=0
+4=2
+4=3
+
+Learned a clause: 
+5=2
+5=3
+3!=0
+4=2
+4=3
+
+Latest falsified literal (now watched): 
+3!=0
+watched2 in learned clause: 
+4=2
+Finding backtrack level...
+watched2 in learned clause: 
+5=2
+We are backtracking to the level: 1
+# of backtracks so far: 14
+3!0 at level 1
+Entailment... 3=1
+3=1 at level 1
+The reason for the literal: 
+-2
+Checking satisfiability...
+4!1 at level 1
+Entailment... 4=0
+4=0 at level 1
+The reason for the literal: 
+-2
+Checking satisfiability...
+5!0 at level 1
+Entailment... 5=1
+5=1 at level 1
+The reason for the literal: 
+-2
+Checking satisfiability...
+Found conflict!
+There is a conflict at level: 1
+Conflicting clause: 
+5!=1
+3!=1
+
+Latest falsified literal: 
+5!=1
+It's reason: 
+-2
+Resolvent:
+3!=1
+5=0
+5=2
+5=3
+
+Latest falsified literal: 
+5=0
+It's reason: 
+9
+Resolvent:
+3!=1
+5=2
+5=3
+4!=0
+
+Latest falsified literal: 
+4!=0
+It's reason: 
+-2
+Resolvent:
+3!=1
+5=2
+5=3
+4=1
+4=2
+4=3
+
+Latest falsified literal: 
+4=1
+It's reason: 
+15
+Resolvent:
+3!=1
+5=2
+5=3
+4=2
+4=3
+
+Latest falsified literal: 
+3!=1
+It's reason: 
+-2
+Resolvent:
+5=2
+5=3
+4=2
+4=3
+3=0
+3=2
+3=3
+
+Latest falsified literal: 
+3=0
+It's reason: 
+53
+Resolvent:
+5=2
+5=3
+4=2
+4=3
+3=2
+3=3
+
+Latest falsified literal: 
+5=3
+It's reason: 
+37
+Resolvent:
+5=2
+4=2
+4=3
+3=2
+3=3
+2!=3
+
+Latest falsified literal: 
+4=3
+It's reason: 
+34
+Resolvent:
+5=2
+4=2
+3=2
+3=3
+2!=3
+
+Latest falsified literal: 
+3=3
+It's reason: 
+32
+Resolvent:
+5=2
+4=2
+3=2
+2!=3
+
+Latest falsified literal: 
+2!=3
+It's reason: 
+-2
+Resolvent:
+5=2
+4=2
+3=2
+2=0
+2=1
+2=2
+
+Latest falsified literal: 
+2=1
+It's reason: 
+52
+Resolvent:
+5=2
+4=2
+3=2
+2=0
+2=2
+
+Latest falsified literal: 
+2=0
+It's reason: 
+51
+Resolvent:
+5=2
+4=2
+3=2
+2=2
+
+Latest falsified literal: 
+5=2
+It's reason: 
+26
+Resolvent:
+4=2
+3=2
+2=2
+1!=2
+
+Latest falsified literal: 
+4=2
+It's reason: 
+23
+Resolvent:
+3=2
+2=2
+1!=2
+
+Latest falsified literal: 
+3=2
+It's reason: 
+21
+Resolvent:
+2=2
+1!=2
+
+Latest falsified literal: 
+2=2
+It's reason: 
+20
+Resolvent:
+1!=2
+
+Learned a clause: 
+1!=2
+
+Latest falsified literal (now watched): 
+1!=2
+Finding backtrack level...
+We are backtracking to the level: 0
+# of backtracks so far: 15
+1!2 at level 0
+Entailment... 1=3
+1=3 at level 0
+The reason for the literal: 
+-2
+Checking satisfiability...
+2!3 at level 0
+Checking satisfiability...
+3!3 at level 0
+Checking satisfiability...
+4!3 at level 0
+Checking satisfiability...
+5!3 at level 0
+Checking satisfiability...
+Decision: 2=0
+2=0 at level 1
+The reason for the literal: 
+-1
+Checking satisfiability...
+3!0 at level 1
+Checking satisfiability...
+4!0 at level 1
+Checking satisfiability...
+5!0 at level 1
+Checking satisfiability...
+3!1 at level 1
+Entailment... 3=2
+3=2 at level 1
+The reason for the literal: 
+-2
+Checking satisfiability...
+4!2 at level 1
+Entailment... 4=1
+4=1 at level 1
+The reason for the literal: 
+-2
+Checking satisfiability...
+5!1 at level 1
+Entailment... 5=2
+5=2 at level 1
+The reason for the literal: 
+-2
+Checking satisfiability...
+Found conflict!
+There is a conflict at level: 1
+Conflicting clause: 
+5!=2
+3!=2
+
+Latest falsified literal: 
+5!=2
+It's reason: 
+-2
+Resolvent:
+3!=2
+5=0
+5=1
+5=3
+
+Latest falsified literal: 
+5=1
+It's reason: 
+19
+Resolvent:
+3!=2
+5=0
+5=3
+4!=1
+
+Latest falsified literal: 
+4!=1
+It's reason: 
+-2
+Resolvent:
+3!=2
+5=0
+5=3
+4=0
+4=2
+4=3
+
+Latest falsified literal: 
+4=2
+It's reason: 
+25
+Resolvent:
+3!=2
+5=0
+5=3
+4=0
+4=3
+
+Latest falsified literal: 
+3!=2
+It's reason: 
+-2
+Resolvent:
+5=0
+5=3
+4=0
+4=3
+3=0
+3=1
+3=3
+
+Latest falsified literal: 
+3=1
+It's reason: 
+44
+Resolvent:
+5=0
+5=3
+4=0
+4=3
+3=0
+3=3
+
+Latest falsified literal: 
+5=0
+It's reason: 
+7
+Resolvent:
+5=3
+4=0
+4=3
+3=0
+3=3
+2!=0
+
+Latest falsified literal: 
+4=0
+It's reason: 
+4
+Resolvent:
+5=3
+4=3
+3=0
+3=3
+2!=0
+
+Latest falsified literal: 
+3=0
+It's reason: 
+2
+Resolvent:
+5=3
+4=3
+3=3
+2!=0
+
+Learned a clause: 
+5=3
+4=3
+3=3
+2!=0
+
+Latest falsified literal (now watched): 
+2!=0
+watched2 in learned clause: 
+5=3
+Finding backtrack level...
+watched2 in learned clause: 
+5=3
+We are backtracking to the level: 0
+# of backtracks so far: 16
+2!0 at level 0
+Checking satisfiability...
+Decision: 2=1
+2=1 at level 1
+The reason for the literal: 
+-1
+Checking satisfiability...
+3!1 at level 1
+Checking satisfiability...
+4!1 at level 1
+Checking satisfiability...
+5!1 at level 1
+Checking satisfiability...
+3!0 at level 1
+Entailment... 3=2
+3=2 at level 1
+The reason for the literal: 
+-2
+Checking satisfiability...
+4!2 at level 1
+Entailment... 4=0
+4=0 at level 1
+The reason for the literal: 
+-2
+Checking satisfiability...
+5!0 at level 1
+Entailment... 5=2
+5=2 at level 1
+The reason for the literal: 
+-2
+Checking satisfiability...
+Found conflict!
+There is a conflict at level: 1
+Conflicting clause: 
+5!=2
+3!=2
+
+Latest falsified literal: 
+5!=2
+It's reason: 
+-2
+Resolvent:
+3!=2
+5=0
+5=1
+5=3
+
+Latest falsified literal: 
+5=0
+It's reason: 
+9
+Resolvent:
+3!=2
+5=1
+5=3
+4!=0
+
+Latest falsified literal: 
+4!=0
+It's reason: 
+-2
+Resolvent:
+3!=2
+5=1
+5=3
+4=1
+4=2
+4=3
+
+Latest falsified literal: 
+4=2
+It's reason: 
+25
+Resolvent:
+3!=2
+5=1
+5=3
+4=1
+4=3
+
+Latest falsified literal: 
+3!=2
+It's reason: 
+-2
+Resolvent:
+5=1
+5=3
+4=1
+4=3
+3=0
+3=1
+3=3
+
+Latest falsified literal: 
+3=0
+It's reason: 
+49
+Resolvent:
+5=1
+5=3
+4=1
+4=3
+3=1
+3=3
+
+Latest falsified literal: 
+5=1
+It's reason: 
+17
+Resolvent:
+5=3
+4=1
+4=3
+3=1
+3=3
+2!=1
+
+Latest falsified literal: 
+4=1
+It's reason: 
+14
+Resolvent:
+5=3
+4=3
+3=1
+3=3
+2!=1
+
+Latest falsified literal: 
+3=1
+It's reason: 
+12
+Resolvent:
+5=3
+4=3
+3=3
+2!=1
+
+Learned a clause: 
+5=3
+4=3
+3=3
+2!=1
+
+Latest falsified literal (now watched): 
+2!=1
+watched2 in learned clause: 
+5=3
+Finding backtrack level...
+watched2 in learned clause: 
+5=3
+We are backtracking to the level: 0
+# of backtracks so far: 17
+2!1 at level 0
+Entailment... 2=2
+2=2 at level 0
+The reason for the literal: 
+-2
+Checking satisfiability...
+3!2 at level 0
+Checking satisfiability...
+4!2 at level 0
+Checking satisfiability...
+5!2 at level 0
+Checking satisfiability...
+3!0 at level 0
+Entailment... 3=1
+3=1 at level 0
+The reason for the literal: 
+-2
+Checking satisfiability...
+4!1 at level 0
+Entailment... 4=0
+4=0 at level 0
+The reason for the literal: 
+-2
+Checking satisfiability...
+5!0 at level 0
+Entailment... 5=1
+5=1 at level 0
+The reason for the literal: 
+-2
+Checking satisfiability...
+Found conflict!
+There is a conflict at level: 0
+Conflicting clause: 
+5!=1
+3!=1
+
+UNSAT
+Checking satisfiability...
+There is a conflict at level: 0
+Conflicting clause: 
+5!=1
+3!=1
+
+5.5849	 5.5944	
+
+UNSAT
+
+Decisions   : 17
+Backtracks  : 17
+Entails     : 53
+Variables   : 5
+Clauses     : 57
+Restarts   : 0
+
