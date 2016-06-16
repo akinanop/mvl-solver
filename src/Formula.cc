@@ -982,6 +982,49 @@ inline void Formula::tempwatchedSatisfyLiteral ( int var, bool equals, int val )
 	}
 }
 
+bool Formula::supported ( int var, Clause * clause ) {
+
+	// counter = VARLIST[var] -> COUNTER;
+
+	int neg_counter = 0;
+	int pos_counter = 0;
+	int var_counter = 0;
+
+
+	// count number of literals involving var
+	// var != val interpreted as positive disjunction with all values except val
+	// if clause contains neg and positive occurences, should be absorbed (FIXME in learning) or added
+
+	for ( int i = 0; i < clause -> ATOM_LIST.size(); i++ ) {
+
+
+		if ( clause -> ATOM_LIST[i] -> VAR == var && clause -> ATOM_LIST[i] -> EQUAL ) {
+			pos_counter++;
+			var_counter++;
+		}
+
+		if ( pos_counter > 0 && clause -> ATOM_LIST[i] -> VAR == var && ! clause -> ATOM_LIST[i] -> EQUAL )
+			var_counter = VARLIST[var] -> DOMAINSIZE;
+
+		else if ( clause -> ATOM_LIST[i] -> VAR == var && ! clause -> ATOM_LIST[i] -> EQUAL )
+			neg_counter++;
+
+		pos_counter = 0;
+	}
+
+	if ( var_counter > 0 && neg_counter > 0)
+		var_counter = VARLIST[var] -> DOMAINSIZE - 1;
+
+
+
+
+	if (VARLIST[var] -> DOMAINSIZE - VARLIST[var] -> COUNTER > VARLIST[var] -> DOMAINSIZE - var_counter )
+		return true;
+	else
+		return false;
+}
+
+
 inline void Formula::watchedSatisfyLiteral( Literal * literal ) {
 
 	// we don't need to  update counts any more
@@ -1101,13 +1144,16 @@ inline void Formula::tempwatchedFalsifyLiteral ( int var, bool equals, int val )
 			 *if the clause is not sat, and literal = watched1 or literal = watched2,
 			  it means that watched1 is falsified, need to replace it by a unassigned literal
 			  if available
+
+			  here falsified means that domainsize - counter > domainsize - appearances of the var in the clause
+
 			 */
 
-			 if ( watched1 -> VAR == var && watched1 -> VAL == val  && watched1 -> EQUAL == equals ) {
+			 if ( watched1 -> VAR == var && watched1 -> VAL == val  && watched1 -> EQUAL == equals && ! supported (watched1 ->  VAR, CLAUSELIST[current -> c_num] ) ) {
 				tempSwapPointer ( current -> c_num );
 
 
-			} else if ( watched2 -> VAR == var && watched2 -> VAL == val  && watched2 -> EQUAL == equals ) {
+			} else if ( watched2 -> VAR == var && watched2 -> VAL == val  && watched2 -> EQUAL == equals && ! supported (watched2 ->  VAR, CLAUSELIST[current -> c_num] ) ) {
 
 				tempSwapPointer ( current -> c_num);
 
