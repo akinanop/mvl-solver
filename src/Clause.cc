@@ -23,6 +23,9 @@ Clause::Clause()
   WATCHED.reserve(2);
   W1 = 0;
   W2 = -1;
+
+  ATOM_LIST_MODIF.reserve(5);
+
 }
 
 //One Argument Constructor
@@ -36,6 +39,9 @@ Clause::Clause(int size)
   WATCHED.reserve(2);
   W1 = 0;
   W2 = -1;
+
+
+  ATOM_LIST_MODIF.reserve(size);
 
 }
 
@@ -53,6 +59,19 @@ void Clause::addAtom(Literal * atom)
   NumUnAss++;
 }
 
+
+void Clause::addAtomModif(Literal * atom)
+{
+  for ( int i = 0; i < ATOM_LIST_MODIF.size(); i++ ) {
+
+	  if ( atom -> VAR ==  ATOM_LIST_MODIF[i][0] -> VAR ) {
+		  ATOM_LIST_MODIF[i][1]= atom;
+	  }
+
+  }
+  NumAtom++;
+  NumUnAss++;
+}
 
 //Print
 void Clause::Print()
