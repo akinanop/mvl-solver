@@ -53,10 +53,11 @@ void SolveFinite(CommandLine * cline, string type)
  else
     {
 	 if ( cline -> CMV   ) {
+
 	     	  result = fobj-> tempWatchedLiterals ( cline -> RESTARTS );
 	       }
 
-      if ( cline -> WATCH  ) {
+	 else if ( cline -> WATCH  ) {
     	  result = fobj-> WatchedLiterals ( cline -> RESTARTS );
       }
       else if (cline->RESTARTS != 0) {

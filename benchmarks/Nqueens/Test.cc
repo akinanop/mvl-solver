@@ -10,9 +10,9 @@ using namespace std;
 void run_solver(int var, int clauses, string file)
 { char buffer [100];
   FILE * outp;
-  outp = fopen("out4_60R_wl", "a");
+  outp = fopen("out4_35R_wl", "a");
 
-  string total =  "~/Desktop/mvl-solver/./Solver -solvenc -wl -file "+file;
+  string total =  "~/netshare/mvl-solver/./Solver -solvenc -wl -file "+file;
   FILE* test = popen(total.c_str(), "r");
   while ( ! feof (test) )
        {
@@ -73,7 +73,7 @@ for(int i=1; i < var+1; i++)
 file<<"p cnf "<<var<<" "<<clauses<<endl;
 file.close();
 
-run_solver(var,clauses,"~/Desktop/mvl-solver/benchmarks/Nqueens/"+name);
+run_solver(var,clauses,"~/netshare/mvl-solver/benchmarks/Nqueens/"+name);
 
 // cout<<clauses<<endl;
 }
