@@ -1,0 +1,615 @@
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+benchmarks/Nqueens/instances/20queens 	0.0367	Checking satisfiability...
+Checking if there is a unit clause...
+Decision: 1=0
+Reducing literal: 1=0 at level 1
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking if there is a unit clause...
+Found a unit clause: 0
+Found a unit clause: 1
+Found a unit clause: 3
+Found a unit clause: 6
+Found a unit clause: 10
+Found a unit clause: 15
+Found a unit clause: 21
+Found a unit clause: 28
+Found a unit clause: 36
+Found a unit clause: 45
+Found a unit clause: 55
+Found a unit clause: 66
+Found a unit clause: 78
+Found a unit clause: 91
+Found a unit clause: 105
+Found a unit clause: 120
+Found a unit clause: 136
+Found a unit clause: 153
+Found a unit clause: 171
+Found a unit clause: 3801
+Found a unit clause: 3840
+Found a unit clause: 3915
+Found a unit clause: 4024
+Found a unit clause: 4165
+Found a unit clause: 4336
+Found a unit clause: 4535
+Found a unit clause: 4760
+Found a unit clause: 5009
+Found a unit clause: 5280
+Found a unit clause: 5569
+Found a unit clause: 5876
+Found a unit clause: 6199
+Found a unit clause: 6536
+Found a unit clause: 6885
+Found a unit clause: 7244
+Found a unit clause: 7611
+Found a unit clause: 7984
+Found a unit clause: 8361
+Reducing: 2!0 at level 1
+Reducing: 3!0 at level 1
+Reducing: 4!0 at level 1
+Reducing: 5!0 at level 1
+Reducing: 6!0 at level 1
+Reducing: 7!0 at level 1
+Reducing: 8!0 at level 1
+Reducing: 9!0 at level 1
+Reducing: 10!0 at level 1
+Reducing: 11!0 at level 1
+Reducing: 12!0 at level 1
+Reducing: 13!0 at level 1
+Reducing: 14!0 at level 1
+Reducing: 15!0 at level 1
+Reducing: 16!0 at level 1
+Reducing: 17!0 at level 1
+Reducing: 18!0 at level 1
+Reducing: 19!0 at level 1
+Reducing: 20!0 at level 1
+Reducing: 2!1 at level 1
+Reducing: 3!2 at level 1
+Reducing: 4!3 at level 1
+Reducing: 5!4 at level 1
+Reducing: 6!5 at level 1
+Reducing: 7!6 at level 1
+Reducing: 8!7 at level 1
+Reducing: 9!8 at level 1
+Reducing: 10!9 at level 1
+Reducing: 11!10 at level 1
+Reducing: 12!11 at level 1
+Reducing: 13!12 at level 1
+Reducing: 14!13 at level 1
+Reducing: 15!14 at level 1
+Reducing: 16!15 at level 1
+Reducing: 17!16 at level 1
+Reducing: 18!17 at level 1
+Reducing: 19!18 at level 1
+Reducing: 20!19 at level 1
+Decision: 2=3
+Reducing literal: 2=3 at level 2
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking if there is a unit clause...
+Found a unit clause: 572
+Found a unit clause: 577
+Found a unit clause: 581
+Found a unit clause: 586
+Found a unit clause: 592
+Found a unit clause: 599
+Found a unit clause: 607
+Found a unit clause: 616
+Found a unit clause: 626
+Found a unit clause: 637
+Found a unit clause: 649
+Found a unit clause: 662
+Found a unit clause: 676
+Found a unit clause: 691
+Found a unit clause: 707
+Found a unit clause: 724
+Found a unit clause: 742
+Found a unit clause: 3881
+Found a unit clause: 3947
+Found a unit clause: 3954
+Found a unit clause: 4061
+Found a unit clause: 4200
+Found a unit clause: 4369
+Found a unit clause: 4566
+Found a unit clause: 4789
+Found a unit clause: 5036
+Found a unit clause: 5304
+Found a unit clause: 5591
+Found a unit clause: 5896
+Found a unit clause: 6217
+Found a unit clause: 6552
+Found a unit clause: 6899
+Found a unit clause: 7256
+Found a unit clause: 7621
+Reducing: 3!3 at level 2
+Reducing: 5!3 at level 2
+Reducing: 6!3 at level 2
+Reducing: 7!3 at level 2
+Reducing: 8!3 at level 2
+Reducing: 9!3 at level 2
+Reducing: 10!3 at level 2
+Reducing: 11!3 at level 2
+Reducing: 12!3 at level 2
+Reducing: 13!3 at level 2
+Reducing: 14!3 at level 2
+Reducing: 15!3 at level 2
+Reducing: 16!3 at level 2
+Reducing: 17!3 at level 2
+Reducing: 18!3 at level 2
+Reducing: 19!3 at level 2
+Reducing: 20!3 at level 2
+Reducing: 3!4 at level 2
+Reducing: 4!1 at level 2
+Reducing: 4!5 at level 2
+Reducing: 5!6 at level 2
+Reducing: 6!7 at level 2
+Reducing: 7!8 at level 2
+Reducing: 8!9 at level 2
+Reducing: 9!10 at level 2
+Reducing: 10!11 at level 2
+Reducing: 11!12 at level 2
+Reducing: 12!13 at level 2
+Reducing: 13!14 at level 2
+Reducing: 14!15 at level 2
+Reducing: 15!16 at level 2
+Reducing: 16!17 at level 2
+Reducing: 17!18 at level 2
+Reducing: 18!19 at level 2
+Decision: 4=19
+Reducing literal: 4=19 at level 3
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking if there is a unit clause...
+Found a unit clause: 3615
+Found a unit clause: 3619
+Found a unit clause: 3623
+Found a unit clause: 3628
+Found a unit clause: 3634
+Found a unit clause: 3641
+Found a unit clause: 3649
+Found a unit clause: 3658
+Found a unit clause: 3668
+Found a unit clause: 3679
+Found a unit clause: 3691
+Found a unit clause: 3704
+Found a unit clause: 3718
+Found a unit clause: 3733
+Found a unit clause: 3766
+Found a unit clause: 4019
+Found a unit clause: 4158
+Found a unit clause: 4289
+Found a unit clause: 4450
+Found a unit clause: 4639
+Found a unit clause: 4854
+Found a unit clause: 5093
+Found a unit clause: 5934
+Found a unit clause: 6249
+Found a unit clause: 6580
+Found a unit clause: 6923
+Found a unit clause: 7276
+Found a unit clause: 7637
+Found a unit clause: 8004
+Reducing: 3!19 at level 3
+Reducing: 5!19 at level 3
+Reducing: 6!19 at level 3
+Reducing: 7!19 at level 3
+Reducing: 8!19 at level 3
+Reducing: 9!19 at level 3
+Reducing: 10!19 at level 3
+Reducing: 11!19 at level 3
+Reducing: 12!19 at level 3
+Reducing: 13!19 at level 3
+Reducing: 14!19 at level 3
+Reducing: 15!19 at level 3
+Reducing: 16!19 at level 3
+Reducing: 17!19 at level 3
+Reducing: 19!19 at level 3
+Reducing: 3!18 at level 3
+Reducing: 5!18 at level 3
+Reducing: 6!17 at level 3
+Reducing: 7!16 at level 3
+Reducing: 8!15 at level 3
+Reducing: 9!14 at level 3
+Reducing: 10!13 at level 3
+Reducing: 13!10 at level 3
+Reducing: 14!9 at level 3
+Reducing: 15!8 at level 3
+Reducing: 16!7 at level 3
+Reducing: 17!6 at level 3
+Reducing: 18!5 at level 3
+Reducing: 19!4 at level 3
+Decision: 3=8
+Reducing literal: 3=8 at level 4
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking if there is a unit clause...
+Found a unit clause: 1528
+Found a unit clause: 1532
+Found a unit clause: 1543
+Found a unit clause: 1558
+Found a unit clause: 1567
+Found a unit clause: 1577
+Found a unit clause: 1588
+Found a unit clause: 1600
+Found a unit clause: 1627
+Found a unit clause: 1642
+Found a unit clause: 1658
+Found a unit clause: 1675
+Found a unit clause: 1693
+Found a unit clause: 4104
+Found a unit clause: 4241
+Found a unit clause: 4393
+Found a unit clause: 4408
+Found a unit clause: 4603
+Found a unit clause: 4804
+Found a unit clause: 5047
+Found a unit clause: 5067
+Found a unit clause: 5332
+Found a unit clause: 5617
+Found a unit clause: 5920
+Reducing: 5!8 at level 4
+Reducing: 6!8 at level 4
+Reducing: 8!8 at level 4
+Reducing: 10!8 at level 4
+Reducing: 11!8 at level 4
+Reducing: 12!8 at level 4
+Reducing: 13!8 at level 4
+Reducing: 14!8 at level 4
+Reducing: 16!8 at level 4
+Reducing: 17!8 at level 4
+Reducing: 18!8 at level 4
+Reducing: 19!8 at level 4
+Reducing: 20!8 at level 4
+Reducing: 5!10 at level 4
+Reducing: 6!11 at level 4
+Reducing: 7!4 at level 4
+Reducing: 7!12 at level 4
+Reducing: 8!13 at level 4
+Reducing: 9!2 at level 4
+Reducing: 10!1 at level 4
+Reducing: 10!15 at level 4
+Reducing: 11!16 at level 4
+Reducing: 12!17 at level 4
+Reducing: 13!18 at level 4
+Decision: 7=18
+Reducing literal: 7=18 at level 5
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking if there is a unit clause...
+Found a unit clause: 3440
+Found a unit clause: 3447
+Found a unit clause: 3454
+Found a unit clause: 3462
+Found a unit clause: 3471
+Found a unit clause: 3481
+Found a unit clause: 3504
+Found a unit clause: 3517
+Found a unit clause: 3531
+Found a unit clause: 3562
+Found a unit clause: 3597
+Found a unit clause: 4488
+Found a unit clause: 4748
+Found a unit clause: 4957
+Found a unit clause: 5445
+Found a unit clause: 6322
+Found a unit clause: 6645
+Found a unit clause: 6980
+Found a unit clause: 7681
+Found a unit clause: 8042
+Found a unit clause: 8407
+Reducing: 6!18 at level 5
+Reducing: 8!18 at level 5
+Reducing: 9!18 at level 5
+Reducing: 10!18 at level 5
+Reducing: 11!18 at level 5
+Reducing: 12!18 at level 5
+Reducing: 14!18 at level 5
+Reducing: 15!18 at level 5
+Reducing: 16!18 at level 5
+Reducing: 18!18 at level 5
+Reducing: 20!18 at level 5
+Reducing: 5!16 at level 5
+Reducing: 8!17 at level 5
+Reducing: 9!16 at level 5
+Reducing: 11!14 at level 5
+Reducing: 14!11 at level 5
+Reducing: 15!10 at level 5
+Reducing: 16!9 at level 5
+Reducing: 18!7 at level 5
+Reducing: 19!6 at level 5
+Reducing: 20!5 at level 5
+Decision: 10=17
+Reducing literal: 10=17 at level 6
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking if there is a unit clause...
+Found a unit clause: 3270
+Found a unit clause: 3274
+Found a unit clause: 3284
+Found a unit clause: 3305
+Found a unit clause: 3317
+Found a unit clause: 3330
+Found a unit clause: 3359
+Found a unit clause: 3392
+Found a unit clause: 3410
+Found a unit clause: 5127
+Found a unit clause: 5159
+Found a unit clause: 5823
+Found a unit clause: 6730
+Found a unit clause: 7059
+Found a unit clause: 7398
+Found a unit clause: 7745
+Found a unit clause: 8457
+Reducing: 5!17 at level 6
+Reducing: 9!17 at level 6
+Reducing: 11!17 at level 6
+Reducing: 13!17 at level 6
+Reducing: 14!17 at level 6
+Reducing: 15!17 at level 6
+Reducing: 17!17 at level 6
+Reducing: 19!17 at level 6
+Reducing: 20!17 at level 6
+Reducing: 5!12 at level 6
+Reducing: 6!13 at level 6
+Reducing: 12!15 at level 6
+Reducing: 15!12 at level 6
+Reducing: 16!11 at level 6
+Reducing: 17!10 at level 6
+Reducing: 18!9 at level 6
+Reducing: 20!7 at level 6
+Decision: 6=9
+Reducing literal: 6=9 at level 7
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking if there is a unit clause...
+Found a unit clause: 1724
+Found a unit clause: 1743
+Found a unit clause: 1760
+Found a unit clause: 1770
+Found a unit clause: 1781
+Found a unit clause: 1806
+Found a unit clause: 1835
+Found a unit clause: 1868
+Found a unit clause: 1886
+Found a unit clause: 4698
+Found a unit clause: 4902
+Found a unit clause: 4913
+Found a unit clause: 5394
+Found a unit clause: 5970
+Found a unit clause: 5990
+Found a unit clause: 6283
+Reducing: 5!9 at level 7
+Reducing: 9!9 at level 7
+Reducing: 11!9 at level 7
+Reducing: 12!9 at level 7
+Reducing: 13!9 at level 7
+Reducing: 15!9 at level 7
+Reducing: 17!9 at level 7
+Reducing: 19!9 at level 7
+Reducing: 20!9 at level 7
+Reducing: 8!11 at level 7
+Reducing: 9!6 at level 7
+Reducing: 9!12 at level 7
+Reducing: 11!4 at level 7
+Reducing: 13!2 at level 7
+Reducing: 13!16 at level 7
+Reducing: 14!1 at level 7
+Decision: 19=16
+Reducing literal: 19=16 at level 8
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking if there is a unit clause...
+Found a unit clause: 3200
+Found a unit clause: 3204
+Found a unit clause: 3206
+Found a unit clause: 3208
+Found a unit clause: 3210
+Found a unit clause: 3229
+Found a unit clause: 8018
+Found a unit clause: 8066
+Found a unit clause: 8281
+Found a unit clause: 8316
+Found a unit clause: 8353
+Found a unit clause: 8732
+Reducing: 8!16 at level 8
+Reducing: 12!16 at level 8
+Reducing: 14!16 at level 8
+Reducing: 16!16 at level 8
+Reducing: 18!16 at level 8
+Reducing: 20!16 at level 8
+Reducing: 5!2 at level 8
+Reducing: 8!5 at level 8
+Reducing: 16!13 at level 8
+Reducing: 17!14 at level 8
+Reducing: 18!15 at level 8
+Reducing: 20!15 at level 8
+Decision: 17=12
+Reducing literal: 17=12 at level 9
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking if there is a unit clause...
+Found a unit clause: 2407
+Found a unit clause: 2411
+Found a unit clause: 2413
+Found a unit clause: 2415
+Found a unit clause: 2432
+Found a unit clause: 2467
+Found a unit clause: 7376
+Found a unit clause: 7428
+Found a unit clause: 7457
+Found a unit clause: 7966
+Found a unit clause: 7969
+Reducing: 8!12 at level 9
+Reducing: 12!12 at level 9
+Reducing: 14!12 at level 9
+Reducing: 16!12 at level 9
+Reducing: 18!12 at level 9
+Reducing: 20!12 at level 9
+Reducing: 9!4 at level 9
+Reducing: 11!6 at level 9
+Reducing: 12!7 at level 9
+Reducing: 18!11 at level 9
+Reducing: 18!13 at level 9
+Decision: 20=11
+Reducing literal: 20=11 at level 10
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking if there is a unit clause...
+Found a unit clause: 2265
+Found a unit clause: 2269
+Found a unit clause: 2271
+Found a unit clause: 2273
+Found a unit clause: 2275
+Found a unit clause: 8483
+Found a unit clause: 8531
+Found a unit clause: 8558
+Found a unit clause: 8587
+Reducing: 5!11 at level 10
+Reducing: 9!11 at level 10
+Reducing: 11!11 at level 10
+Reducing: 13!11 at level 10
+Reducing: 15!11 at level 10
+Reducing: 11!2 at level 10
+Reducing: 13!4 at level 10
+Reducing: 14!5 at level 10
+Reducing: 15!6 at level 10
+Decision: 15=2
+Reducing literal: 15=2 at level 11
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking if there is a unit clause...
+Found a unit clause: 478
+Found a unit clause: 482
+Found a unit clause: 484
+Found a unit clause: 499
+Found a unit clause: 530
+Found a unit clause: 6774
+Found a unit clause: 7204
+Reducing: 8!2 at level 11
+Reducing: 12!2 at level 11
+Reducing: 14!2 at level 11
+Reducing: 16!2 at level 11
+Reducing: 18!2 at level 11
+Reducing: 12!5 at level 11
+Reducing: 16!1 at level 11
+Decision: 5=15
+Reducing literal: 5=15 at level 12
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking if there is a unit clause...
+Found a unit clause: 2882
+Found a unit clause: 2899
+Found a unit clause: 2920
+Found a unit clause: 5951
+Found a unit clause: 6266
+Found a unit clause: 6936
+Reducing: 9!15 at level 12
+Reducing: 11!15 at level 12
+Reducing: 13!15 at level 12
+Reducing: 13!7 at level 12
+Reducing: 14!6 at level 12
+Reducing: 16!4 at level 12
+Decision: 13=13
+Reducing literal: 13=13 at level 13
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking if there is a unit clause...
+Found a unit clause: 2544
+Found a unit clause: 2546
+Found a unit clause: 6180
+Found a unit clause: 6519
+Found a unit clause: 7150
+Reducing: 9!13 at level 13
+Reducing: 11!13 at level 13
+Reducing: 12!14 at level 13
+Reducing: 14!14 at level 13
+Reducing: 16!10 at level 13
+Decision: 14=7
+Reducing literal: 14=7 at level 14
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking if there is a unit clause...
+Found a unit clause: 1416
+Found a unit clause: 1418
+Found a unit clause: 6340
+Found a unit clause: 7175
+Reducing: 9!7 at level 14
+Reducing: 11!7 at level 14
+Reducing: 8!1 at level 14
+Reducing: 16!5 at level 14
+Decision: 8=10
+Reducing literal: 8=10 at level 15
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking if there is a unit clause...
+Found a unit clause: 1962
+Found a unit clause: 2043
+Found a unit clause: 5737
+Reducing: 12!10 at level 15
+Reducing: 18!10 at level 15
+Reducing: 12!6 at level 15
+Decision: 16=14
+Reducing literal: 16=14 at level 16
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking if there is a unit clause...
+Found a unit clause: 2811
+Reducing: 18!14 at level 16
+Decision: 18=6
+Reducing literal: 18=6 at level 17
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking if there is a unit clause...
+Decision: 9=5
+Reducing literal: 9=5 at level 18
+The reason for the literal: 
+-1
+Checking satisfiability...
+Checking if there is a unit clause...
+Found a unit clause: 1003
+Reducing: 11!5 at level 18
+Entailment... 11=1
+Reducing literal: 11=1 at level 18
+The reason for the literal: 
+-2
+Reducing: 12!1 at level 18
+Entailment... 12=4
+Reducing literal: 12=4 at level 18
+The reason for the literal: 
+-2
+Checking satisfiability...
+0.0095	 0.0462	
+
+SAT
+
+Decisions   : 18
+Backtracks  : 0
+Entails     : 2
+Variables   : 20
+Clauses     : 8740
+Restarts   : 0
+
+Verifying model ... Checking satisfiability...
+model is CORRECT
