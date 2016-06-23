@@ -73,8 +73,6 @@ public:
   int DOMAINSIZE;
   bool SAT;
   int LEVEL;
-// current domain = domainsize - counter
-  int COUNTER;
   //  array storing index (decstack size) at which literal is falsified
   int * ATOMWATCH; // 0 if not watched, 1 if is watched1, 2 if watched2
   int * ATOMINDEX; // order at which atoms where was falsified

@@ -20,7 +20,6 @@ Variable::Variable()
 	DOMAINSIZE = -1;
 	SAT = false;
 	LEVEL = -1;
-	COUNTER = 0;
 	ATOMLEVEL = NULL;
 	ATOMASSIGN = NULL;
 	ATOMCNTPOS = NULL;
@@ -42,7 +41,6 @@ Variable::Variable(int var, int domain)
 	DOMAINSIZE = domain;
 	SAT = false;
 	LEVEL = -1;
-	COUNTER = 0;
 	ATOMINDEX = new int[DOMAINSIZE];
 	ATOMWATCH = new int[DOMAINSIZE];
 	ATOMLEVEL = new int[DOMAINSIZE];

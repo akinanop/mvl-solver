@@ -186,7 +186,8 @@ public:
   Literal * templazyWatchedChooseLiteral ();
   int tempWatchedLiterals ( int restarts );
   inline void tempwatchedSatisfyLiteral( Literal * literal );
-  bool supported ( int var, Clause * clause ) ;
+
+
 
 };
 // End of Code
