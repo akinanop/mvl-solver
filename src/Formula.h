@@ -77,6 +77,7 @@ public:
   bool LOG; // verbose
   bool WATCH; //watched literals option
   bool CMV; //watched literals option
+  bool VSIDS; //vsids option
 
   int WATCHED2; // temp, to fix wl algo
   //public variables and functions
@@ -118,6 +119,7 @@ public:
   //chooseLiteral : selects next branching literal from the current theory
   void addReason(int var, int val); // needed for analyzing coflict
   Literal * chooseLiteral();
+  Literal * chooseLiteralVSIDS();
   Literal * watchedChooseLiteral();
   void SwapPointer( Clause* clause );
   void SwapPointer( int clause );

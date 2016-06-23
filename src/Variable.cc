@@ -27,6 +27,7 @@ Variable::Variable()
 	ATOMCNTNEG = NULL;
 	ATOMRECPOS = NULL;
 	ATOMRECNEG = NULL;
+	VSIDSCOUNTER=NULL;
 	ATOMINDEX = NULL;
 	FLAG = NULL;
 	CLAUSEID = NULL;
@@ -48,6 +49,7 @@ Variable::Variable(int var, int domain)
 	ATOMASSIGN = new int[DOMAINSIZE];
 	ATOMCNTPOS = new int[DOMAINSIZE];
 	ATOMCNTNEG = new int[DOMAINSIZE];
+	VSIDSCOUNTER = new int[DOMAINSIZE];
 	FLAG = new bool[DOMAINSIZE];
 	CLAUSEID = new int[DOMAINSIZE];
 	ATOMRECPOS = new VARRECORD *[DOMAINSIZE];
@@ -58,6 +60,7 @@ Variable::Variable(int var, int domain)
 		ATOMASSIGN[i] = 0;
 		ATOMCNTPOS[i] = 0;
 		ATOMCNTNEG[i] = 0;
+		VSIDSCOUNTER[i] = 0;
 		FLAG[i] = false;
 		CLAUSEID[i] = -10;
 		ATOMRECPOS[i] = NULL;
@@ -76,6 +79,7 @@ Variable::~Variable()
 	delete [] ATOMCNTNEG;
 	delete [] FLAG;
 	delete [] CLAUSEID;
+	delete [] VSIDSCOUNTER;
 
 	for(int i=0; i<DOMAINSIZE; i++)
 	{

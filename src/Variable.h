@@ -82,6 +82,7 @@ public:
   int * ATOMASSIGN;
   int * ATOMCNTPOS; // need this for choosing a decision literal
   int * ATOMCNTNEG; // need this for choosing a decision literal
+  int * VSIDSCOUNTER; // need this for choosing a decision literal with vsids
   bool * FLAG;
   int * CLAUSEID;
   VARRECORD ** ATOMRECPOS;

@@ -61,6 +61,8 @@ struct CommandLine
   int RESTARTS;
   // For the watched literals algo from Sellmann and Jain 2010
   bool CMV;
+  //vsids option
+  bool VSIDS;
 };
 
 //Global Declaration - Functions

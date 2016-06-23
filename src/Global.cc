@@ -197,6 +197,7 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 	cline -> RESTARTS = 0;
 	cline -> WATCH = false;
 	cline -> CMV = false;
+	cline -> VSIDS = false;
 	cline -> LOG = false;
 	cline -> MODEL = false;
 
@@ -321,6 +322,8 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 					cline -> CMV = true;
 				else if(!strcmp(argv[current], "-wl"))
 					cline -> WATCH = true;
+				else if(!strcmp(argv[current], "-vsids"))
+					cline -> VSIDS = true;
 				else if(!strcmp(argv[current], "-model"))
 					cline->MODEL = true;
 				else if(!strcmp(argv[current], "-var"))

@@ -34,6 +34,7 @@ Formula::Formula () {
 	LOG = false;
 	WATCH = false;
 	CMV = false;
+	VSIDS=false;
 }
 
 //1-arg constructor
@@ -57,6 +58,7 @@ Formula::Formula ( CommandLine * cline ) {
 	LOG = cline->LOG;
 	WATCH = cline->WATCH;
 	CMV =  cline->CMV;
+	VSIDS = cline->VSIDS;
 }
 
 // Parse input and build the formula aka theory
@@ -160,6 +162,7 @@ void Formula::BuildFormula ( CommandLine* cline ) {
 							VARLIST[var]->ATOMCNTNEG[val]++;
 							VARLIST[var]->addRecord(clause_num, val, false);
 						}
+						VARLIST[var]->VSIDSCOUNTER[val]++;
 						atom_num++;
 					}
 				}
@@ -459,6 +462,35 @@ Literal* Formula::chooseLiteral () {
 			for ( int j = 0; j < VARLIST[i] -> DOMAINSIZE; j++ ) {
 				if ( VARLIST[i] -> ATOMASSIGN[j] == 0 ) {
 					tmax = VARLIST[i] -> ATOMCNTPOS[j] - VARLIST[i] -> ATOMCNTNEG[j];
+					if ( max < tmax ) {
+						max = tmax;
+						tvar = i;
+						tval = j;
+					}
+				}
+			}
+		}
+	}
+	return ( tvar != -1 ? new Literal ( tvar, tval ) : NULL );
+}
+
+Literal* Formula::chooseLiteralVSIDS () {
+
+	/*  Pick a literal which is not yet satisfied, and which has a maximal vsids counter
+	 */
+
+	int max = INT_MIN;
+	int tmax = -1;
+	int tvar = -1;
+	int tval = -1;
+	UNITCLAUSE = -1;
+
+	for ( int i = 0; i < VARLIST.size(); i++ ) {
+		if ( ! VARLIST[i] -> SAT ) {
+			for ( int j = 0; j < VARLIST[i] -> DOMAINSIZE; j++ ) {
+				if ( VARLIST[i] -> ATOMASSIGN[j] == 0 ) {
+					if ( VARLIST[i] -> ATOMCNTPOS[j]!=0 || VARLIST[i] -> ATOMCNTNEG[j]!=0)
+						tmax=VARLIST[i]->VSIDSCOUNTER[j];
 					if ( max < tmax ) {
 						max = tmax;
 						tvar = i;
@@ -1400,6 +1432,9 @@ Clause* Formula::analyzeConflict ( Clause * clause ) {
 		for ( int i = 0; i < clause -> NumAtom; i++ ) {
 			Literal* atom = clause->ATOM_LIST[i];
 			VARLIST[atom->VAR] -> addRecord( cid, atom->VAL, atom->EQUAL);
+
+			if (VSIDS)
+				VARLIST[atom->VAR]->VSIDSCOUNTER[atom->VAL]++;
 		}
 
 		if ( WATCH ) {
@@ -1414,6 +1449,14 @@ Clause* Formula::analyzeConflict ( Clause * clause ) {
 			if ( clause -> NumAtom == 1 ) {
 									clause -> W2  = -1;
 								}
+		}
+
+		if (VSIDS) {
+			for (int i=0;i<VARLIST.size();i++) {
+				for (int j=0;j<VARLIST[i]->DOMAINSIZE;j++) {
+					VARLIST[i]->VSIDSCOUNTER[j]/=2;
+				}
+			}
 		}
 
 		return clause;
@@ -2558,7 +2601,11 @@ int Formula::NonChronoBacktrack() {
 		// otherwise choose a literal and propagate
 		if ( !CONFLICT ) {
 
-			Literal* atom = chooseLiteral();
+			Literal* atom;
+			if (VSIDS)
+				atom = chooseLiteralVSIDS();
+			else
+				atom = chooseLiteral();
 			if ( atom ) {
 				DECISIONS++;
 				LEVEL++;
