@@ -69,11 +69,16 @@ public:
   Literal * ENTAILLITERAL;
   list <int> UNITLIST;
   int UNITCLAUSE;
+  int LASTFALSE; // for potent fn
   bool CONFLICT;
   int CONFLICTINGCLAUSE;
   vector <Literal *> DECSTACK;
   int RESTARTS;
-  // int ORIGINALFORMULA;
+  bool LOG; // verbose
+  bool WATCH; //watched literals option
+  bool CMV; //watched literals option
+
+  int WATCHED2; // temp, to fix wl algo
   //public variables and functions
   //Zero argument constructor
   Formula();
@@ -82,10 +87,11 @@ public:
   // 2-arg constructor
   Formula(int vars, int clauses);
   //BuildFunction : builds the theory using the input cnf file
-  bool HasAtom(Clause * clause, Literal * atom);
-
-  void BuildFunction(CommandLine * cline);
-  void BuildFunction(string name);
+  bool falsifies ( Literal* literal1, Literal* literal2 );
+  int sat (Literal* literal);
+  bool hasAtom(Clause * clause, Literal * atom);
+  void watchedUndoTheory ( int level );
+  void BuildFormula(CommandLine * cline);
   //PrintVar : prints the variable and its value
   void PrintVar();
   //PrintClause : prints the clauses in the theory
@@ -94,30 +100,43 @@ public:
   void PrintInfo();
   // Print model
   void PrintModel();
-  bool hasClause(Clause * clause);
   //verifyModel : verifies the model that was found, if any. returns true
   //if corret
-
   bool verifyModel();
   //checkSat : returns true if theory satisfied else false
   bool checkSat();
+  int watchedCheckSat(); // 1 sat, 0 falsif, 2 continue
   //checkConflict : return an integer value representing the conflict
   //clause else returns -1
   int checkConflict();
   //checkUnit : checks for unit clauses and adds clause id to unitlist
   void checkUnit();
+  Literal * watchedCheckUnit();
   //checkEntail : checks for entailed atom if any in the theory and
   //stores info in ENTAILLITEAL, returns true if finds one
   bool checkEntail(int var);
   //chooseLiteral : selects next branching literal from the current theory
   void addReason(int var, int val); // needed for analyzing coflict
   Literal * chooseLiteral();
+  Literal * watchedChooseLiteral();
+  void SwapPointer( Clause* clause );
+  void SwapPointer( int clause );
+
   //reduceTheory : reduces the theory by satisfying literals/clauses
   void reduceTheory(int var, bool equals, int val);
+  void watchedReduceTheory(Literal * literal, int var, bool equals, int val);
+
   //satisfyClauses : reduces the theory by satisfying the clauses
+  void watchedSatisfyLiteral(Literal * literal);
+
   void satisfyClauses(int var, bool equals, int val);
   //removeLiteral : reduces the theory by removing literals from the claues
   void removeLiteral(int var, bool equals, int val);
+  void watchedFalsifyLiteral(Literal * literal);
+  void watchedFalsifyLiteral(int var, bool equals, int val);
+  void watchedSatisfyLiteral(int var, bool equals, int val);
+  // Assign watched literals to a (learned) clause
+  void assignWatched ( Clause* clause );
   //undoTheory : brings the theory back at the level stage
   void undoTheory(int level);
   //unsatisfyClauses : brings back the clauses that were satisfied before
@@ -128,27 +147,45 @@ public:
   //analyzeConflict : finds the conflict, learns and creates a conflict clause,
   //add's the clause to theory and returns a backtrack level
   Clause * analyzeConflict(Clause * clause);
-  bool Potent(Clause * clause);
+  bool potent(Clause * clause);
   int backtrackLevel(Clause * clause);
-  //whyFalse: return the literal inconsistent with the input literal that was added to the interpretation earliest
-  Literal * whyFalse(Literal * literal);
   //resolve: Extended resolution
   Clause * resolve(Clause * clause, Literal * literal, Clause * reason);
   //maxLit: return the literal in C that was falsified last (?)
-  Literal * maxLit(Clause * clause);
+  vector<int> maxLit(Clause * clause);
   //unitPropagation : does BCP in Finite Domain, returns true if no conflict
   //else returns false
-  bool LitisEqual(Literal * literal1, Literal * literal2);
+  bool LitIsEqual(Literal * literal1, Literal * literal2);
   bool unitPropagation();
-// find unit literal in the unit clause
+  // find unit literal in the unit clause
   Literal * unitLiteral(Clause * clause);
   //NonChronoBacktrack : Extended DPLL algorithm with clause learning and
   //non chronological backtracking, returns backtrack level
   int NonChronoBacktrack();
+  int NonChronoBacktrack(int restarts);
 
   int NonChronoBacktrackLoop(int level);
   //ChronoBacktrack : Extended DPLL algorithm without any learning
   int ChronoBacktrack(int level);
+  // watched literals algo from Jain:
+  int WatchedLiterals( int restarts );
+  Literal* lazyWatchedChooseLiteral ();
+
+  // CMV watched literals algorithm:
+
+
+  void tempSwapPointer ( int clause_num );
+  inline void tempwatchedFalsifyLiteral ( int var, bool equals, int val );
+  void tempassignWatched ( Clause* clause );
+  int tempwatchedCheckSat () ;
+  inline void tempwatchedSatisfyLiteral ( int var, bool equals, int val );
+
+  Literal* tempwatchedCheckUnit () ;
+  Literal * templazyWatchedChooseLiteral ();
+  int tempWatchedLiterals ( int restarts );
+  inline void tempwatchedSatisfyLiteral( Literal * literal );
+  bool supported ( int var, Clause * clause ) ;
+
 };
 // End of Code
 //

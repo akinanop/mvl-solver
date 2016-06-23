@@ -1,7 +1,7 @@
 //**************************************************************
 //
 // Finite Domain Solver
-//
+// Authors: H. A. Lal, N. Pona
 // File : Main.cc
 // Description : Main Driver program code
 //**************************************************************
@@ -27,6 +27,7 @@ int main(int argc, char ** argv)
 {
   //Start Solver Time
   cout<<endl<<"************************************************************************"<<endl;
+
   cout<<endl<<"Finite Domain Sat Solver"<<endl;
 
   cout<<endl<<"************************************************************************"<<endl;
@@ -78,15 +79,15 @@ int main(int argc, char ** argv)
 
   else if(!strcmp(argv[1], "-solvech"))
     {
-      //Call SolveFinite - see SolveFinite.cc
-      SolveFinite(clineinfo, "ch");
+        SolveFinite(clineinfo, "ch");
     }
+    //Call SolveFinite
 
   else if(!strcmp(argv[1], "-solvenc"))
     {
       //Call SolveFinite
       SolveFinite(clineinfo, "nc");
-      
+
     }
 
   else

@@ -20,6 +20,12 @@ Clause::Clause()
   NumAtom = 0;
   NumUnAss = 0;
   LEVEL = -1;
+  WATCHED.reserve(2);
+  W1 = 0;
+  W2 = -1;
+
+  ATOM_LIST_MODIF.reserve(5);
+
 }
 
 //One Argument Constructor
@@ -30,6 +36,13 @@ Clause::Clause(int size)
   NumAtom = 0;
   NumUnAss = 0;
   LEVEL = -1;
+  WATCHED.reserve(2);
+  W1 = 0;
+  W2 = -1;
+
+
+  ATOM_LIST_MODIF.reserve(size);
+
 }
 
 //Destructor
@@ -39,13 +52,26 @@ Clause::~Clause()
 }
 
 //AddAtom
-void Clause::AddAtom(Literal * atom)
+void Clause::addAtom(Literal * atom)
 {
   ATOM_LIST.push_back(atom);
   NumAtom++;
   NumUnAss++;
 }
 
+
+void Clause::addAtomModif(Literal * atom)
+{
+  for ( int i = 0; i < ATOM_LIST_MODIF.size(); i++ ) {
+
+	  if ( atom -> VAR ==  ATOM_LIST_MODIF[i][0] -> VAR ) {
+		  ATOM_LIST_MODIF[i][1]= atom;
+	  }
+
+  }
+  NumAtom++;
+  NumUnAss++;
+}
 
 //Print
 void Clause::Print()
@@ -107,21 +133,6 @@ inline int Clause::getLevel()
   return LEVEL;
 }
 
-bool Clause::LitisEqual(Literal * literal1, Literal * literal2){
-  if(literal1->VAR == literal2->VAR && literal1->VAL == literal2->VAL && literal1->EQUAL == literal2->EQUAL) return true;
-   else return false;
-}
-
-bool Clause::ClauseisEqual(Clause * clause1,Clause * clause2)
-{
-  if(clause1->NumAtom != clause2->NumAtom) return false;
-
-  for(int i=0; i<clause1->NumAtom; i++)
-  {
-    if(!LitisEqual(clause1->ATOM_LIST[i], clause2->ATOM_LIST[i])) return false;
-  }
-  return true;
-}
 
 //setLevel
 inline void Clause::setLevel(int level)

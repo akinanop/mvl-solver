@@ -1,6 +1,11 @@
-# Finite Domain Satisfiablity Solver
+# Finite Domain Satisfiablity Solver 
 
-To learn what is a finite satisfiability problem, go to the [wiki page](https://github.com/akinanop/mvl-solver/wiki). If you want to try out the solver, download the archive in the current folder and follow the instructions below. Click [here](https://github.com/akinanop/mvl-solver/blob/master/EXAMPLES.md) to see some simple problems you could solve. 
+[![Build Status](https://travis-ci.org/akinanop/mvl-solver.svg?branch=master)](https://travis-ci.org/akinanop/mvl-solver) [![Coverage Status](https://coveralls.io/repos/github/akinanop/mvl-solver/badge.svg?branch=master)](https://coveralls.io/github/akinanop/mvl-solver?branch=master)
+
+To learn what is a finite satisfiability problem, go to the [wiki page](https://github.com/akinanop/mvl-solver/wiki). If you want to try out the solver, download the archive in the current folder and follow the instructions below. Click [here](https://github.com/akinanop/mvl-solver/wiki/Benchmarks) to see some problems you could solve. 
+
+*This project supported by the Austrian Science Fund (FWF): I836-N23.*
+
 
 Table of contents:
 
@@ -11,7 +16,17 @@ Table of contents:
       * [Solve a problem](https://github.com/akinanop/mvl-solver#finite-domain-solver-with-non-chronological-backtracking)
       * [Convert between Boolean and Finite domain problems](https://github.com/akinanop/mvl-solver#convert-boolean-to-finite-domain)
 
-<small>*Note*: This solver corrects and builds upon the unsound solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. Currently it implements non-chronological backtracking with resolution-based learning based on the Algorithm 7 in documentation/FD Solver.pdf.</small>
+*Note*: This solver corrects and builds upon the unsound solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. Currently it implements [non-chronological backtracking with resolution-based learning](https://github.com/akinanop/mvl-solver/blob/master/literature/Algorithm%207.pdf) with the [watched literals](https://github.com/akinanop/mvl-solver/blob/master/literature/Watched%20literals.pdf) bookkeeping technique.
+
+Roughly, a quarter of the original code was modified. If you run ```dwdiff -s``` on the file containing the main functions, you get:
+
+```
+dwdiff -s /original_solver/Formula.cc /src/Formula.cc
+
+old: 2848 words  2036 71% common  328 11% deleted  484 16% changed
+new: 3102 words  2036 65% common  335 10% inserted  731 23% changed
+
+```
 
 
 ### Building the Solver
@@ -36,28 +51,28 @@ The solver accepts the problems in extended DIMACS CNF format, which is an exten
 
 ``` c This is a comment line  ```
 
-2. Problem line: This line contains information about the problem. It begins with a p. There is exactly one such line for each problem.
+2. Problem line: This line contains information about the problem. It begins with a p. There is exactly one such line for each problem and it should be the first non-comment line in the problem.
 
-```p cnf <NumVar> <NumClause>```
+```p mvcnf <NumVar> <NumClause>```
 
 where NumVar is the total number of variables in the problem, and NumClause is the number of
 clauses in the problem.
 
 3. Domain line: This line contains information about the domain size of a variable. It begins with a d
-and is followed by the variable and then by the domain size.
+and is followed by the variable and then by the domain size. The variables are represented by numbers from 1 to N where N is the total number of variables in the theory, and the domain by numbers from 0 to M, where M is the size of the domain minus one.
 
 ```d <VarName> <DomainSize>```
 
 where VarName is the variable name, and DomainSize is the size of the domain of the variable.
-There should be at most one domain life for each variable.
+There should be at most one domain life for each variable. 
 
-4. Clause line: each literal is of the form ```<VarName>=<DomainValue>``` or ```<VarName>!=<DomainValue>```. Each clause ends with a 0, which is used as an end-marker, and the variables are represented by numbers from 1 to N where N is the total number of variables in the theory.
+4. Clause line: each literal is of the form ```<VarName>=<DomainValue>``` or ```<VarName>!=<DomainValue>```. Each clause ends with a 0, which is used as an end-marker.
 
 **EXAMPLE**
 
 ```
 c This is a pigeonhole problem with 3 pigeons and 2 holes
-p cnf 3 5
+p mvcnf 3 5
 d 1 2
 d 2 2
 d 3 2
@@ -70,20 +85,41 @@ d 3 2
 
 ```
 
+### Finite Domain Solver with Non-Chronological Backtracking
+
+Use the following format to run the program. The solver accepts problems in [extended DIMACS format](https://github.com/akinanop/mvl-solver/wiki/Extended-DIMACS-format). Watched algorithm is a more efficient bookkeeping technique for backtracking, see [here](https://github.com/akinanop/mvl-solver/wiki/Watched-literals).
+
+``` ./mvl-solver -solvenc -verbose -restarts <int> -var <int> -clause <int> -file <string> -time <int> ```
+
+where :
+
+```
+  mvl-solver     : * name of executable
+  -solvenc       : * option stating to solve the finite domain problem
+  -file           : * name of the input file
+  -var            :  number of variables in benchmark problem
+  -clause         :  number of clauses in benchmark problem
+  -verbose        : turns on the verbose mode
+  -wl             : enable watched literals algorithma
+  -restarts       : restarts threshold, default - no restatrs; incompatible with -wl
+  -time           : amount of time allowed for solver to run (in seconds)
+
+ * - required fields
+```
+*Example*: ``` ./mvl-solver -solvenc -file "example_SAT" ```
 
 
 ### Generating Benchmark Problem
 
 If you want to generate a random benchmark problem, use the following format to run the program:
 
-``` exe -genben -var <int> -clause <int> -clausesize <int> -sat <1/0>
+``` ./mvl-solver -genben -var <int> -clause <int> -clausesize <int> -sat <1/0>
       -domain <int> -drand <1/0> -bool <1/0> -file <string> ```
 
 where :
 
 ```
-exe               | * name of executable
-
+   mvl-solver     | * name of executable
   -genben         | * option stating create benchmark problem
   -var            | * number of variables in benchmark problem
   -clause         | * number of clauses in benchmark problem
@@ -99,38 +135,20 @@ exe               | * name of executable
  * - required fields
 ```
 
-EXAMPLE: ``` ./Solver -genben -var 4 -clause 18 -clausesize 2 -sat 0 -domain 2 -bool 1 -file "finite.txt" ```
+Example: ``` ./mvl-solver -genben -var 4 -clause 18 -clausesize 2 -sat 1 -domain 2 -bool 1 -file "example_SAT" ```
 
-### Finite Domain Solver with Non-Chronological Backtracking
 
-Use the following format to run the program. The solver accepts problems in extended DIMACS format.
-
-``` exe -solvenc -var <int> -clause <int> -file <string> -time <int> ```
-
-where :
-
-```
-  exe             : * name of executable
-  -solvenc       : * option stating to solve the finite domain problem
-  -var            : * number of variables in benchmark problem
-  -clause         : * number of clauses in benchmark problem
-  -file           : * name of the input file
-  -time           : amount of time allowed for solver to run (in seconds)
-
- * - required fields
-```
-EXAMPLE: ``` ./Solver -solvenc -var 4 -clause 18 -file "example.txt" ```
 
 
 ### Convert Boolean to Finite Domain
 
 Use the following format to run the program. The solver accepts problems in DIMACS format.
 
-``` ./Solver -b2f -file <string> -model <string> ```
+``` ./mvl-solver -b2f -file <string> -model <string> ```
 where :
 
 ```
- exe             : * name of executable
+ mvl-solver             : * name of executable
  -b2f            : * option stating to convert file
  -file           : * name of the boolean file
  -model          : * name of the finite file
@@ -143,11 +161,11 @@ where :
 
 Use the following format to run the program:
 
-``` exe -linenc -file <string> -model <string> ```
+``` ./mvl-solver -linenc -file <string> -model <string> ```
 
 where :
 ```
- exe             : * name of executable
+  mvl-solver             : * name of executable
  -linenc         : * option stating to convert file
  -file           : * name of the boolean file
  -model          : * name of the finite file
@@ -160,11 +178,11 @@ where :
 
 Use the following format to run the program:
 
-``` exe -quadenc -file <string> -model <string> ```
+``` ./mvl-solver -quadenc -file <string> -model <string> ```
 
 where :
 ```
- exe             : * name of executable
+  mvl-solver             : * name of executable
  -quadenc        : * option stating to convert file
  -file           : * name of the boolean file
  -model          : * name of the finite file

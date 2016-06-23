@@ -29,7 +29,7 @@ void SolveFinite(CommandLine * cline, string type)
   //Creating object
   fobj = new Formula(cline);
   //Building database
-  fobj->BuildFunction(cline);
+  fobj->BuildFormula(cline);
   //Compute Buildtime
   difftime = fobj->TIME_E - fobj->TIME_S;
   totaltime += difftime;
@@ -52,10 +52,20 @@ void SolveFinite(CommandLine * cline, string type)
   // 2. NonChronological Backtracking with Clause learning
  else
     {
-      //3. NonChronological Backtracking with Clause learning - "loop version"
-    //  result = fobj->NonChronoBacktrack(0); "recursive version"
-      result = fobj->NonChronoBacktrack(); // The function defined in Formula.cc
+	 if ( cline -> CMV   ) {
+
+	     	  result = fobj-> tempWatchedLiterals ( cline -> RESTARTS );
+	       }
+
+	 else if ( cline -> WATCH  ) {
+    	  result = fobj-> WatchedLiterals ( cline -> RESTARTS );
+      }
+      else if (cline->RESTARTS != 0) {
+        result = fobj->NonChronoBacktrack(cline->RESTARTS);
+      }
+      else result = fobj->NonChronoBacktrack(); // The function defined in Formula.cc
     }
+
   // compute the search time
   difftime = fobj->TIME_E - fobj->TIME_S;
   totaltime += difftime;
@@ -72,8 +82,8 @@ void SolveFinite(CommandLine * cline, string type)
     cout<<"UNSAT"<<endl;
   fobj->PrintInfo();
   if(result == 0)
-   { cout<<"The model: "<<endl;
-     fobj->PrintModel();
+   { if(cline->MODEL) { cout<<"The model: "<<endl;
+     fobj->PrintModel(); }
       cout<<"Verifying model ... ";
        if(fobj->verifyModel())
  	cout<<"model is CORRECT"<<endl;

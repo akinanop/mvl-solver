@@ -1,6 +1,6 @@
 //**************************************************************
 //
-// Finite Domain Solver 
+// Finite Domain Solver
 //
 // File : Clause.h
 // Description : Contains code for creating clause to store atoms,
@@ -38,14 +38,23 @@ class Clause
 public:
   //ATOM_LIST = vector of atoms
   //SAT = boolean variable true if clause satisfied else false
-  //NumAtom = number of atoms in clause
-  //NumUnAss = number of unassigned clause
+  //NumAtom = number of atoms in the clause
+  //NumUnAss = number of unassigned literals in the clause
   //LEVEL = Level at which the clause got satisfied, default -1
   vector <Literal *> ATOM_LIST;
+  vector <Literal **> ATOM_LIST_MODIF;
+
+
+
   bool SAT;
   int NumAtom;
   int NumUnAss;
   int LEVEL;
+  //Watched Literals:
+  vector <Literal *> WATCHED;
+  // use indexes instead lists for watched literals:
+  int W1;
+  int W2;
 
   //Zero Argument Constructor
   Clause();
@@ -54,7 +63,7 @@ public:
   //Destructor
   ~Clause();
   //AddAtom : adds an literal to clause
-  void AddAtom(Literal * atom);
+  void addAtom(Literal * atom);
   //Print : function to print the clause
   void Print();
 
@@ -85,6 +94,8 @@ public:
   //hasAtom
    bool ClauseisEqual(Clause * clause1, Clause * clause2);
   bool LitisEqual(Literal * literal1, Literal * literal2);
+
+  void addAtomModif(Literal * atom);
  //bool HasAtom(Literal * atom);
 };
 // End of Code

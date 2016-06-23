@@ -1,6 +1,6 @@
 //**************************************************************
 //
-// Finite Domain Solver 
+// Finite Domain Solver
 //
 // File : Global.h
 // Description : Contains code for Commandline arguments parsing
@@ -30,7 +30,12 @@ using namespace std;
 #define MAX_LINE 3000
 
 struct CommandLine
-{
+{ // print model option
+  bool MODEL;
+  //watched litetarals option
+  bool WATCH;
+  //verbose
+  bool LOG;
   //Number of Variables in CNF File
   int NUM_VAR;
   //Number of Clauses in CNF File
@@ -52,6 +57,10 @@ struct CommandLine
   char * MODEL_FILE;
   //Time limit
   int TIME;
+  // Number of backtracks at which the search is started from the level 0
+  int RESTARTS;
+  // For the watched literals algo from Sellmann and Jain 2010
+  bool CMV;
 };
 
 //Global Declaration - Functions
@@ -87,5 +96,8 @@ void QuadraticEncode(CommandLine * cline);
 //This function is called to solve the finite domain problem
 //passed as the argument to the solver
 void SolveFinite(CommandLine * cline, string type);
+//logging
+void Log (char *message);    // logs a message to sdout
+void LogErr (char *message); // logs a message; execution is interrupted
 #endif
 //**********************************************************************//

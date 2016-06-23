@@ -73,10 +73,15 @@ public:
   int DOMAINSIZE;
   bool SAT;
   int LEVEL;
+// current domain = domainsize - counter
+  int COUNTER;
+  //  array storing index (decstack size) at which literal is falsified
+  int * ATOMWATCH; // 0 if not watched, 1 if is watched1, 2 if watched2
+  int * ATOMINDEX; // order at which atoms where was falsified
   int * ATOMLEVEL;
   int * ATOMASSIGN;
-  int * ATOMCNTPOS;
-  int * ATOMCNTNEG;
+  int * ATOMCNTPOS; // need this for choosing a decision literal
+  int * ATOMCNTNEG; // need this for choosing a decision literal
   bool * FLAG;
   int * CLAUSEID;
   VARRECORD ** ATOMRECPOS;
@@ -90,7 +95,7 @@ public:
   //Destructor
   ~Variable();
   //AddRecord : adds the record to appropriate fields, true = '='; false= '!'
-  void AddRecord(int c_id, int d_id, bool flag);
+  void addRecord(int c_id, int d_id, bool flag);
   //Print : prints the indexes of the clause for each var domain
   void Print();
 };
