@@ -58,12 +58,18 @@ void SolveFinite(CommandLine * cline, string type)
 	       }
 
 	 else if ( cline -> WATCH  ) {
+
+
     	  result = fobj-> WatchedLiterals ( cline -> RESTARTS );
+
       }
       else if (cline->RESTARTS != 0) {
         result = fobj->NonChronoBacktrack(cline->RESTARTS);
       }
-      else result = fobj->NonChronoBacktrack(); // The function defined in Formula.cc
+      else  {
+
+     result = fobj->NonChronoBacktrack();
+      }
     }
 
   // compute the search time

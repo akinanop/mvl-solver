@@ -101,6 +101,8 @@ public:
   void PrintInfo();
   // Print model
   void PrintModel();
+int NewNonChronoBacktrack();
+  int NewWatchedCheckSat ();
   //verifyModel : verifies the model that was found, if any. returns true
   //if corret
   bool verifyModel();
@@ -112,15 +114,20 @@ public:
   int checkConflict();
   //checkUnit : checks for unit clauses and adds clause id to unitlist
   void checkUnit();
-  Literal * watchedCheckUnit();
+  Literal* watchedCheckUnit();
   //checkEntail : checks for entailed atom if any in the theory and
   //stores info in ENTAILLITEAL, returns true if finds one
   bool checkEntail(int var);
   //chooseLiteral : selects next branching literal from the current theory
   void addReason(int var, int val); // needed for analyzing coflict
-  Literal * chooseLiteral();
-  Literal * chooseLiteralVSIDS();
-  Literal * watchedChooseLiteral();
+  Literal* chooseLiteral();
+  // choose random unassigned literal
+  Literal* lazyChooseLiteral();
+  void NewWatchedCheckUnit ();
+void WatchedUnitPropagation();
+int NewWatchedLiterals ( int restarts );
+  Literal* chooseLiteralVSIDS();
+  Literal* watchedChooseLiteral();
   void SwapPointer( Clause* clause );
   void SwapPointer( int clause );
 

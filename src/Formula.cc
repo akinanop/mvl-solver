@@ -289,7 +289,7 @@ void Formula::PrintInfo()
 {
 	printf("\n");
 	printf("Decisions   : %d\n", DECISIONS);
-	//  printf("Number of Units       : %d\n", UNITS);
+	printf("Units       : %d\n", UNITS);
 	printf("Backtracks  : %d\n", BACKTRACKS);
 	printf("Entails     : %d\n", ENTAILS);
 	//  printf("Number of Levels      : %d\n", LEVEL);
@@ -478,6 +478,7 @@ Literal* Formula::chooseLiteralVSIDS () {
 
 	/*  Pick a literal which is not yet satisfied, and which has a maximal vsids counter
 	 */
+
 
 	int max = INT_MIN;
 	int tmax = -1;
@@ -1433,7 +1434,7 @@ Clause* Formula::analyzeConflict ( Clause * clause ) {
 			Literal* atom = clause->ATOM_LIST[i];
 			VARLIST[atom->VAR] -> addRecord( cid, atom->VAL, atom->EQUAL);
 
-			if (VSIDS)
+		if ( VSIDS )
 				VARLIST[atom->VAR]->VSIDSCOUNTER[atom->VAL]++;
 		}
 
@@ -1451,10 +1452,10 @@ Clause* Formula::analyzeConflict ( Clause * clause ) {
 								}
 		}
 
-		if (VSIDS) {
-			for (int i=0;i<VARLIST.size();i++) {
-				for (int j=0;j<VARLIST[i]->DOMAINSIZE;j++) {
-					VARLIST[i]->VSIDSCOUNTER[j]/=2;
+		if ( VSIDS ) {
+			for ( int i = 0; i < VARLIST.size(); i++ ) {
+				for ( int j = 0; j < VARLIST[i] -> DOMAINSIZE; j++ ) {
+					VARLIST[i] -> VSIDSCOUNTER[j] /= 2;
 				}
 			}
 		}
@@ -1499,6 +1500,8 @@ Clause* Formula::analyzeConflict ( Clause * clause ) {
 
 	// resolve:
 	resolvent = resolve ( clause, lastFalse, reason );
+
+	//cout << "Clause size: " << resolvent -> NumAtom << endl;
 
 	if (LOG) {
 		cout << "Resolvent:" << endl;
@@ -1584,7 +1587,6 @@ int Formula::watchedCheckSat () {
 		Literal* watched1 = CLAUSELIST[i] -> WATCHED[0];
 		Literal* watched2 = CLAUSELIST[i] -> WATCHED[1];
 
-
 		if ( sat ( watched1 ) == 0
 				&& (  watched2  == NULL || sat ( watched2 ) == 0 ) ) {
 
@@ -1595,9 +1597,38 @@ int Formula::watchedCheckSat () {
 
 			return 0;
 
-		} else if ( sat ( watched1 ) == 2 &&  watched2 == NULL  ) counter++;
-		  else if ( sat ( watched1 ) == 2   ) counter++ ;
-	      else if ( watched2 != NULL && sat ( watched2 ) == 2   ) counter++ ;
+		}   else if ( sat ( watched1 ) != 1  ) counter++ ;
+	    //  else if ( watched2 != NULL && sat ( watched2 ) == 2   ) counter++ ;
+	}
+
+	if ( counter > 0 ) return 2;
+	else return 1;
+}
+
+int Formula::NewWatchedCheckSat () {
+
+	// returns 1 if all watched1 is sat (1), 0 if some watched1 and watched2 falsified (0), otherwise 2 -undefined (2)
+
+	if ( LOG ) cout << "Checking satisfiability..." << endl;
+
+     int counter = 0;
+
+	for ( unsigned int  i = 0; i < CLAUSELIST.size(); i++ ) {
+
+		Literal* watched1 = CLAUSELIST[i] -> WATCHED[0];
+		Literal* watched2 = CLAUSELIST[i] -> WATCHED[1];
+
+		if ( watched1 -> SAT == 0
+				&& (  watched2  == NULL || watched2 -> SAT == 0 ) ) {
+
+			if (LOG) cout << "Found conflict!" << endl;
+
+			CONFLICTINGCLAUSE = i;
+			CONFLICT = true;
+
+			return 0;
+
+		} else if ( watched1 -> SAT != 1 ) counter++;
 	}
 
 	if ( counter > 0 ) return 2;
@@ -1777,6 +1808,62 @@ Literal* Formula::watchedCheckUnit () {
 	return NULL;
 }
 
+void Formula::NewWatchedCheckUnit () {
+
+//	if ( LOG ) cout << "Checking for units..." << endl;
+
+	for ( unsigned int i = 0; i < CLAUSELIST.size(); i++ ) {
+
+		Literal* watched1 = CLAUSELIST[i] -> WATCHED[0];
+		Literal* watched2 = CLAUSELIST[i] -> WATCHED[1];
+
+		if ( watched1 == NULL ) { ;
+		}
+		if ( sat ( watched1 ) == 2 // if watched1 unassigned
+				&& ( watched2 == NULL || sat ( watched2 ) == 0 ) ) {
+		//	cout << "Found unit, watched1" << endl;
+			UNITLIST.push_back(i);
+		}
+
+		else if ( sat ( watched1 ) == 0 && ( watched2 == NULL || sat ( watched2 ) == 0 ) ) {
+					cout << "Found conflict" << endl;
+					CONFLICTINGCLAUSE = i;
+					CONFLICT = true;
+				}
+
+		else if ( sat ( watched1 ) == 0 && sat ( watched2 ) == 2 ) {
+		//	cout << "Found unit, watched2" << endl;
+		UNITLIST.push_back(i);
+		}
+	}
+	// if ( LOG ) cout << "No units..." << endl;
+}
+
+
+void Formula::WatchedUnitPropagation()
+{
+	int unit_clause = -1;
+
+	//while there is no conflict and there exists a unit clause
+	//find the unit literal and satisfy it
+	while( ! CONFLICT && ! UNITLIST.empty() ) {
+
+		UNITS++;
+		unit_clause = UNITLIST.front();
+		UNITCLAUSE = unit_clause;
+		//if (LOG) cout<<"unit c : "<<unit_clause<<endl;
+		UNITLIST.pop_front();
+
+		Clause* clause = CLAUSELIST[unit_clause];
+
+		if ( sat ( clause -> WATCHED[0] ) == 2 ) watchedReduceTheory(clause -> WATCHED[0], clause -> WATCHED[0] -> VAR, clause -> WATCHED[0] -> EQUAL, clause -> WATCHED[0] -> VAL);
+		else if ( sat ( clause -> WATCHED[1] ) == 2 ) watchedReduceTheory(clause -> WATCHED[1], clause -> WATCHED[1] -> VAR, clause -> WATCHED[1] -> EQUAL, clause -> WATCHED[1] -> VAL);
+
+	}
+
+	if ( CONFLICT ) UNITLIST.clear();
+
+}
 
 Literal* Formula::watchedChooseLiteral () {
 
@@ -1819,10 +1906,33 @@ Literal * Formula::lazyWatchedChooseLiteral () {
 
 		Literal* watched1 = CLAUSELIST[i] -> WATCHED[0];
 
-		if ( sat ( watched1 ) == 2) return  new Literal(watched1 -> VAR, '=', watched1 ->VAL);
+		if ( sat ( watched1 ) == 2) return  watched1;
 	}
 	return NULL;
 }
+
+
+
+Literal* Formula::lazyChooseLiteral() {
+
+	for ( unsigned int  i = 0; i < CLAUSELIST.size(); i++ ) {
+
+		Clause* clause = CLAUSELIST[i];
+
+		for ( int j = 0 ; ! clause -> SAT && j < clause -> ATOM_LIST.size(); j++ ) {
+
+			Literal* literal = clause -> ATOM_LIST[j];
+
+			if ( sat ( literal ) == 2 ) return literal;
+
+		}
+	}
+
+	return NULL;
+
+
+}
+
 
 Literal * Formula::templazyWatchedChooseLiteral () {
 
@@ -1832,7 +1942,7 @@ Literal * Formula::templazyWatchedChooseLiteral () {
 
 		Literal* watched1 = CLAUSELIST[i] -> ATOM_LIST[CLAUSELIST[i] -> W1];
 
-		if ( sat ( watched1 ) == 2) return  new Literal(watched1 -> VAR, '=', watched1 ->VAL);
+		if ( sat ( watched1 ) == 2) return  watched1;
 	}
 	return NULL;
 }
@@ -1915,9 +2025,11 @@ void Formula::SwapPointer ( int clause_num ) {
 				VARLIST[literal -> VAR] -> ATOMWATCH[literal -> VAL] = 2;
 			}
 		}
-	} else if ( sat ( watched2 ) == 0 && sat ( watched1 )  == 0 ) {
-		if ( LOG ) cout << "conflict" << endl;
-	}
+	} /*else if ( sat ( watched2 ) == 0 && sat ( watched1 )  == 0 ) {
+		if ( LOG ) cout << "Conflict" << endl;
+		CONFLICT = true;
+		CONFLICTINGCLAUSE = clause_num;
+	} */
 
 
 		/* if ( sat ( clause -> WATCHED[0] ) == 0 && ( clause -> WATCHED[1] == NULL || sat ( clause -> WATCHED[1] ) == 0 ) ) {
@@ -2313,7 +2425,8 @@ void Formula::watchedReduceTheory ( Literal * literal, int var, bool equals, int
 }
 //=================== Watched literals NON-CHRONOLOGICAL BACKTRACK ============================//
 
-int Formula::WatchedLiterals ( int restarts ) {
+int Formula::NewWatchedLiterals ( int restarts ) {
+
 
 	int restartCount = restarts;
 
@@ -2323,6 +2436,8 @@ int Formula::WatchedLiterals ( int restarts ) {
 
 	while ( true ) {
 		//Check if the theory satisfied
+
+
 		if ( watchedCheckSat() == 1 )
 			return 0; //
 
@@ -2357,15 +2472,118 @@ int Formula::WatchedLiterals ( int restarts ) {
 			CONFLICT = false;
 
 			if ( BACKTRACKS == restartCount ) {
+
+
 				//	cout << "restarting" << endl;
 				watchedUndoTheory ( 0 );
+
+
+
 				restartCount = BACKTRACKS + restarts;
 				RESTARTS++;
 			}
 			else watchedUndoTheory ( LEVEL );
+
+
 					}
+
 		// If there is a unit clause, propagate
-		Literal* unit = watchedCheckUnit ();
+
+
+		NewWatchedCheckUnit ();
+
+		if ( ! UNITLIST.empty() )
+			WatchedUnitPropagation();
+		// otherwise choose a literal and propagate - no need for separate unit propagation
+
+		else if ( UNITLIST.empty() && ! CONFLICT ) {
+		Literal * atom = NULL;
+			if ( VSIDS ) atom = chooseLiteralVSIDS();
+			else atom = lazyWatchedChooseLiteral ();
+
+			if ( atom ) {
+				DECISIONS++;
+				LEVEL++;
+				// set REASON for subsequent falsified atoms
+				UNITCLAUSE = -1;
+				if ( LOG ) cout << "Decision: " << atom -> VAR << ( atom -> EQUAL ? '=' : '!' ) << atom -> VAL << endl;
+				watchedReduceTheory ( atom, atom -> VAR, atom -> EQUAL, atom -> VAL );
+			}
+
+		}
+
+	}
+
+}
+
+int Formula::WatchedLiterals ( int restarts ) {
+
+
+	int restartCount = restarts;
+
+	// returns 0 if sat, 1 if timeout, 2 if unsat
+
+	if ( LOG ) cout << "Solving with the watched literal algorithm..." << endl;
+
+	while ( true ) {
+		//Check if the theory satisfied
+
+
+		if ( watchedCheckSat() == 1 )
+			return 0; //
+
+		//Check if time out
+		TIME_E = GetTime();
+	//	if ( ( TIME_E - TIME_S ) > TIMELIMIT )
+		//	return 1;
+
+		if ( CONFLICT ) {
+
+			if ( LOG ) {
+				cout << "There is a conflict at level: " << LEVEL << endl;
+				cout<<"Conflicting clause: "<<  endl;
+				CLAUSELIST[CONFLICTINGCLAUSE] -> Print ();
+			}
+
+
+			if ( LEVEL == 0 ) { cout << "UNSAT" << endl; return 2; }
+
+			Clause* learned = analyzeConflict ( CLAUSELIST[CONFLICTINGCLAUSE] );
+			LEVEL = backtrackLevel ( learned );
+
+			if ( learned -> NumAtom > 1) {
+			learned -> WATCHED[1] = learned -> ATOM_LIST[WATCHED2];
+			}
+
+			BACKTRACKS++;
+			if ( LOG ) {
+				cout << "We are backtracking to the level: " << LEVEL << endl;
+				cout << "# of backtracks so far: " << BACKTRACKS << endl;
+			}
+			CONFLICT = false;
+
+			if ( BACKTRACKS == restartCount ) {
+
+
+				//	cout << "restarting" << endl;
+				watchedUndoTheory ( 0 );
+
+
+
+				restartCount = BACKTRACKS + restarts;
+				RESTARTS++;
+			}
+			else watchedUndoTheory ( LEVEL );
+
+
+					}
+
+		// If there is a unit clause, propagate
+
+
+	 Literal* unit = watchedCheckUnit ();
+
+
 		if ( unit ) {
 		/*	if ( LOG ) {
 				cout << "Found unit!" << endl;
@@ -2378,7 +2596,9 @@ int Formula::WatchedLiterals ( int restarts ) {
 		}
 		// otherwise choose a literal and propagate - no need for separate unit propagation
 		else if ( ! CONFLICT ) {
-			Literal * atom = chooseLiteral ();
+			Literal * atom = NULL;
+			if ( VSIDS ) atom = chooseLiteralVSIDS();
+			else atom = lazyWatchedChooseLiteral ();
 			if ( atom ) {
 				DECISIONS++;
 				LEVEL++;
@@ -2460,7 +2680,10 @@ int Formula::tempWatchedLiterals ( int restarts ) {
 		}
 		// otherwise choose a literal and propagate - no need for separate unit propagation
 		else if ( ! CONFLICT ) {
-			Literal * atom = chooseLiteral ();
+			Literal * atom = NULL;
+			if ( VSIDS ) atom = chooseLiteralVSIDS();
+			else atom = templazyWatchedChooseLiteral ();
+
 			if ( atom ) {
 				DECISIONS++;
 				LEVEL++;
@@ -2468,6 +2691,90 @@ int Formula::tempWatchedLiterals ( int restarts ) {
 				UNITCLAUSE = -1;
 				if ( LOG ) cout << "Decision: " << atom -> VAR << ( atom -> EQUAL ? '=' : '!' ) << atom -> VAL << endl;
 				watchedReduceTheory ( atom, atom -> VAR, atom -> EQUAL, atom -> VAL );
+			}
+
+		}
+	}
+
+}
+
+
+
+
+// Resolution-based non-chronological backtracking algorithm
+
+int Formula::NewNonChronoBacktrack() {
+
+	/* start of finite domain extended dpll
+	 return 0 : if theory satisfied
+	 return 1 : if time out
+	 return 2 : if CONFLICT and later used as unsatisfied
+	 */
+
+	while ( true ) {
+
+		if ( checkSat() )
+			return 0;
+
+		//Check if time out
+		TIME_E = GetTime();
+		if ( ( TIME_E - TIME_S ) > TIMELIMIT )
+			return 1;
+
+		if ( CONFLICT ) {
+
+			if ( LOG ) {
+				cout << "There is a conflict at level: " << LEVEL << endl;
+				cout<<"Conflicting clause: "<<  endl;
+				CLAUSELIST[CONFLICTINGCLAUSE] -> Print();
+			}
+
+			if ( LEVEL == 0 ) return 2; // the formula is unsat
+
+			LEVEL = backtrackLevel ( analyzeConflict ( CLAUSELIST[CONFLICTINGCLAUSE]) );
+
+			BACKTRACKS++;
+
+			if ( LOG ) {
+				cout << "We are backtracking to the level: " << LEVEL << endl;
+				cout << "# of backtracks so far: " << BACKTRACKS << endl;
+			}
+
+			CONFLICT = false;
+
+			undoTheory(LEVEL);
+
+		}
+
+		// If there is a unit clause, propagate
+
+
+		checkUnit();
+
+
+
+
+		if ( !UNITLIST.empty() )
+		    unitPropagation();
+
+
+		// otherwise choose a literal and propagate
+		if ( !CONFLICT ) {
+
+			Literal* atom;
+			if (VSIDS)
+				atom = chooseLiteralVSIDS();
+			else
+				atom = lazyChooseLiteral();
+			if ( atom ) {
+				DECISIONS++;
+				LEVEL++;
+
+				if (LOG) cout << "Decision: " << atom -> VAR << ( atom -> EQUAL ? '=' : '!' ) << atom -> VAL << endl;
+
+				UNITCLAUSE = -1; // REASON for the subsequent falsified atoms
+
+				reduceTheory ( atom -> VAR, atom -> EQUAL, atom -> VAL );
 			}
 
 		}
@@ -2561,8 +2868,11 @@ int Formula::NonChronoBacktrack() {
 
 	while ( true ) {
 
+
+
 		if ( checkSat() )
 			return 0;
+
 
 		//Check if time out
 		TIME_E = GetTime();
@@ -2589,11 +2899,18 @@ int Formula::NonChronoBacktrack() {
 			}
 
 			CONFLICT = false;
+
 			undoTheory(LEVEL);
+
 		}
 
 		// If there is a unit clause, propagate
+
+
 		checkUnit();
+
+
+
 
 		if ( !UNITLIST.empty() )
 			unitPropagation();
@@ -2605,7 +2922,7 @@ int Formula::NonChronoBacktrack() {
 			if (VSIDS)
 				atom = chooseLiteralVSIDS();
 			else
-				atom = chooseLiteral();
+				atom = lazyChooseLiteral();
 			if ( atom ) {
 				DECISIONS++;
 				LEVEL++;
