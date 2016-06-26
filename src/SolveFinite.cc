@@ -60,7 +60,7 @@ void SolveFinite(CommandLine * cline, string type)
 	 else if ( cline -> WATCH  ) {
 
 
-    	  result = fobj-> WatchedLiterals ( cline -> RESTARTS );
+    	  result = fobj-> NewWatchedLiterals ( cline -> RESTARTS );
 
       }
       else if (cline->RESTARTS != 0) {

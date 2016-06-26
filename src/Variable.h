@@ -21,6 +21,7 @@
 #include <time.h>
 #include <fstream>
 #include <string>
+#include <bitset>
 
 #include "Clause.h"
 
@@ -83,7 +84,6 @@ public:
   int * ATOMCNTPOS; // need this for choosing a decision literal
   int * ATOMCNTNEG; // need this for choosing a decision literal
   int * VSIDSCOUNTER; // need this for choosing a decision literal with vsids
-  bool * FLAG;
   int * CLAUSEID;
   VARRECORD ** ATOMRECPOS;
   VARRECORD ** ATOMRECNEG;

@@ -45,6 +45,8 @@ public:
   vector <Literal **> ATOM_LIST_MODIF;
 
 
+  Literal* FIRST;
+
 
   bool SAT;
   int NumAtom;
@@ -63,7 +65,8 @@ public:
   //Destructor
   ~Clause();
   //AddAtom : adds an literal to clause
-  void addAtom(Literal * atom);
+//  void addAtom(Literal * atom);
+  void addAtom ( int var, char ch, int val );
   //Print : function to print the clause
   void Print();
 

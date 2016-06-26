@@ -50,7 +50,6 @@ Variable::Variable(int var, int domain)
 	ATOMCNTPOS = new int[DOMAINSIZE];
 	ATOMCNTNEG = new int[DOMAINSIZE];
 	VSIDSCOUNTER = new int[DOMAINSIZE];
-	FLAG = new bool[DOMAINSIZE];
 	CLAUSEID = new int[DOMAINSIZE];
 	ATOMRECPOS = new VARRECORD *[DOMAINSIZE];
 	ATOMRECNEG = new VARRECORD *[DOMAINSIZE];
@@ -77,7 +76,7 @@ Variable::~Variable()
 	delete [] ATOMASSIGN;
 	delete [] ATOMCNTPOS;
 	delete [] ATOMCNTNEG;
-	delete [] FLAG;
+
 	delete [] CLAUSEID;
 	delete [] VSIDSCOUNTER;
 

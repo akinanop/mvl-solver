@@ -18,6 +18,7 @@
 #include <time.h>
 #include <fstream>
 #include <string>
+#include <bitset>
 
 using namespace std;
 //**************************************************************
@@ -37,28 +38,55 @@ public:
   //EQUAL = is the atom = (true) or ! (false)
  // INDEX = point (# of previous decisions) when literal was falsified
   int VAR;
-  int VAL;
-  bool EQUAL;
-  int SAT; // whether literal is sat 1, falsified 0, undef 2
-  int LEVEL;
+  bitset MULTIVAL; //  multi-literals
+
   //Zero argument constructor
-  Literal() { VAR = -1; VAL = -1; EQUAL = false; SAT = 2; LEVEL = -10;}
+  Literal() { VAR = -1;}
   //Two argument constructor
-  Literal(int vr, int vl) { VAR = vr; VAL = vl; EQUAL = true; SAT = 2; LEVEL = -10;}
+  Literal(int vr, int vl) {
+    VAR = vr;
+    bitset<domain> values;
+    MULTIVAL = values;
+    MULTIVAL[vl] = 1;
+  }
+  Literal(int vr, int domain) {
+    VAR = vr;
+    bitset<domain> values;
+    MULTIVAL = values;
+  }
+
   //Three argument constructor
-  Literal(int vr, char ch, int vl)
-  { SAT = 2;
-    VAR = vr; VAL = vl;
-    if(ch == '=') EQUAL = true;
-    else EQUAL = false;
-    LEVEL = -10;
+/*  Literal(int vr, char ch, int vl) {
+    VAR = vr;
+    bitset<domain> values;
+    MULTIVAL = values;
+
+    if(ch == '=')  MULTIVAL[vl] = 1;;
+  } */
+
+  //4 argument constructor
+  Literal ( int vr, char ch, int vl, int domain ) {
+    VAR = vr;
+    bitset<domain> values;
+    MULTIVAL = values;
+    if(ch == '=')  MULTIVAL[vl] = 1;
+    else {
+        for ( int i = 0; i < MULTIVAL.size() && i != vl; i++ ) {
+          MULTIVAL[i] = 1;
+        }
+    }
   }
 
   //Print : function to print the atom
   void Print()
   {
-    cout<<VAR;
-    if(EQUAL) cout<<"="<<VAL<<endl; else cout<<"!="<<VAL<<endl;
+
+    for ( int i = 0; i < MULTIVAL.size(); i++ ){
+        cout<<VAR;
+        if ( MULTIVAL[i] == 1 ) cout<<"="<<i<<endl;
+        else cout<<"!="<<VAL<<endl;
+    }
+
   //  cout<<INDEX;
   }
 

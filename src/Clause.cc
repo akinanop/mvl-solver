@@ -24,7 +24,7 @@ Clause::Clause()
   W1 = 0;
   W2 = -1;
 
-  ATOM_LIST_MODIF.reserve(5);
+  ATOM_LIST_MODIF.reserve(5); // ???
 
 }
 
@@ -44,6 +44,20 @@ Clause::Clause(int size)
   ATOM_LIST_MODIF.reserve(size);
 
 }
+
+void addAtom ( int var, char ch, int val ) {
+  for ( int i = 0; i < NumAtom; i++ ) {
+    if ( ATOM_LIST[i] -> VAR == var ) {
+      if ( ch == '=' )  MULTIVAL[val] = 1;
+      else {
+          for ( int i = 0; i < MULTIVAL.size() && i != vl; i++ ) {
+            MULTIVAL[i] = 1;
+          }
+      }
+    } else ATOM_LIST.push_back(new Literal(var,ch,val,VARLIST[var]->DOMAINSIZE));
+  }
+}
+
 
 //Destructor
 Clause::~Clause()

@@ -78,6 +78,7 @@ public:
   bool WATCH; //watched literals option
   bool CMV; //watched literals option
   bool VSIDS; //vsids option
+  bool QS; //quant support
 
   int WATCHED2; // temp, to fix wl algo
   //public variables and functions
@@ -194,6 +195,12 @@ int NewWatchedLiterals ( int restarts );
   int tempWatchedLiterals ( int restarts );
   inline void tempwatchedSatisfyLiteral( Literal * literal );
   bool supported ( int var, Clause * clause ) ;
+
+// Quantified support:
+  Literal* tempwatchedCheckUnit_QS ();
+  inline void tempwatchedFalsifyLiteral_QS ( int var, bool equals, int val );
+  int tempwatchedCheckSat_QS () ;
+
 
 };
 // End of Code
