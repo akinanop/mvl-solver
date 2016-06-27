@@ -2922,7 +2922,7 @@ int Formula::NonChronoBacktrack() {
 			if (VSIDS)
 				atom = chooseLiteralVSIDS();
 			else
-				atom = lazyChooseLiteral();
+				atom = chooseLiteral();
 			if ( atom ) {
 				DECISIONS++;
 				LEVEL++;
@@ -2984,7 +2984,13 @@ int Formula::ChronoBacktrack(int level)
 
 	//since all is fine, now need to choose a literal
 	//to branch on
-	Literal * atom = chooseLiteral();
+	Literal * atom = NULL;
+
+	if (VSIDS)
+		atom = chooseLiteralVSIDS();
+	else
+		atom = lazyChooseLiteral();
+
 	if(atom)
 	{
 		DECISIONS++;
