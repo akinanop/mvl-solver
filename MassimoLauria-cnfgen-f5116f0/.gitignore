@@ -1,0 +1,10 @@
+*.cnf
+*.pyc
+*.pyo
+.ropeproject/
+!./ropeproject/config.py
+build/
+dist/
+.eggs/
+*.egg-info/
+.dir-locals.el

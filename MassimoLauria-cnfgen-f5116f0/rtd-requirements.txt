@@ -1,0 +1,2 @@
+networkx>=1.9.0
+numpydoc
