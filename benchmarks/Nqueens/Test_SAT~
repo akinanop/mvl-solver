@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <cstring>
+#include <string>
+#include <iostream>
+#include <fstream>
+// include "Nqueens.cc"
+
+using namespace std;
+
+void run_solver(string file)
+{ char buffer [100];
+  FILE * outp;
+  outp = fopen("out4_33_minisat", "a");
+
+  string total =  "minisat "+file;
+  FILE* test = popen(total.c_str(), "r");
+  while ( ! feof (test) )
+       {
+         if ( fgets (buffer , 100 , test) == NULL ) break;
+         fputs (buffer , outp);
+
+       }
+  fclose(outp);
+  pclose(test);
+
+}
+
+int main()
+{
+  // Nqueens
+
+  char buffer [100];
+  FILE * outp;
+  
+  for ( int i = 4; i < 34 ; i++ ) {
+
+  string total =  "./sat "+ number;
+  FILE* test = popen(total.c_str(), "r");
+  while ( ! feof (test) )
+       {
+         if ( fgets (buffer , 100 , test) == NULL ) break;
+       }
+
+  pclose(test);
+
+run_solver(number);
+
+// cout<<clauses<<endl;
+}
+
+  printf("Done!\n");
+  // cout<<'\a';
+  return 0;
+}
+
