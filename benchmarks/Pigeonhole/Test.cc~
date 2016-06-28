@@ -11,9 +11,9 @@ using namespace std;
 void run_solver(string file)
 { char buffer [100];
   FILE * outp;
-  outp = fopen("out4_30_noR", "a");
+  outp = fopen("pgn4_15_vsids", "a");
 
-  string total =  "~/netshare/mvl-solver/./Solver -solvenc -file "+file;
+  string total =  "~/netshare/mvl-solver/./Solver -solvenc -vsids -file "+file;
   FILE* test = popen(total.c_str(), "r");
   while ( ! feof (test) )
        {
@@ -31,7 +31,7 @@ int main()
   // Nqueens
 
 
- for ( int pgn = 3; pgn < 11; pgn++ ) { // generating problems for n = 2...100
+ for ( int pgn = 4; pgn < 15; pgn++ ) { // generating problems for n = 2...100
 
     int hole = pgn - 1 ;
     int clauses = ( pow( pgn - 1 , 2 ) * pgn ) / 2 ; // # of clauses in the problem

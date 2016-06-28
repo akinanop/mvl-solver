@@ -115,3 +115,70 @@ CPU time              : 521217 s
 
 INDETERMINATE
 
+
+minisat pgn12_sat 
+
+============================[ Problem Statistics ]=============================
+|                                                                             |
+|  Number of variables:           252                                         |
+|  Number of clauses:            1206                                         |
+
+| Learnt clauses: 3226    
+===============================================================================
+restarts              : 81918
+conflicts             : 63684688       (59974 /sec)
+decisions             : 70355515       (0.00 % random) (66256 /sec)
+propagations          : 1055200366     (993710 /sec)
+CPU time              : 1061.88 s
+
+UNSATISFIABLE
+
+
+VSIDS:
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+benchmarks/Pigeonhole/instances/pgn12 	0.0083	170.9028	 170.9111	
+
+UNSAT
+
+Decisions   : 9218
+Units       : 309884
+Backtracks  : 9218
+Entails     : 56335
+Variables   : 12
+Clauses     : 9944
+
+Counter:
+benchmarks/Pigeonhole/instances/pgn12 	0.0089	414.5937	 414.6026	
+
+UNSAT
+
+Decisions   : 32340
+Units       : 420425
+Backtracks  : 32135
+Entails     : 14893
+Variables   : 12
+Clauses     : 32861
+
+nika@logic-9:~/netshare/mvl-solver$ ./Solver -solvenc -file benchmarks/Pigeonhole/instances/pgn13 -vsids ; minisat pgn13_sat 
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+benchmarks/Pigeonhole/instances/pgn13 	0.0090	999.1576	 999.1666	
+
+UNSAT
+
+Decisions   : 20481
+Units       : 811151
+Backtracks  : 20481
+Entails     : 135181
+Variables   : 13
+Clauses     : 21417
+Restarts   : 0
+
