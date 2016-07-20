@@ -19,7 +19,7 @@ script:
 - ./Solver -solvenc -wl -file ../benchmarks/Pigeonhole/instances/pgn3
 - ./Solver -solvenc -wl -file ../benchmarks/Pigeonhole/instances/pgn5
 - ./Solver -solvenc -file ../benchmarks/Nqueens/instances/9queens
-- ./Solver -solvenc -file ../benchmarks/Nqueens/instances/34queens
+# - ./Solver -solvenc -file ../benchmarks/Nqueens/instances/34queens
 - ./Solver -solvenc -wl -file ../benchmarks/Nqueens/instances/9queens
 # - ./Solver -solvenc -wl -file ../benchmarks/Nqueens/instances/34queens
 - ./Solver -solvenc -file ../benchmarks/Graph_Coloring/instances/myciel7_N3.dimacs
