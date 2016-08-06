@@ -1,0 +1,71 @@
+
+Nika&Irene: go through watched literals algo and see where the complexity comes from 
+
+- we have new folder for experimenting with data structures (bitvec)
+
+
+- what are the operations that we are optimizing for?
+  Resolution, subsumption, ...? Any search/indexing operations for
+  finding clauses with certain characteristics quickly?
+
+- we want to make it efficient for the watched literals algorithm (backtracking time is linear):
+
+- decrease Swap Pointer calls
+- check satisfiability (of a literal) fast
+- satisfy clause, falsify clause
+
+- unit propagation (!!!) 
+- check satisfiability 
+- check unit
+
+- resolution ?
+
+first algorithm (counter-based, no watched literals)
+
+
+- what is the data that we need to store: domain values, variables,
+  clauses? Anything else? Backtrack information?
+
+- domains
+- variables
+- clauses
+- decisions, decision level 
+- number of occurences of a variable/literal (in watched literals is used when satisfying/falsifying literals in clauses) 
+- in which clauses the literal is watched (whether it is watched at all)
+
+- group literals concerning the same variable 
+
+
+- what are the typical sizes:
+
+  . What is the number of domain elements we optimize for?
+    I think it is admissible to re-compile the prover if a bigger
+    domain-size is needed, as this takes a fraction of the run-time.
+    So a variable can be a fixed-length array of words, with
+    each bit corresponding to a domain element.
+
+- agree ( 100 ...)
+
+  . What is the max number of variables? Does it pay off to
+    make each clause a fixed-length array, where the length is the
+    number of variables? Or should clauses be variable-length since
+    the clauses are short on average?
+
+- typical benchmark problem is 2SAT, but while learning big clauses (< var.domain) are added. literals are represented differently, the clause size will be smaller
+
+    In the first case one does not have to store the name of variables,
+    since each is in a fixed place.  In your benchmarks the clauses
+    are rather short, so probably a list of pairs (var,sign) is better.
+
+
+Again, the max length of clauses can be compiled in, such that
+we don't have to use dynamic data structures.
+("sign" means set of domain elements)
+
+- max length of clause = length of varlist
+
+Then we should calculate the memory requirements for some of the
+benchmarks to get an idea (and compare it to the space currently
+needed), for all interesting candidate data structures. And we should
+compare the times that the operations take for different structures.
+
