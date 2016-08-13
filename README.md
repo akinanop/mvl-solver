@@ -1,10 +1,12 @@
-# Finite Domain Satisfiablity Solver 
+# Finite Domain Satisfiablity Solver
 
 [![Build Status](https://travis-ci.org/akinanop/mvl-solver.svg?branch=master)](https://travis-ci.org/akinanop/mvl-solver) [![Coverage Status](https://coveralls.io/repos/github/akinanop/mvl-solver/badge.svg?branch=master)](https://coveralls.io/github/akinanop/mvl-solver?branch=master)
 
-To learn what is a finite satisfiability problem, go to the [wiki page](https://github.com/akinanop/mvl-solver/wiki). If you want to try out the solver, download the archive in the current folder and follow the instructions below. Click [here](https://github.com/akinanop/mvl-solver/wiki/Benchmarks) to see some problems you could solve. 
+To learn what is a finite satisfiability problem, go to the [wiki page](https://github.com/akinanop/mvl-solver/wiki). For a concise description of the progress of the project, have a look at this [conference poster](https://github.com/akinanop/mvl-solver/blob/master/literature/Conference%20Poster.pdf). If you want to try out the solver, download the current folder and follow the instructions below. Click [here](https://github.com/akinanop/mvl-solver/wiki/Benchmarks) to see some problems you could solve.
 
-*This project supported by the Austrian Science Fund (FWF): I836-N23.*
+*This project supported by the Austrian Science Fund (FWF): I836-N23.* 
+
+
 
 
 Table of contents:
@@ -18,13 +20,13 @@ Table of contents:
 
 *Note*: This solver corrects and builds upon the unsound solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. Currently it implements [non-chronological backtracking with resolution-based learning](https://github.com/akinanop/mvl-solver/blob/master/literature/Algorithm%207.pdf) with the [watched literals](https://github.com/akinanop/mvl-solver/blob/master/literature/Watched%20literals.pdf) bookkeeping technique.
 
-Roughly, a quarter of the original code was modified. If you run ```dwdiff -s``` on the file containing the main functions, you get:
+Roughly, more than third of the original code was changed. If you run ```dwdiff -s``` on the file containing the main functions, you get:
 
 ```
 dwdiff -s /original_solver/Formula.cc /src/Formula.cc
 
-old: 2848 words  2036 71% common  328 11% deleted  484 16% changed
-new: 3102 words  2036 65% common  335 10% inserted  731 23% changed
+old: 2848 words  1608 56% common  153 5% deleted  1087 38% changed
+new: 12112 words  1608 13% common  6037 49% inserted  4467 36% changed
 
 ```
 
@@ -64,7 +66,7 @@ and is followed by the variable and then by the domain size. The variables are r
 ```d <VarName> <DomainSize>```
 
 where VarName is the variable name, and DomainSize is the size of the domain of the variable.
-There should be at most one domain life for each variable. 
+There should be at most one domain life for each variable.
 
 4. Clause line: each literal is of the form ```<VarName>=<DomainValue>``` or ```<VarName>!=<DomainValue>```. Each clause ends with a 0, which is used as an end-marker.
 
@@ -100,9 +102,10 @@ where :
   -var            :  number of variables in benchmark problem
   -clause         :  number of clauses in benchmark problem
   -verbose        : turns on the verbose mode
-  -wl             : enable watched literals algorithma
+  -wl             : enable watched literals algorithm
   -restarts       : restarts threshold, default - no restatrs; incompatible with -wl
   -time           : amount of time allowed for solver to run (in seconds)
+  -vsids          : vsids heuristics option
 
  * - required fields
 ```
@@ -189,4 +192,3 @@ where :
 
  * - required fields
 ```
-

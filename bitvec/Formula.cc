@@ -918,9 +918,6 @@ inline void Formula::watchedSatisfyLiteral ( int var, bool equals, int val ) {
 	   https://github.com/akinanop/mvl-solver/blob/master/literature/Watched%20literals.pdf
 	 */
 
-	Literal* literal = new Literal(var, val);
-	literal->EQUAL=equals;
-
 	while ( current ) {
 
 		// assign the satisfied literal from the clause to be watched1
@@ -929,6 +926,20 @@ inline void Formula::watchedSatisfyLiteral ( int var, bool equals, int val ) {
 
 		Literal* watched1 = CLAUSELIST[current->c_num]->WATCHED[0];
 		Literal* watched2 = CLAUSELIST[current->c_num]->WATCHED[1];
+
+		Literal* literal = NULL;
+
+		for ( int j = 0; j < CLAUSELIST[current->c_num] -> NumAtom; j++ ) {
+
+			Literal* temp = CLAUSELIST[current->c_num] -> ATOM_LIST[j];
+
+			if ( temp -> VAR == var &&  temp -> VAL == val &&
+					temp -> EQUAL == equals ) {
+
+				literal = CLAUSELIST[current->c_num] -> ATOM_LIST[j];
+				break;
+			}
+		}
 
 		if ( sat ( CLAUSELIST[current->c_num]->WATCHED[0] )  != 1 ) {
 
@@ -1173,7 +1184,7 @@ inline void Formula::watchedFalsifyLiteral ( int var, bool equals, int val ) {
 	if ( equals ) current = VARLIST[var] -> ATOMRECPOS[val];
 	else current = VARLIST[var] -> ATOMRECNEG[val];
 
-	while ( current &&!CONFLICT ) {
+	while ( current ) {
 
 		// CLAUSELIST[current -> c_num] -> Print();
 
@@ -1565,15 +1576,33 @@ Literal* Formula::unitLiteral ( Clause* unit ) {
 
 int Formula::watchedCheckSat () {
 
-	// returns 1 if all watched1 is sat (1), otherwise 2 -undefined (2)
+	// returns 1 if all watched1 is sat (1), 0 if some watched1 and watched2 falsified (0), otherwise 2 -undefined (2)
 
 	if (LOG) cout << "Checking satisfiability..." << endl;
 
+     int counter = 0;
+
 	for ( unsigned int  i = 0; i < CLAUSELIST.size(); i++ ) {
-		if ( sat ( CLAUSELIST[i] -> WATCHED[0] ) != 1  ) return 2;
+
+		Literal* watched1 = CLAUSELIST[i] -> WATCHED[0];
+		Literal* watched2 = CLAUSELIST[i] -> WATCHED[1];
+
+		if ( sat ( watched1 ) == 0
+				&& (  watched2  == NULL || sat ( watched2 ) == 0 ) ) {
+
+			if (LOG) cout << "Found conflict!" << endl;
+
+			CONFLICTINGCLAUSE = i;
+			CONFLICT = true;
+
+			return 0;
+
+		}   else if ( sat ( watched1 ) != 1  ) counter++ ;
+	    //  else if ( watched2 != NULL && sat ( watched2 ) == 2   ) counter++ ;
 	}
 
-	return 1;
+	if ( counter > 0 ) return 2;
+	else return 1;
 }
 
 int Formula::NewWatchedCheckSat () {
@@ -1782,20 +1811,27 @@ Literal* Formula::watchedCheckUnit () {
 void Formula::NewWatchedCheckUnit () {
 
 //	if ( LOG ) cout << "Checking for units..." << endl;
-	UNITLIST.clear();
+
 	for ( unsigned int i = 0; i < CLAUSELIST.size(); i++ ) {
 
 		Literal* watched1 = CLAUSELIST[i] -> WATCHED[0];
 		Literal* watched2 = CLAUSELIST[i] -> WATCHED[1];
-		int sat_wl1 = sat(watched1);
 
-		if ( sat_wl1 == 2 // if watched1 unassigned
+		if ( watched1 == NULL ) { ;
+		}
+		if ( sat ( watched1 ) == 2 // if watched1 unassigned
 				&& ( watched2 == NULL || sat ( watched2 ) == 0 ) ) {
 		//	cout << "Found unit, watched1" << endl;
 			UNITLIST.push_back(i);
 		}
 
-		else if ( sat_wl1 == 0 && sat ( watched2 ) == 2 ) {
+		else if ( sat ( watched1 ) == 0 && ( watched2 == NULL || sat ( watched2 ) == 0 ) ) {
+					cout << "Found conflict" << endl;
+					CONFLICTINGCLAUSE = i;
+					CONFLICT = true;
+				}
+
+		else if ( sat ( watched1 ) == 0 && sat ( watched2 ) == 2 ) {
 		//	cout << "Found unit, watched2" << endl;
 		UNITLIST.push_back(i);
 		}
@@ -1812,6 +1848,7 @@ void Formula::WatchedUnitPropagation()
 	//find the unit literal and satisfy it
 	while( ! CONFLICT && ! UNITLIST.empty() ) {
 
+		UNITS++;
 		unit_clause = UNITLIST.front();
 		UNITCLAUSE = unit_clause;
 		//if (LOG) cout<<"unit c : "<<unit_clause<<endl;
@@ -1819,14 +1856,8 @@ void Formula::WatchedUnitPropagation()
 
 		Clause* clause = CLAUSELIST[unit_clause];
 
-		if ( sat ( clause -> WATCHED[0] ) == 2 ) {
-			watchedReduceTheory(clause -> WATCHED[0], clause -> WATCHED[0] -> VAR, clause -> WATCHED[0] -> EQUAL, clause -> WATCHED[0] -> VAL);
-			UNITS++;
-		}
-		else if ( sat ( clause -> WATCHED[1] ) == 2 ) {
-			watchedReduceTheory(clause -> WATCHED[1], clause -> WATCHED[1] -> VAR, clause -> WATCHED[1] -> EQUAL, clause -> WATCHED[1] -> VAL);
-			UNITS++;
-	}
+		if ( sat ( clause -> WATCHED[0] ) == 2 ) watchedReduceTheory(clause -> WATCHED[0], clause -> WATCHED[0] -> VAR, clause -> WATCHED[0] -> EQUAL, clause -> WATCHED[0] -> VAL);
+		else if ( sat ( clause -> WATCHED[1] ) == 2 ) watchedReduceTheory(clause -> WATCHED[1], clause -> WATCHED[1] -> VAR, clause -> WATCHED[1] -> EQUAL, clause -> WATCHED[1] -> VAL);
 
 	}
 
@@ -1965,7 +1996,6 @@ void Formula::SwapPointer ( int clause_num ) {
 	Literal* watched1 = clause -> WATCHED[0];
 	Literal* watched2 = clause -> WATCHED[1];
 
-	bool unitClause = true;
 
 	if ( watched2 != NULL && sat ( watched2 )  == 2 ) {
 
@@ -1981,7 +2011,6 @@ void Formula::SwapPointer ( int clause_num ) {
 				clause -> WATCHED[0] = literal;
 
 				VARLIST[literal -> VAR] -> ATOMWATCH[literal -> VAL] = 1;
-				unitClause = false;
 				break;
 			}
 		}
@@ -1991,23 +2020,24 @@ void Formula::SwapPointer ( int clause_num ) {
 
 			Literal* literal = clause -> ATOM_LIST[i];
 
-			if ( VARLIST[literal -> VAR] -> ATOMASSIGN[literal -> VAL] == 0 && ! LitIsEqual ( literal, watched1 ) ) {
+			if ( sat ( literal ) == 2 && ! LitIsEqual ( literal, watched1 ) ) {
 				clause -> WATCHED[1] = literal;
 				VARLIST[literal -> VAR] -> ATOMWATCH[literal -> VAL] = 2;
-				unitClause = false;
-				break;
-
 			}
 		}
-	} else {
+	} /*else if ( sat ( watched2 ) == 0 && sat ( watched1 )  == 0 ) {
 		if ( LOG ) cout << "Conflict" << endl;
 		CONFLICT = true;
 		CONFLICTINGCLAUSE = clause_num;
-		unitClause = false;
-	}
-	if (unitClause) {
-		UNITLIST.push_front(clause_num);
-	}
+	} */
+
+
+		/* if ( sat ( clause -> WATCHED[0] ) == 0 && ( clause -> WATCHED[1] == NULL || sat ( clause -> WATCHED[1] ) == 0 ) ) {
+		CONFLICT = true;
+		CONFLICTINGCLAUSE = clause_num; */
+		// cout << "conflict"<< endl;
+//	}
+
 }
 
 
@@ -2501,6 +2531,7 @@ int Formula::WatchedLiterals ( int restarts ) {
 
 		if ( watchedCheckSat() == 1 )
 			return 0; //
+
 		//Check if time out
 		TIME_E = GetTime();
 	//	if ( ( TIME_E - TIME_S ) > TIMELIMIT )
@@ -2550,12 +2581,21 @@ int Formula::WatchedLiterals ( int restarts ) {
 		// If there is a unit clause, propagate
 
 
-		NewWatchedCheckUnit ();
+	 Literal* unit = watchedCheckUnit ();
 
-		if ( ! UNITLIST.empty() )
-			WatchedUnitPropagation();
 
-	 if ( ! CONFLICT ) {
+		if ( unit ) {
+		/*	if ( LOG ) {
+				cout << "Found unit!" << endl;
+				unit -> Print();
+				cout << "Unit clause: "<<endl;
+				CLAUSELIST[UNITCLAUSE] -> Print();
+			} */
+			watchedReduceTheory ( unit, unit -> VAR, unit -> EQUAL, unit -> VAL );
+
+		}
+		// otherwise choose a literal and propagate - no need for separate unit propagation
+		else if ( ! CONFLICT ) {
 			Literal * atom = NULL;
 			if ( VSIDS ) atom = chooseLiteralVSIDS();
 			else atom = lazyWatchedChooseLiteral ();
@@ -2570,6 +2610,7 @@ int Formula::WatchedLiterals ( int restarts ) {
 
 		}
 	}
+
 }
 
 
