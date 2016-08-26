@@ -37,7 +37,7 @@ new: 12112 words  1608 13% common  6037 49% inserted  4467 36% changed
 You can easily create executable on Linux using g++ compiler in the following way:
 
 ```
-cd ~/your-path-to/mvl-solver/src
+cd ~/your-path-to/mvl-solver/
 
 make
 
@@ -51,11 +51,11 @@ The solver accepts the problems in extended DIMACS CNF format, which is an exten
 
 1. Comment line: This line contains comments and can be ignored.
 
-``` c This is a comment line  ```
+    ``` c This is a comment line  ```
 
 2. Problem line: This line contains information about the problem. It begins with a p. There is exactly one such line for each problem and it should be the first non-comment line in the problem.
 
-```p mvcnf <NumVar> <NumClause>```
+    ```p mvcnf <NumVar> <NumClause>```
 
 where NumVar is the total number of variables in the problem, and NumClause is the number of
 clauses in the problem.
@@ -63,10 +63,10 @@ clauses in the problem.
 3. Domain line: This line contains information about the domain size of a variable. It begins with a d
 and is followed by the variable and then by the domain size. The variables are represented by numbers from 1 to N where N is the total number of variables in the theory, and the domain by numbers from 0 to M, where M is the size of the domain minus one.
 
-```d <VarName> <DomainSize>```
+    ```d <VarName> <DomainSize>```
 
 where VarName is the variable name, and DomainSize is the size of the domain of the variable.
-There should be at most one domain life for each variable.
+There should be at most one domain line for each variable.
 
 4. Clause line: each literal is of the form ```<VarName>=<DomainValue>``` or ```<VarName>!=<DomainValue>```. Each clause ends with a 0, which is used as an end-marker.
 
@@ -91,7 +91,7 @@ d 3 2
 
 Use the following format to run the program. The solver accepts problems in [extended DIMACS format](https://github.com/akinanop/mvl-solver/wiki/Extended-DIMACS-format). Watched algorithm is a more efficient bookkeeping technique for backtracking, see [here](https://github.com/akinanop/mvl-solver/wiki/Watched-literals).
 
-``` ./mvl-solver -solvenc -verbose -restarts <int> -var <int> -clause <int> -file <string> -time <int> ```
+``` ./mvl-solver -solvenc -verbose -restarts <int> -file <string> -time <int> ```
 
 where :
 
@@ -99,8 +99,6 @@ where :
   mvl-solver     : * name of executable
   -solvenc       : * option stating to solve the finite domain problem
   -file           : * name of the input file
-  -var            :  number of variables in benchmark problem
-  -clause         :  number of clauses in benchmark problem
   -verbose        : turns on the verbose mode
   -wl             : enable watched literals algorithm
   -restarts       : restarts threshold, default - no restatrs; incompatible with -wl
