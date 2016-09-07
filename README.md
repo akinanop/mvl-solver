@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/akinanop/mvl-solver.svg?branch=master)](https://travis-ci.org/akinanop/mvl-solver) [![Coverage Status](https://coveralls.io/repos/github/akinanop/mvl-solver/badge.svg?branch=master)](https://coveralls.io/github/akinanop/mvl-solver?branch=master)
 
-To learn what is a finite satisfiability problem, go to the [wiki page](https://github.com/akinanop/mvl-solver/wiki). For a concise description of the progress of the project, have a look at this [conference poster](https://github.com/akinanop/mvl-solver/blob/master/literature/Conference%20Poster.pdf). If you want to try out the solver, download the current folder and follow the instructions below. Click [here](https://github.com/akinanop/mvl-solver/wiki/Benchmarks) to see some problems you could solve.
+To learn what is a finite satisfiability problem, go to the [wiki page](https://github.com/akinanop/mvl-solver/wiki). For a concise description of the progress of the project, have a look at this [conference poster](https://github.com/akinanop/mvl-solver/blob/master/literature/Conference%20Poster.pdf); for a more detailed description see [ESSLLI Proceedings] (http://www2.sfs.uni-tuebingen.de/esslli-stus-2016/esslli-stus-2016-proceedings.pdf), pp.99-111. If you want to try out the solver, download the current folder and follow the instructions below. Click [here](https://github.com/akinanop/mvl-solver/wiki/Benchmarks) to see some problems you could solve.
 
 *This project supported by the Austrian Science Fund (FWF): I836-N23.* 
 
