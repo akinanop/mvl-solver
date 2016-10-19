@@ -1,0 +1,21 @@
+source_node_1 : 1 = 1
+source_node_2 : 2 = 2
+source_node_3 : 3 != 3
+source_node_4 : 6 = 6  7 = 7
+source_node_5 : 10 = 10
+source_node_6 : 11 != 11
+node_1 : 4 = 4
+node_2 : 8 != 8 9 != 9
+node_3 : 12 = 12
+node_4 : 13 = 13
+target_node_1 : 5 != 5 14 = 14 15 != 15
+parent(node_1) : source_node_1
+parent(node_1) : source_node_2
+parent(target_node_1) : node_3
+parent(target_node_1) : node_4
+parent(node_2) : source_node_3
+parent(node_2) : source_node_4
+parent(node_3) : source_node_5
+parent(node_3) : source_node_6
+parent(node_4) : node_1
+parent(node_4) : node_2
