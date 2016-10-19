@@ -1,8 +1,12 @@
 # Finite Domain Satisfiablity Solver
 
-To learn what is a finite satisfiability problem, go to the [wiki page](https://github.com/akinanop/mvl-solver/wiki). If you want to try out the solver, download the archive in the current folder and follow the instructions below. Click [here](https://github.com/akinanop/mvl-solver/blob/master/EXAMPLES.md) to see some simple problems you could solve. 
+[![Build Status](https://travis-ci.org/akinanop/mvl-solver.svg?branch=master)](https://travis-ci.org/akinanop/mvl-solver) [![Coverage Status](https://coveralls.io/repos/github/akinanop/mvl-solver/badge.svg?branch=master)](https://coveralls.io/github/akinanop/mvl-solver?branch=master)
 
-*This project supported by the Austrian Science Fund (FWF): I836-N23.*
+To learn what is a finite satisfiability problem, go to the [wiki page](https://github.com/akinanop/mvl-solver/wiki). For a concise description of the progress of the project, have a look at this [conference poster](https://github.com/akinanop/mvl-solver/blob/master/literature/Conference%20Poster.pdf); for a more detailed description see [ESSLLI Proceedings] (http://www2.sfs.uni-tuebingen.de/esslli-stus-2016/esslli-stus-2016-proceedings.pdf), pp.99-111. If you want to try out the solver, download the current folder and follow the instructions below. Click [here](https://github.com/akinanop/mvl-solver/wiki/Benchmarks) to see some problems you could solve.
+
+*This project supported by the Austrian Science Fund (FWF): I836-N23.* 
+
+
 
 
 Table of contents:
@@ -14,15 +18,15 @@ Table of contents:
       * [Solve a problem](https://github.com/akinanop/mvl-solver#finite-domain-solver-with-non-chronological-backtracking)
       * [Convert between Boolean and Finite domain problems](https://github.com/akinanop/mvl-solver#convert-boolean-to-finite-domain)
 
-*Note*: This solver corrects and builds upon the unsound solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. Currently it implements [non-chronological backtracking with resolution-based learning](https://github.com/akinanop/mvl-solver/blob/master/literature/Algorithm%207.pdf).
+*Note*: This solver corrects and builds upon the unsound solver created by Hemal A. Lal. See: http://www.d.umn.edu/~lalx0004/research/. Currently it implements [non-chronological backtracking with resolution-based learning](https://github.com/akinanop/mvl-solver/blob/master/literature/Algorithm%207.pdf) with the [watched literals](https://github.com/akinanop/mvl-solver/blob/master/literature/Watched%20literals.pdf) bookkeeping technique.
 
-Roughly, a quarter of the original code was modified. If you run ```dwdiff -s``` on the file containing the main functions, you get:
+Roughly, more than third of the original code was changed. If you run ```dwdiff -s``` on the file containing the main functions, you get:
 
 ```
 dwdiff -s /original_solver/Formula.cc /src/Formula.cc
 
-old: 2848 words  2036 71% common  328 11% deleted  484 16% changed
-new: 3102 words  2036 65% common  335 10% inserted  731 23% changed
+old: 2848 words  1608 56% common  153 5% deleted  1087 38% changed
+new: 12112 words  1608 13% common  6037 49% inserted  4467 36% changed
 
 ```
 
@@ -33,7 +37,7 @@ new: 3102 words  2036 65% common  335 10% inserted  731 23% changed
 You can easily create executable on Linux using g++ compiler in the following way:
 
 ```
-cd ~/your-path-to/mvl-solver/src
+cd ~/your-path-to/mvl-solver/
 
 make
 
@@ -47,30 +51,30 @@ The solver accepts the problems in extended DIMACS CNF format, which is an exten
 
 1. Comment line: This line contains comments and can be ignored.
 
-``` c This is a comment line  ```
+    ``` c This is a comment line  ```
 
-2. Problem line: This line contains information about the problem. It begins with a p. There is exactly one such line for each problem.
+2. Problem line: This line contains information about the problem. It begins with a p. There is exactly one such line for each problem and it should be the first non-comment line in the problem.
 
-```p cnf <NumVar> <NumClause>```
+    ```p mvcnf <NumVar> <NumClause>```
 
-where NumVar is the total number of variables in the problem, and NumClause is the number of
-clauses in the problem.
+    where NumVar is the total number of variables in the problem, and NumClause is the number of
+    clauses in the problem.
 
 3. Domain line: This line contains information about the domain size of a variable. It begins with a d
-and is followed by the variable and then by the domain size.
+and is followed by the variable and then by the domain size. The variables are represented by numbers from 1 to N where N is the total number of variables in the theory, and the domain by numbers from 0 to M, where M is the size of the domain minus one.
 
-```d <VarName> <DomainSize>```
+    ```d <VarName> <DomainSize>```
 
 where VarName is the variable name, and DomainSize is the size of the domain of the variable.
-There should be at most one domain life for each variable.
+There should be at most one domain line for each variable.
 
-4. Clause line: each literal is of the form ```<VarName>=<DomainValue>``` or ```<VarName>!=<DomainValue>```. Each clause ends with a 0, which is used as an end-marker, and the variables are represented by numbers from 1 to N where N is the total number of variables in the theory.
+4. Clause line: each literal is of the form ```<VarName>=<DomainValue>``` or ```<VarName>!=<DomainValue>```. Each clause ends with a 0, which is used as an end-marker.
 
 **EXAMPLE**
 
 ```
 c This is a pigeonhole problem with 3 pigeons and 2 holes
-p cnf 3 5
+p mvcnf 3 5
 d 1 2
 d 2 2
 d 3 2
@@ -83,6 +87,27 @@ d 3 2
 
 ```
 
+### Finite Domain Solver with Non-Chronological Backtracking
+
+Use the following format to run the program. The solver accepts problems in [extended DIMACS format](https://github.com/akinanop/mvl-solver/wiki/Extended-DIMACS-format). Watched algorithm is a more efficient bookkeeping technique for backtracking, see [here](https://github.com/akinanop/mvl-solver/wiki/Watched-literals).
+
+``` ./mvl-solver -solvenc -verbose -restarts <int> -file <string> -time <int> ```
+
+where :
+
+```
+  mvl-solver     : * name of executable
+  -solvenc       : * option stating to solve the finite domain problem
+  -file           : * name of the input file
+  -verbose        : turns on the verbose mode
+  -wl             : enable watched literals algorithm
+  -restarts       : restarts threshold, default - no restatrs; incompatible with -wl
+  -time           : amount of time allowed for solver to run (in seconds)
+  -vsids          : vsids heuristics option
+
+ * - required fields
+```
+*Example*: ``` ./mvl-solver -solvenc -file "example_SAT" ```
 
 
 ### Generating Benchmark Problem
@@ -111,27 +136,9 @@ where :
  * - required fields
 ```
 
-EXAMPLE: ``` ./Solver -genben -var 4 -clause 18 -clausesize 2 -sat 0 -domain 2 -bool 1 -file "example.txt" ```
+Example: ``` ./mvl-solver -genben -var 4 -clause 18 -clausesize 2 -sat 1 -domain 2 -bool 1 -file "example_SAT" ```
 
-### Finite Domain Solver with Non-Chronological Backtracking
 
-Use the following format to run the program. The solver accepts problems in [extended DIMACS format](https://github.com/akinanop/mvl-solver/wiki/Extended-DIMACS-format).
-
-``` ./mvl-solver -solvenc -var <int> -clause <int> -file <string> -time <int> ```
-
-where :
-
-```
-  mvl-solver     : * name of executable
-  -solvenc       : * option stating to solve the finite domain problem
-  -file           : * name of the input file
-  -var            :  number of variables in benchmark problem
-  -clause         :  number of clauses in benchmark problem
-  -time           : amount of time allowed for solver to run (in seconds)
-
- * - required fields
-```
-EXAMPLE: ``` ./mvl-solver -solvenc -file "example_SAT" ```
 
 
 ### Convert Boolean to Finite Domain
@@ -183,4 +190,3 @@ where :
 
  * - required fields
 ```
-

@@ -1,0 +1,532 @@
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/43queens 	0.1686	0.1036	 0.2722	
+
+SAT
+
+Decisions   : 37
+Units       : 1139
+Backtracks  : 0
+Entails     : 6
+Variables   : 43
+Clauses     : 89999
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/44queens 	0.1827	0.1119	 0.2946	
+
+SAT
+
+Decisions   : 39
+Units       : 1195
+Backtracks  : 0
+Entails     : 5
+Variables   : 44
+Clauses     : 96492
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/45queens 	0.1991	3.2143	 3.4134	
+
+SAT
+
+Decisions   : 616
+Units       : 7462
+Backtracks  : 500
+Entails     : 1257
+Variables   : 45
+Clauses     : 103790
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/46queens 	0.2160	0.1390	 0.3550	
+
+SAT
+
+Decisions   : 44
+Units       : 1331
+Backtracks  : 3
+Entails     : 12
+Variables   : 46
+Clauses     : 110403
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/47queens 	0.2414	0.1688	 0.4102	
+
+SAT
+
+Decisions   : 43
+Units       : 1365
+Backtracks  : 2
+Entails     : 8
+Variables   : 47
+Clauses     : 117831
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/48queens 	0.2526	0.3110	 0.5636	
+
+SAT
+
+Decisions   : 72
+Units       : 1780
+Backtracks  : 29
+Entails     : 116
+Variables   : 48
+Clauses     : 125613
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/49queens 	0.2740	4.5118	 4.7857	
+
+SAT
+
+Decisions   : 673
+Units       : 7981
+Backtracks  : 593
+Entails     : 1269
+Variables   : 49
+Clauses     : 134265
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/50queens 	0.2834	0.1814	 0.4648	
+
+SAT
+
+Decisions   : 45
+Units       : 1557
+Backtracks  : 0
+Entails     : 5
+Variables   : 50
+Clauses     : 142100
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/51queens 	0.2939	0.1943	 0.4882	
+
+SAT
+
+Decisions   : 43
+Units       : 1611
+Backtracks  : 0
+Entails     : 8
+Variables   : 51
+Clauses     : 150875
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/52queens 	0.3108	10.9650	 11.2757	
+
+SAT
+
+Decisions   : 1398
+Units       : 15613
+Backtracks  : 1254
+Entails     : 2948
+Variables   : 52
+Clauses     : 161258
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/53queens 	0.3215	2.8304	 3.1519	
+
+SAT
+
+Decisions   : 360
+Units       : 5193
+Backtracks  : 279
+Entails     : 852
+Variables   : 53
+Clauses     : 169773
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/54queens 	0.3337	1.0295	 1.3632	
+
+SAT
+
+Decisions   : 138
+Units       : 2792
+Backtracks  : 82
+Entails     : 294
+Variables   : 54
+Clauses     : 179434
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/55queens 	0.3494	1.4209	 1.7703	
+
+SAT
+
+Decisions   : 170
+Units       : 2962
+Backtracks  : 114
+Entails     : 325
+Variables   : 55
+Clauses     : 189699
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/56queens 	0.3732	166.0667	 166.4399	
+
+SAT
+
+Decisions   : 10400
+Units       : 138223
+Backtracks  : 9540
+Entails     : 20579
+Variables   : 56
+Clauses     : 209740
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/57queens 	0.3785	73.7265	 74.1050	
+
+SAT
+
+Decisions   : 5568
+Units       : 69700
+Backtracks  : 5303
+Entails     : 8768
+Variables   : 57
+Clauses     : 216507
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/58queens 	0.4207	57.8845	 58.3052	
+
+SAT
+
+Decisions   : 4777
+Units       : 58254
+Backtracks  : 4162
+Entails     : 8732
+Variables   : 58
+Clauses     : 226766
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/59queens 	0.4206	0.5734	 0.9940	
+
+SAT
+
+Decisions   : 74
+Units       : 2355
+Backtracks  : 19
+Entails     : 74
+Variables   : 59
+Clauses     : 234426
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/60queens 	0.4257	737.7277	 738.1533	
+
+SAT
+
+Decisions   : 28006
+Units       : 419351
+Backtracks  : 27106
+Entails     : 33932
+Variables   : 60
+Clauses     : 273726
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/61queens 	0.4446	103.0233	 103.4679	
+
+SAT
+
+Decisions   : 5919
+Units       : 77381
+Backtracks  : 5610
+Entails     : 10743
+Variables   : 61
+Clauses     : 264860
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/62queens 	0.5167	1.1546	 1.6714	
+
+SAT
+
+Decisions   : 108
+Units       : 2838
+Backtracks  : 50
+Entails     : 171
+Variables   : 62
+Clauses     : 272354
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/63queens 	0.4973	0.4293	 0.9266	
+
+SAT
+
+Decisions   : 57
+Units       : 2472
+Backtracks  : 0
+Entails     : 6
+Variables   : 63
+Clauses     : 285789
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/64queens 	0.5082	0.4845	 0.9927	
+
+SAT
+
+Decisions   : 62
+Units       : 2527
+Backtracks  : 0
+Entails     : 2
+Variables   : 64
+Clauses     : 299712
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/65queens 	0.5436	199.3600	 199.9037	
+
+SAT
+
+Decisions   : 8531
+Units       : 103504
+Backtracks  : 8202
+Entails     : 15390
+Variables   : 65
+Clauses     : 322282
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/66queens 	0.5601	839.0916	 839.6517	
+
+SAT
+
+Decisions   : 24595
+Units       : 362477
+Backtracks  : 23743
+Entails     : 40546
+Variables   : 66
+Clauses     : 352643
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/67queens 	0.5799	0.5710	 1.1509	
+
+SAT
+
+Decisions   : 62
+Units       : 2769
+Backtracks  : 0
+Entails     : 5
+Variables   : 67
+Clauses     : 344179
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/68queens 	0.5867	10.2333	 10.8200	
+
+SAT
+
+Decisions   : 634
+Units       : 10183
+Backtracks  : 487
+Entails     : 1095
+Variables   : 68
+Clauses     : 360411
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/69queens 	0.6081	1.4574	 2.0655	
+
+SAT
+
+Decisions   : 104
+Units       : 3402
+Backtracks  : 38
+Entails     : 156
+Variables   : 69
+Clauses     : 376180
+Restarts   : 0
+
+Verifying model ... model is CORRECT
+
+************************************************************************
+
+Finite Domain Sat Solver
+
+************************************************************************
+/home/LOGIC/nika/netshare/mvl-solver/benchmarks/Nqueens/70queens 	0.6236	6.7949	 7.4184	
+
+SAT
+
+Decisions   : 391
+Units       : 6542
+Backtracks  : 283
+Entails     : 905
+Variables   : 70
+Clauses     : 393123
+Restarts   : 0
+
+Verifying model ... model is CORRECT
