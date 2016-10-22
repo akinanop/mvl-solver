@@ -1,0 +1,17 @@
+1) name of input file: "graph_descr.txt"
+2) all nodes are introduced as follows:
+name of the node, consisting of string without spaces, + single space + ":" + single space + clauses, associated
+to the node. 
+3) for any literal, variables, "=" or "!=" and values are separated by single space. Literals in a
+clause are separated by single space.  
+4) source nodes are called  "source_node_n", where type(n) == int 
+5) target nodes are called "target_node_n", where type(n) == int
+6) nodes, which are not either target or source, are called node_n, where type(n) == int
+7) edges are introduced as follows :
+    parent(x) : y
+By condition of the exercise there are always either 0 or 2 parents for each node, and either 1 or
+0 children for each node. So y is a node with outdegree = 1, and x is a node with indegree 2.  
+8) Each line in graph_descr.txt is either introduction of a new node, or introduction of an edge. 
+9) The order of introduction are the following : all source nodes, all nodes, all target nodes, all
+edges. 
+8) Take a look at an exapmle file "graph_descr.txt"

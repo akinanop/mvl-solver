@@ -3,6 +3,43 @@
 import sys
 import os.path 
 complete_pebbler = open("complete_pebbler.txt",'a')
+vertices = []
+edges = []
+
+def ccg_1():
+  infile = open("graph_descr.txt", 'r')
+  for line in infile:
+     if line[0] == "s" or line[0] == "n" or line[0] == "t":
+        vertices.append(line[:line.index(":")])
+ccg_1()
+
+def ccg_2():
+   infile = open ("graph_descr.txt", 'r')
+   for line in infile:
+      if line[0] == "p":
+          
+          edges.append("(" + line[line.index(":")+1:line.index("\n")] + "," +
+line[line.index("(")+1:line.index(")")] + ")" )
+
+ccg_2()
+
+
+
+
+
+
+
+complete_pebbler.write("c" + " This is a graph with vertices" + str(vertices) + " and edges " +
+str(edges) + "\n" )
+complete_pebbler.write("p" + " " + str(len(vertices)) + " " + str(len(edges)) + "\n")
+
+def ccg_3():
+   for i in edges:
+       complete_pebbler.write("e" + " " + i[1:i.index(",")] + " " + i[i.index(",")+1:i.index(")")] + "\n")
+
+ccg_3()  
+
+
 
 def souf():
    infile = open("graph_descr.txt", 'r')
@@ -418,7 +455,10 @@ def caution():
 caution()
 
 
+
 import union_with_clauses       
+
+
 
 def combs_into_final():
    
@@ -429,5 +469,6 @@ def combs_into_final():
 
 
 combs_into_final()
+
 
 
