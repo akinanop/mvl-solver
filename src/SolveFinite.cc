@@ -68,7 +68,7 @@ void SolveFinite(CommandLine * cline, string type)
       }
       else  {
 
-     result = fobj->NonChronoBacktrack();
+     result = fobj->NonChronoBacktrack(0);
       }
     }
 

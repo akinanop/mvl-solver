@@ -42,9 +42,6 @@ public:
   //NumUnAss = number of unassigned literals in the clause
   //LEVEL = Level at which the clause got satisfied, default -1
   vector <Literal *> ATOM_LIST;
-  vector <Literal **> ATOM_LIST_MODIF;
-
-
 
   bool SAT;
   int NumAtom;
@@ -90,13 +87,6 @@ public:
   bool isUnit();
   //isEmpty : returns true if NumUnAss == 0
   bool isEmpty();
-
-  //hasAtom
-   bool ClauseisEqual(Clause * clause1, Clause * clause2);
-  bool LitisEqual(Literal * literal1, Literal * literal2);
-
-  void addAtomModif(Literal * atom);
- //bool HasAtom(Literal * atom);
 };
 // End of Code
 //

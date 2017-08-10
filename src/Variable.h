@@ -76,14 +76,12 @@ public:
 // current domain = domainsize - counter
   int COUNTER;
   //  array storing index (decstack size) at which literal is falsified
-  int * ATOMWATCH; // 0 if not watched, 1 if is watched1, 2 if watched2
   int * ATOMINDEX; // order at which atoms where was falsified
   int * ATOMLEVEL;
   int * ATOMASSIGN;
   int * ATOMCNTPOS; // need this for choosing a decision literal
   int * ATOMCNTNEG; // need this for choosing a decision literal
   int * VSIDSCOUNTER; // need this for choosing a decision literal with vsids
-  bool * FLAG;
   int * CLAUSEID;
   VARRECORD ** ATOMRECPOS;
   VARRECORD ** ATOMRECNEG;

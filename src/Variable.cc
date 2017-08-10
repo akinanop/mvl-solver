@@ -29,9 +29,7 @@ Variable::Variable()
 	ATOMRECNEG = NULL;
 	VSIDSCOUNTER=NULL;
 	ATOMINDEX = NULL;
-	FLAG = NULL;
 	CLAUSEID = NULL;
-	ATOMWATCH = NULL;
 }
 
 //Two argument constructor
@@ -44,13 +42,11 @@ Variable::Variable(int var, int domain)
 	LEVEL = -1;
 	COUNTER = 0;
 	ATOMINDEX = new int[DOMAINSIZE];
-	ATOMWATCH = new int[DOMAINSIZE];
 	ATOMLEVEL = new int[DOMAINSIZE];
 	ATOMASSIGN = new int[DOMAINSIZE];
 	ATOMCNTPOS = new int[DOMAINSIZE];
 	ATOMCNTNEG = new int[DOMAINSIZE];
 	VSIDSCOUNTER = new int[DOMAINSIZE];
-	FLAG = new bool[DOMAINSIZE];
 	CLAUSEID = new int[DOMAINSIZE];
 	ATOMRECPOS = new VARRECORD *[DOMAINSIZE];
 	ATOMRECNEG = new VARRECORD *[DOMAINSIZE];
@@ -61,12 +57,10 @@ Variable::Variable(int var, int domain)
 		ATOMCNTPOS[i] = 0;
 		ATOMCNTNEG[i] = 0;
 		VSIDSCOUNTER[i] = 0;
-		FLAG[i] = false;
 		CLAUSEID[i] = -10;
 		ATOMRECPOS[i] = NULL;
 		ATOMRECNEG[i] = NULL;
 		ATOMINDEX[i] = -1;
-		ATOMWATCH[i] = 0;
 	}
 }
 
@@ -77,7 +71,6 @@ Variable::~Variable()
 	delete [] ATOMASSIGN;
 	delete [] ATOMCNTPOS;
 	delete [] ATOMCNTNEG;
-	delete [] FLAG;
 	delete [] CLAUSEID;
 	delete [] VSIDSCOUNTER;
 

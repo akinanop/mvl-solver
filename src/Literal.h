@@ -35,23 +35,18 @@ public:
   //VAR = variable name
   //VAL = value assigned to variable
   //EQUAL = is the atom = (true) or ! (false)
- // INDEX = point (# of previous decisions) when literal was falsified
   int VAR;
   int VAL;
   bool EQUAL;
-  int SAT; // whether literal is sat 1, falsified 0, undef 2
-  int LEVEL;
   //Zero argument constructor
-  Literal() { VAR = -1; VAL = -1; EQUAL = false; SAT = 2; LEVEL = -10;}
+  Literal() { VAR = -1; VAL = -1; EQUAL = false;}
   //Two argument constructor
-  Literal(int vr, int vl) { VAR = vr; VAL = vl; EQUAL = true; SAT = 2; LEVEL = -10;}
+  Literal(int vr, int vl) { VAR = vr; VAL = vl; EQUAL = true; }
   //Three argument constructor
   Literal(int vr, char ch, int vl)
-  { SAT = 2;
-    VAR = vr; VAL = vl;
+  { VAR = vr; VAL = vl;
     if(ch == '=') EQUAL = true;
     else EQUAL = false;
-    LEVEL = -10;
   }
 
   //Print : function to print the atom
