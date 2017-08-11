@@ -76,7 +76,6 @@ public:
   int RESTARTS;
   bool LOG; // verbose
   bool WATCH; //watched literals option
-  bool CMV; //watched literals option
   bool VSIDS; //vsids option
 
   int WATCHED2; // temp, to fix wl algo
@@ -120,8 +119,6 @@ void WatchedUnitPropagation();
   void watchedReduceTheory(Literal * literal, int var, bool equals, int val);
 
   //satisfyClauses : reduces the theory by satisfying the clauses
-  void watchedSatisfyLiteral(Literal * literal);
-
   void satisfyClauses(int var, bool equals, int val);
   //removeLiteral : reduces the theory by removing literals from the claues
   void removeLiteral(int var, bool equals, int val);
@@ -156,21 +153,6 @@ void WatchedUnitPropagation();
   // watched literals algo from Jain:
   int WatchedLiterals( int restarts );
   Literal* lazyWatchedChooseLiteral ();
-
-  // CMV watched literals algorithm:
-
-
-  void tempSwapPointer ( int clause_num );
-  inline void tempwatchedFalsifyLiteral ( int var, bool equals, int val );
-  void tempassignWatched ( Clause* clause );
-  int tempwatchedCheckSat () ;
-  inline void tempwatchedSatisfyLiteral ( int var, bool equals, int val );
-
-  Literal* tempwatchedCheckUnit () ;
-  Literal * templazyWatchedChooseLiteral ();
-  int tempWatchedLiterals ( int restarts );
-  inline void tempwatchedSatisfyLiteral( Literal * literal );
-  bool supported ( int var, Clause * clause ) ;
 
 };
 // End of Code

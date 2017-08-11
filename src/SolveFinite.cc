@@ -52,12 +52,7 @@ void SolveFinite(CommandLine * cline, string type)
   // 2. NonChronological Backtracking with Clause learning
  else
     {
-	 if ( cline -> CMV   ) {
-
-	     	  result = fobj-> tempWatchedLiterals ( cline -> RESTARTS );
-	       }
-
-	 else if ( cline -> WATCH  ) {
+	 if ( cline -> WATCH  ) {
 
 
     	  result = fobj-> WatchedLiterals ( cline -> RESTARTS );

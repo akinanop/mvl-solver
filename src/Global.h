@@ -59,8 +59,6 @@ struct CommandLine
   int TIME;
   // Number of backtracks at which the search is started from the level 0
   int RESTARTS;
-  // For the watched literals algo from Sellmann and Jain 2010
-  bool CMV;
   //vsids option
   bool VSIDS;
 };

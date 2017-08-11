@@ -197,7 +197,6 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 	cline -> RESTARTS = 0;
 	cline->MODEL = true;
 	cline -> WATCH = false;
-	cline -> CMV = false;
 	cline -> VSIDS = false;
 	cline -> LOG = false;
 
@@ -318,8 +317,6 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 					cline->RESTARTS = atoi(argv[++current]);
 				else if(!strcmp(argv[current], "-verbose"))
 					cline->LOG = true;
-				else if(!strcmp(argv[current], "-cmv"))
-					cline -> CMV = true;
 				else if(!strcmp(argv[current], "-wl"))
 					cline -> WATCH = true;
 				else if(!strcmp(argv[current], "-vsids"))
