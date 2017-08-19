@@ -50,7 +50,6 @@ public:
   //DECISIONS = stores number of decisions done so far
   //UNITS = stores number of unit propagations done so far
   //ENTAILS = stores number of entailments done so far
-  //ENTAILLITERAL = atom to store entailed literal info
   //UNITLIST = stores info about unit clauses in theory
   //UNITCLAUSE = clause that just got unit and satisfied
   //CONFLICT = boolean variable true when conflict in theory
@@ -66,10 +65,8 @@ public:
   int DECISIONS;
   int UNITS;
   int ENTAILS;
-  Literal * ENTAILLITERAL;
   list <int> UNITLIST;
   int UNITCLAUSE;
-  int LASTFALSE; // for potent fn
   bool CONFLICT;
   int CONFLICTINGCLAUSE;
   vector <Literal *> DECSTACK;
@@ -78,7 +75,6 @@ public:
   bool WATCH; //watched literals option
   bool VSIDS; //vsids option
 
-  int WATCHED2; // temp, to fix wl algo
   //public variables and functions
   //Zero argument constructor
   Formula();
@@ -99,24 +95,23 @@ public:
   bool verifyModel();
   //checkSat : returns true if theory satisfied else false
   bool checkSat();
-  int watchedCheckSat(); // 1 sat, 0 falsif, 2 continue
+  int watchedCheckSat(); // 1 sat, 2 continue
   //checkUnit : checks for unit clauses and adds clause id to unitlist
   void checkUnit();
-  //checkEntail : checks for entailed atom if any in the theory and
-  //stores info in ENTAILLITEAL, returns true if finds one
-  bool checkEntail(int var);
+  //checkEntail : checks for entailed atom for var and returns entailed
+  //domainvalue or -1 if no atom is entailed
+  int checkEntail(int var);
   //chooseLiteral : selects next branching literal from the current theory
   Literal* chooseLiteral();
   // choose random unassigned literal
   Literal* lazyChooseLiteral();
-  void NewWatchedCheckUnit ();
-void WatchedUnitPropagation();
+  void WatchedUnitPropagation();
   Literal* chooseLiteralVSIDS();
   void SwapPointer( int clause );
 
   //reduceTheory : reduces the theory by satisfying literals/clauses
   void reduceTheory(int var, bool equals, int val);
-  void watchedReduceTheory(Literal * literal, int var, bool equals, int val);
+  void watchedReduceTheory(int var, bool equals, int val);
 
   //satisfyClauses : reduces the theory by satisfying the clauses
   void satisfyClauses(int var, bool equals, int val);
@@ -139,11 +134,13 @@ void WatchedUnitPropagation();
   //resolve: Extended resolution
   Clause * resolve(Clause * clause, Literal * literal, Clause * reason);
   //maxLit: return the literal in C that was falsified last (?)
-  vector<int> maxLit(Clause * clause);
+  int maxLit(Clause * clause);
+  //sets the watched literals of the clause to the two last falsified literals
+  void assignWatched( Clause* clause);
   //unitPropagation : does BCP in Finite Domain, returns true if no conflict
   //else returns false
-  bool LitIsEqual(Literal * literal1, Literal * literal2);
   bool unitPropagation();
+  bool LitIsEqual(Literal * literal1, Literal * literal2);
   //NonChronoBacktrack : Extended DPLL algorithm with clause learning and
   //non chronological backtracking, returns backtrack level
   int NonChronoBacktrack(int restarts);

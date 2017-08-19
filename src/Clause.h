@@ -48,10 +48,7 @@ public:
   int NumUnAss;
   int LEVEL;
   //Watched Literals:
-  vector <Literal *> WATCHED;
-  // use indexes instead lists for watched literals:
-  int W1;
-  int W2;
+  Literal* WATCHED[2];
 
   //Zero Argument Constructor
   Clause();

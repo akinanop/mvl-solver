@@ -71,10 +71,7 @@ public:
   int VAR;
   int VAL;
   int DOMAINSIZE;
-  bool SAT;
   int LEVEL;
-// current domain = domainsize - counter
-  int COUNTER;
   //  array storing index (decstack size) at which literal is falsified
   int * ATOMINDEX; // order at which atoms where was falsified
   int * ATOMLEVEL;

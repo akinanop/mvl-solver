@@ -20,9 +20,6 @@ Clause::Clause()
   NumAtom = 0;
   NumUnAss = 0;
   LEVEL = -1;
-  WATCHED.reserve(2);
-  W1 = 0;
-  W2 = -1;
 
 }
 
@@ -34,9 +31,6 @@ Clause::Clause(int size)
   NumAtom = 0;
   NumUnAss = 0;
   LEVEL = -1;
-  WATCHED.reserve(2);
-  W1 = 0;
-  W2 = -1;
 
 }
 
