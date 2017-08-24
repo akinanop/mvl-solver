@@ -48,6 +48,14 @@ public:
     if(ch == '=') EQUAL = true;
     else EQUAL = false;
   }
+  //Three argument constructor
+  Literal(int vr, bool eq, int vl)
+  { VAR = vr; VAL = vl;
+    EQUAL = eq;
+  }
+  bool operator==(const Literal& lit) const {
+    return (VAR == lit.VAR && VAL == lit.VAL && EQUAL == lit.EQUAL);
+  }
 
   //Print : function to print the atom
   void Print()

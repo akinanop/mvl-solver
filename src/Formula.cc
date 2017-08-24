@@ -72,7 +72,7 @@ void Formula::BuildFormula ( CommandLine* cline ) {
 	char ch1;
 	string str;
 	Variable * temp_var = NULL;
-	Literal * temp_atom = NULL;
+	Literal temp_atom;
 	Clause * temp_clause = NULL;
 
 	//to start variable from 1 and not from 0 we need this
@@ -143,7 +143,7 @@ void Formula::BuildFormula ( CommandLine* cline ) {
 					if(var != 0)
 					{
 						//add it to clause_list's atom_list
-						temp_atom = new Literal(var, ch, val);
+						temp_atom = Literal(var, ch, val);
 						temp_clause->addAtom(temp_atom);
 
 						//increment the index representing value so that
@@ -167,20 +167,24 @@ void Formula::BuildFormula ( CommandLine* cline ) {
 			}while(*lp);
 			CLAUSELIST.push_back(temp_clause);
 
+			if (temp_clause->NumAtom == 1) {
+				UNITLIST.push_back(clause_num);
+			}
+
 			// with watched literals option, assign first two literals in the clause to watched1 and watched2
 
 
 			if ( cline -> WATCH ) {
 
-				Literal* watched1 = temp_clause -> ATOM_LIST[0];
+				Literal watched1 = temp_clause -> ATOM_LIST[0];
 				temp_clause -> WATCHED[0] = watched1;
 
 				if ( temp_clause -> NumAtom > 1 ) {
 
-					Literal* watched2 = temp_clause -> ATOM_LIST[1];
+					Literal watched2 = temp_clause -> ATOM_LIST[1];
 					temp_clause -> WATCHED[1] = watched2;
 
-				} else temp_clause -> WATCHED[1] = NULL; // if only one literal, watched2 is null
+				}
 			}
 
 
@@ -199,7 +203,7 @@ void Formula::PrintModel()
 {
 	for(unsigned int  i=0; i<DECSTACK.size();i++)
 	{
-		if(DECSTACK[i]->EQUAL) DECSTACK[i]->Print();
+		if(DECSTACK[i].EQUAL) DECSTACK[i].Print();
 	}
 	if (LOG) cout<<endl;
 }
@@ -348,7 +352,7 @@ int Formula::checkEntail ( int var ) {
 	return -1;
 }
 
-Literal* Formula::chooseLiteral () {
+Literal Formula::chooseLiteral () {
 
 	/*  Pick a literal which is not yet satisfied, and which satisfies more clauses and removes less literals,
 	 *  use literal counts for this. Other heuristics are possible.
@@ -374,10 +378,10 @@ Literal* Formula::chooseLiteral () {
 			}
 		}
 	}
-	return ( tvar != -1 ? new Literal ( tvar, tval ) : NULL );
+	return Literal ( tvar, tval );
 }
 
-Literal* Formula::chooseLiteralVSIDS () {
+Literal Formula::chooseLiteralVSIDS () {
 
 	/*  Pick a literal which is not yet satisfied, and which has a maximal vsids counter
 	 */
@@ -403,7 +407,7 @@ Literal* Formula::chooseLiteralVSIDS () {
 			}
 		}
 	}
-	return ( tvar != -1 ? new Literal ( tvar, tval ) : NULL );
+	return Literal ( tvar, tval );
 }
 
 void Formula::reduceTheory ( int var, bool equals, int val ) {
@@ -431,7 +435,7 @@ void Formula::reduceTheory ( int var, bool equals, int val ) {
 		}
 
 		//Add literal to the Decision Stack
-		DECSTACK.push_back ( new Literal ( var, '=', val ) );
+		DECSTACK.push_back ( Literal ( var, '=', val ) );
 		VARLIST[var] -> ATOMINDEX[val] = DECSTACK.size() - 1; // to use in maxLit
 
 		//foreach domain value x from dom(v) which is not assigned assign it
@@ -474,7 +478,7 @@ void Formula::reduceTheory ( int var, bool equals, int val ) {
 		VARLIST[var] -> CLAUSEID[val] = UNITCLAUSE;
 		VARLIST[var] -> ATOMINDEX[val] = DECSTACK.size() - 1;
 
-		DECSTACK.push_back ( new Literal ( var, '!', val ) );
+		DECSTACK.push_back ( Literal ( var, '!', val ) );
 
 		// Check entailment on this variable
 
@@ -515,9 +519,9 @@ inline void Formula::satisfyClauses ( int var, bool equals, int val ) {
 
 			for ( int i = 0; i < CLAUSELIST[current -> c_num] -> NumAtom; i++ ) {
 
-				lit_var = CLAUSELIST[current -> c_num] -> ATOM_LIST[i] -> VAR;
-				lit_equal = CLAUSELIST[current -> c_num] -> ATOM_LIST[i] -> EQUAL;
-				lit_val = CLAUSELIST[current -> c_num] -> ATOM_LIST[i] -> VAL;
+				lit_var = CLAUSELIST[current -> c_num] -> ATOM_LIST[i] . VAR;
+				lit_equal = CLAUSELIST[current -> c_num] -> ATOM_LIST[i] . EQUAL;
+				lit_val = CLAUSELIST[current -> c_num] -> ATOM_LIST[i] . VAL;
 
 				if ( VARLIST[lit_var] -> ATOMASSIGN[lit_val] == 0 ) {
 
@@ -591,9 +595,9 @@ inline void Formula::unsatisfyClauses ( int var, bool equals, int val, int level
 
 			for ( int i = 0; i < CLAUSELIST[current -> c_num] -> NumAtom; i++ ) {
 
-				lit_var = CLAUSELIST[current->c_num]->ATOM_LIST[i]->VAR;
-				lit_equal = CLAUSELIST[current->c_num]->ATOM_LIST[i]->EQUAL;
-				lit_val = CLAUSELIST[current->c_num]->ATOM_LIST[i]->VAL;
+				lit_var = CLAUSELIST[current->c_num]->ATOM_LIST[i].VAR;
+				lit_equal = CLAUSELIST[current->c_num]->ATOM_LIST[i].EQUAL;
+				lit_val = CLAUSELIST[current->c_num]->ATOM_LIST[i].VAL;
 
 				if ( ( VARLIST[lit_var] -> ATOMLEVEL[lit_val] > level )
 						|| ( VARLIST[lit_var] -> ATOMASSIGN[lit_val] == 0 ) ) {
@@ -641,21 +645,21 @@ inline void Formula::addLiteral ( int var, bool equals, int val ) {
 }
 
 
-bool Formula::hasAtom ( Clause* clause, Literal* atom ) {
+bool Formula::hasAtom ( Clause* clause, Literal atom ) {
 
 	// true if clause contains the atom
 
 	for ( int i = 0; i < clause -> NumAtom; i++ ) {
 
-		Literal* c_atom = clause -> ATOM_LIST[i];
+		Literal c_atom = clause -> ATOM_LIST[i];
 
-		if ( LitIsEqual (atom, c_atom) )
+		if ( atom == c_atom )
 			return true;
 	}
 	return false;
 }
 
-Clause* Formula::resolve ( Clause* clause, Literal* literal, Clause* reason ) {
+Clause* Formula::resolve ( Clause* clause, Literal literal, Clause* reason ) {
 
 	//  Performs extended resolution on clause and reason wrt literal.
 	// (See pp.47-50 of Jain: https://github.com/akinanop/mvl-solver/blob/master/literature/Jain_thesis.pdf)
@@ -666,10 +670,10 @@ Clause* Formula::resolve ( Clause* clause, Literal* literal, Clause* reason ) {
 
 	for ( unsigned int i = 0; i < clause -> ATOM_LIST.size(); i++ ) {
 
-		Literal* c_atom = clause -> ATOM_LIST[i];
+		Literal c_atom = clause -> ATOM_LIST[i];
 
-		if ( c_atom -> VAR != literal -> VAR ) resolvent -> addAtom ( c_atom );
-		else if ( c_atom -> VAL != literal -> VAL && c_atom -> EQUAL != literal -> EQUAL ) resolvent -> addAtom ( c_atom );
+		if ( c_atom . VAR != literal . VAR ) resolvent -> addAtom ( c_atom );
+		else if ( c_atom . VAL != literal . VAL && c_atom . EQUAL != literal . EQUAL ) resolvent -> addAtom ( c_atom );
 		else if ( falsifies ( c_atom, literal ) ) resolvent -> addAtom ( c_atom );
 
 	}
@@ -677,7 +681,7 @@ Clause* Formula::resolve ( Clause* clause, Literal* literal, Clause* reason ) {
 
 	for ( unsigned int  i = 0; i < reason -> ATOM_LIST.size(); i++ ) {
 
-		Literal* r_atom = reason -> ATOM_LIST[i];
+		Literal r_atom = reason -> ATOM_LIST[i];
 
 		if ( ! falsifies ( r_atom, literal ) && ! hasAtom ( resolvent, r_atom ) ) resolvent -> addAtom ( r_atom );
 
@@ -692,12 +696,13 @@ bool Formula::potent ( Clause* clause ) {
 
 	// Check if there is exactly one atom falsified at the current level
 
+	if (clause->NumAtom == 1) {
+		return true;
+	}
+
 	if (WATCH) {
-		Literal* w2 = clause->WATCHED[1];
-		if (w2==NULL) {
-			return true;
-		}
-		if (VARLIST[w2->VAR]->ATOMLEVEL[w2->VAL] < LEVEL) {
+		Literal w2 = clause->WATCHED[1];
+		if (VARLIST[w2.VAR]->ATOMLEVEL[w2.VAL] < LEVEL) {
 			return true;
 		}
 		return false;
@@ -708,9 +713,9 @@ bool Formula::potent ( Clause* clause ) {
 
 		for ( int i = 0; i < clause -> NumAtom; i++ ) {
 
-			Literal* atom = clause -> ATOM_LIST[i];
+			Literal atom = clause -> ATOM_LIST[i];
 
-			if ( VARLIST[atom -> VAR] -> ATOMLEVEL[atom -> VAL] == LEVEL ) {
+			if ( VARLIST[atom . VAR] -> ATOMLEVEL[atom . VAL] == LEVEL ) {
 				if (flag)
 					return false;
 				flag = true;
@@ -744,8 +749,8 @@ int Formula::backtrackLevel ( Clause * learnedClause ) {
 
 	for ( int i = 0; i < csize; i++ ) {
 
-		Literal* atom = learnedClause -> ATOM_LIST[i];
-		int atom_level = VARLIST[atom -> VAR] -> ATOMLEVEL[atom -> VAL];
+		Literal atom = learnedClause -> ATOM_LIST[i];
+		int atom_level = VARLIST[atom . VAR] -> ATOMLEVEL[atom . VAL];
 
 		if ( LEVEL > atom_level && max < atom_level ) {
 			max = atom_level;
@@ -806,7 +811,7 @@ void Formula::undoTheory ( int level ) {
 	int decsize = DECSTACK.size();
 
 	for ( int i = decsize-1; i > -1; i-- ) {
-		if ( VARLIST[DECSTACK[i] -> VAR] -> ATOMASSIGN[DECSTACK[i] -> VAL] == 0 ) {
+		if ( VARLIST[DECSTACK[i] . VAR] -> ATOMASSIGN[DECSTACK[i] . VAL] == 0 ) {
 			DECSTACK.erase ( DECSTACK.begin() + i );
 		}
 	}
@@ -815,67 +820,61 @@ void Formula::undoTheory ( int level ) {
 
 // Corresponding functions for watched literals version of the algorithm:
 
-inline void Formula::watchedSatisfyLiteral ( int var, bool equals, int val ) {
+inline void Formula::watchedSatisfyLiteral ( Literal lit ) {
 
 	VARRECORD * current = NULL;
 
 	// get clauses with the literal
 
-	if ( equals ) current = VARLIST[var] -> ATOMRECPOS[val];
-	else current = VARLIST[var] -> ATOMRECNEG[val];
+	if ( lit.EQUAL ) current = VARLIST[lit.VAR] -> ATOMRECPOS[lit.VAL];
+	else current = VARLIST[lit.VAR] -> ATOMRECNEG[lit.VAL];
 
 	/*
 	 * for every clause that contains this literal update watched literals, as described here:
 	   https://github.com/akinanop/mvl-solver/blob/master/literature/Watched%20literals.pdf
 	 */
 
-	Literal* literal = new Literal(var, val);
-	literal->EQUAL=equals;
-
 	while ( current ) {
 
 		// assign the satisfied literal from the clause to be watched1
 
-		Clause* clause = CLAUSELIST[current->c_num];
-
-		Literal* watched1 = CLAUSELIST[current->c_num]->WATCHED[0];
-		Literal* watched2 = CLAUSELIST[current->c_num]->WATCHED[1];
+		Literal* watched1 = &(CLAUSELIST[current->c_num]->WATCHED[0]);
+		Literal* watched2 = &(CLAUSELIST[current->c_num]->WATCHED[1]);
 
 		if ( sat ( CLAUSELIST[current->c_num]->WATCHED[0] )  != 1 ) {
 
-			if ( CLAUSELIST[current->c_num]->WATCHED[1] != NULL && ! LitIsEqual ( CLAUSELIST[current->c_num]->WATCHED[1], literal ) ) {
+			if ( CLAUSELIST[current->c_num]->NumAtom > 1 && ! (*watched2 == lit ) ) {
 
-				CLAUSELIST[current->c_num]->WATCHED[0] = literal;
+				*watched1 = lit;
 
 			} else {
 
-				CLAUSELIST[current->c_num]->WATCHED[1] = CLAUSELIST[current->c_num]->WATCHED[0];
-				CLAUSELIST[current->c_num]->WATCHED[0] = literal;
+				*watched2 = *watched1;
+				*watched1 = lit;
 			}
 		}
 		current = current -> next;
 	}
 }
 
-inline void Formula::watchedFalsifyLiteral ( int var, bool equals, int val ) {
-
+inline void Formula::watchedFalsifyLiteral ( Literal lit ) {
 
 //	cout << "Falsifying " << var << ( equals ? "=" : "!" ) << val << endl;
 	VARRECORD* current = NULL;
 
 	// Go through all occurrences of the literal in clauses and update watched literals
 
-	if ( equals ) current = VARLIST[var] -> ATOMRECPOS[val];
-	else current = VARLIST[var] -> ATOMRECNEG[val];
+	if ( lit.EQUAL ) current = VARLIST[lit.VAR] -> ATOMRECPOS[lit.VAL];
+	else current = VARLIST[lit.VAR] -> ATOMRECNEG[lit.VAL];
 
 	while ( current &&!CONFLICT ) {
 
 		// CLAUSELIST[current -> c_num] -> Print();
 
-		Literal* watched1 = CLAUSELIST[current -> c_num] -> WATCHED[0];
-		Literal* watched2 = CLAUSELIST[current -> c_num] -> WATCHED[1];
+		Literal watched1 = CLAUSELIST[current -> c_num] -> WATCHED[0];
+		Literal watched2 = CLAUSELIST[current -> c_num] -> WATCHED[1];
 
-		if ( sat ( watched1 ) != 1 &&  watched2 != NULL  )  {
+		if ( sat ( watched1 ) != 1 )  {
 
 			/*
 			 *if the clause is not sat, and literal = watched1 or literal = watched2,
@@ -883,11 +882,11 @@ inline void Formula::watchedFalsifyLiteral ( int var, bool equals, int val ) {
 			  if available
 			 */
 
-			 if ( watched1 -> VAR == var && watched1 -> VAL == val  && watched1 -> EQUAL == equals ) {
+			 if ( watched1==lit ) {
 				SwapPointer ( current -> c_num );
 
 
-			} else if ( watched2 -> VAR == var && watched2 -> VAL == val  && watched2 -> EQUAL == equals ) {
+			} else if ( CLAUSELIST[current -> c_num]->NumAtom > 1 && watched2 ==lit ) {
 
 				SwapPointer ( current -> c_num);
 
@@ -921,7 +920,7 @@ void Formula::watchedUndoTheory ( int level ) { // FIXME  fixed ?
 	//undo the decision stack
 	int decsize = DECSTACK.size();
 	for ( int i = decsize - 1; i > -1; i-- ) {
-		if ( VARLIST[DECSTACK[i] -> VAR] -> ATOMASSIGN[DECSTACK[i] -> VAL] == 0 ) {
+		if ( VARLIST[DECSTACK[i] . VAR] -> ATOMASSIGN[DECSTACK[i] . VAL] == 0 ) {
 			DECSTACK.erase ( DECSTACK.begin() + i );
 		}
 	}
@@ -929,7 +928,7 @@ void Formula::watchedUndoTheory ( int level ) { // FIXME  fixed ?
 
 //--------------- Resolution-based clause learning ---------------------//
 
-Clause* Formula::analyzeConflict ( Clause * clause ) {
+Clause* Formula::analyzeConflict ( Clause * clause, bool freeClauseAfterUse ) {
 
 	/*
     First check if there is exactly one atom falsified at the current level.
@@ -956,11 +955,11 @@ Clause* Formula::analyzeConflict ( Clause * clause ) {
 		int cid = CLAUSELIST.size()-1;
 		// update global records for each atom in the clause
 		for ( int i = 0; i < clause -> NumAtom; i++ ) {
-			Literal* atom = clause->ATOM_LIST[i];
-			VARLIST[atom->VAR] -> addRecord( cid, atom->VAL, atom->EQUAL);
+			Literal atom = clause->ATOM_LIST[i];
+			VARLIST[atom.VAR] -> addRecord( cid, atom.VAL, atom.EQUAL);
 
 			if ( VSIDS )
-				VARLIST[atom->VAR]->VSIDSCOUNTER[atom->VAL]++;
+				VARLIST[atom.VAR]->VSIDSCOUNTER[atom.VAL]++;
 		}
 
 		if ( VSIDS ) {
@@ -977,44 +976,53 @@ Clause* Formula::analyzeConflict ( Clause * clause ) {
 
 	// Resolve the clause and its latest falsified literal's reason
 	// Latest falsified literal in the clause:
-	Literal* lastFalse;
+	Literal lastFalse;
 	if (WATCH)
 		lastFalse = clause->WATCHED[0];
 	else
 		lastFalse = clause -> ATOM_LIST[maxLit ( clause )];
-	int var = lastFalse -> VAR;
-	int val = lastFalse -> VAL;
+	int var = lastFalse . VAR;
+	int val = lastFalse . VAL;
 
 
 	if ( LOG ) {
 		cout << "Latest falsified literal: " << endl;
-		lastFalse -> Print ();
+		lastFalse . Print ();
 		cout << "It's reason: " << endl;
 		cout << VARLIST[var]-> CLAUSEID[val] << endl;
 	}
 
 	// Generate reasons for decision and entail reasons:
-	Clause* reason = new Clause ();
+	Clause* reason;
 
 	if ( VARLIST[var]-> CLAUSEID[val] == -1 ) {
 		// Take literal in the decstack that falsified lastFalse
-		Literal * falsifier = DECSTACK[VARLIST[var]->ATOMINDEX[val]];
+		Literal falsifier = DECSTACK[VARLIST[var]->ATOMINDEX[val]];
 
 		// Generate the reason clause:
-		reason -> addAtom ( new Literal ( falsifier -> VAR, '=', falsifier -> VAL ) );
-		reason -> addAtom ( new Literal ( falsifier -> VAR, '!', falsifier -> VAL ) );
+		reason = new Clause(2);
+		reason -> addAtom ( Literal ( falsifier . VAR, '=', falsifier . VAL ) );
+		reason -> addAtom ( Literal ( falsifier . VAR, '!', falsifier . VAL ) );
 
 	} else if ( VARLIST[var] -> CLAUSEID[val] == -2 ) {
 
+		reason = new Clause(VARLIST[var] -> DOMAINSIZE);
 		for ( int i = 0; i < VARLIST[var] -> DOMAINSIZE; i++ ) {
-			reason -> addAtom ( new Literal ( var, '=', i ) );
+			reason -> addAtom ( Literal ( var, '=', i ) );
 		}
 	} else {
-		reason = CLAUSELIST[VARLIST[var] -> CLAUSEID[val]];
+		reason = (CLAUSELIST[VARLIST[var] -> CLAUSEID[val]]);
 	}
 
 	// resolve:
 	Clause * resolvent = resolve ( clause, lastFalse, reason );
+
+	if (freeClauseAfterUse) {
+		delete clause;
+	}
+	if (VARLIST[var] -> CLAUSEID[val] <0) {
+		delete reason;
+	}
 
 	//cout << "Clause size: " << resolvent -> NumAtom << endl;
 
@@ -1022,7 +1030,7 @@ Clause* Formula::analyzeConflict ( Clause * clause ) {
 		cout << "Resolvent:" << endl;
 		resolvent -> Print();
 	}
-	return analyzeConflict ( resolvent );
+	return analyzeConflict ( resolvent, true );
 }
 
 
@@ -1036,9 +1044,9 @@ int Formula::maxLit ( Clause* clause ) {
 
 	for ( int i = 0; i < clause -> NumAtom; i++ ) {
 
-		Literal * atom = clause -> ATOM_LIST[i];
+		Literal atom = clause -> ATOM_LIST[i];
 
-		decision_index = VARLIST[atom -> VAR] -> ATOMINDEX[atom -> VAL];
+		decision_index = VARLIST[atom . VAR] -> ATOMINDEX[atom . VAL];
 
 		if ( max_decision_index < decision_index ) {
 
@@ -1055,17 +1063,17 @@ int Formula::maxLit ( Clause* clause ) {
 
 void Formula::assignWatched( Clause* clause) {
 
-	Literal* w1 = NULL;
-	Literal* w2 = NULL;
+	Literal w1;
+	Literal w2;
 	int decision_index = -1;
 	int max_decision_index = -1;
 	int second_max_decision_index = -1;
 
 	for ( int i = 0; i < clause -> NumAtom; i++ ) {
 
-		Literal * atom = clause -> ATOM_LIST[i];
+		Literal atom = clause -> ATOM_LIST[i];
 
-		decision_index = VARLIST[atom -> VAR] -> ATOMINDEX[atom -> VAL];
+		decision_index = VARLIST[atom . VAR] -> ATOMINDEX[atom . VAL];
 
 		if ( max_decision_index < decision_index ) {
 			second_max_decision_index = max_decision_index;
@@ -1081,13 +1089,13 @@ void Formula::assignWatched( Clause* clause) {
 	clause->WATCHED[1] = w2;
 }
 
-bool Formula::falsifies ( Literal* literal, Literal* decision ) {
+bool Formula::falsifies ( Literal literal, Literal decision ) {
 
 	// true if literal falsifies decision
 
-	if ( literal -> VAR != decision -> VAR ) return false;
-	else if ( literal -> VAL != decision -> VAL && literal -> EQUAL != decision -> EQUAL ) return false;
-	else if ( literal -> VAL == decision -> VAL && literal -> EQUAL == decision -> EQUAL ) return false;
+	if ( literal . VAR != decision . VAR ) return false;
+	else if ( literal . VAL != decision . VAL && literal . EQUAL != decision . EQUAL ) return false;
+	else if ( literal . VAL == decision . VAL && literal . EQUAL == decision . EQUAL ) return false;
 
 	else return true;
 }
@@ -1107,20 +1115,18 @@ int Formula::watchedCheckSat () {
 	return 1;
 }
 
-int Formula::sat ( Literal* literal ) {
+int Formula::sat ( Literal literal ) {
 
 	// computes literal -> SAT
 	// literal -> SAT == 2 unassigned, == 1 satisfied, == 0 falsified
 
-	int var = literal -> VAR;
-	int val = literal -> VAL;
 	int equals = 0;
 
-	if ( literal -> EQUAL) equals = 1;
+	if ( literal . EQUAL) equals = 1;
 	else equals = -1;
 
-	if ( VARLIST[var] -> ATOMASSIGN[val] == equals ) return 1; // literal is satisfied
-	else if ( VARLIST[var] -> ATOMASSIGN[val] == 0 ) return 2; // unassigned
+	if ( VARLIST[literal . VAR] -> ATOMASSIGN[literal . VAL] == equals ) return 1; // literal is satisfied
+	else if ( VARLIST[literal . VAR] -> ATOMASSIGN[literal . VAL] == 0 ) return 2; // unassigned
 	else return 0; //  literal is falsified
 
 }
@@ -1140,12 +1146,16 @@ void Formula::WatchedUnitPropagation()
 
 		Clause* clause = CLAUSELIST[unit_clause];
 
-		if ( sat ( clause -> WATCHED[0] ) == 2 ) {
-			watchedReduceTheory(clause -> WATCHED[0] -> VAR, clause -> WATCHED[0] -> EQUAL, clause -> WATCHED[0] -> VAL);
+		if (clause->NumAtom == 1) {
+			watchedReduceTheory(clause -> ATOM_LIST[0]);
+			UNITS++;
+		}
+		else if ( sat ( clause -> WATCHED[0] ) == 2 ) {
+			watchedReduceTheory(clause -> WATCHED[0]);
 			UNITS++;
 		}
 		else if ( sat ( clause -> WATCHED[1] ) == 2 ) {
-			watchedReduceTheory(clause -> WATCHED[1] -> VAR, clause -> WATCHED[1] -> EQUAL, clause -> WATCHED[1] -> VAL);
+			watchedReduceTheory(clause -> WATCHED[1]);
 			UNITS++;
 	}
 
@@ -1155,23 +1165,23 @@ void Formula::WatchedUnitPropagation()
 
 }
 
-Literal * Formula::lazyWatchedChooseLiteral () {
+Literal Formula::lazyWatchedChooseLiteral () {
 
 	// Choose any unassigned first watched literal
 
 
 	for ( unsigned int  i = 0; i < CLAUSELIST.size(); i++ ) {
 
-		Literal* watched1 = CLAUSELIST[i] -> WATCHED[0];
+		Literal watched1 = CLAUSELIST[i] -> WATCHED[0];
 
 		if ( sat ( watched1 ) == 2) return  watched1;
 	}
-	return NULL;
+	return Literal();
 }
 
 
 
-Literal* Formula::lazyChooseLiteral() {
+Literal Formula::lazyChooseLiteral() {
 
 	for ( unsigned int  i = 0; i < CLAUSELIST.size(); i++ ) {
 
@@ -1179,36 +1189,33 @@ Literal* Formula::lazyChooseLiteral() {
 
 		for ( int j = 0 ; ! clause -> SAT && j < clause -> ATOM_LIST.size(); j++ ) {
 
-			Literal* literal = clause -> ATOM_LIST[j];
+			Literal literal = clause -> ATOM_LIST[j];
 
 			if ( sat ( literal ) == 2 ) return literal;
 
 		}
 	}
-
-	return NULL;
-
-
+	return Literal();
 }
 
 void Formula::SwapPointer ( int clause_num ) {
 
     Clause* clause = CLAUSELIST[clause_num];
 
-	Literal* watched1 = clause -> WATCHED[0];
-	Literal* watched2 = clause -> WATCHED[1];
+	Literal watched1 = clause -> WATCHED[0];
+	Literal watched2 = clause -> WATCHED[1];
 
 	bool unitClause = true;
 
-	if ( watched2 != NULL && sat ( watched2 )  == 2 ) {
+	if ( clause->NumAtom > 1 && sat ( watched2 )  == 2 ) {
 
 		// if watched2 unassigned, watched1 falsified
 
 		for ( int i = 0; i < clause -> NumAtom; i++ ) {
 
-			Literal* literal = clause -> ATOM_LIST[i];
+			Literal literal = clause -> ATOM_LIST[i];
 
-			if (  VARLIST[literal -> VAR] -> ATOMASSIGN[literal -> VAL] == 0 && ! LitIsEqual ( literal, watched2 ) ) {
+			if (  VARLIST[literal . VAR] -> ATOMASSIGN[literal . VAL] == 0 && !  (literal == watched2)  ) {
 
 
 				clause -> WATCHED[0] = literal;
@@ -1217,13 +1224,13 @@ void Formula::SwapPointer ( int clause_num ) {
 				break;
 			}
 		}
-	} else if ( watched2 != NULL && sat ( watched1 )  == 2  ) {
+	} else if ( clause->NumAtom > 1 && sat ( watched1 )  == 2  ) {
 
 		for ( int i = 0; i < clause -> NumAtom; i++ ) {
 
-			Literal* literal = clause -> ATOM_LIST[i];
+			Literal literal = clause -> ATOM_LIST[i];
 
-			if ( VARLIST[literal -> VAR] -> ATOMASSIGN[literal -> VAL] == 0 && ! LitIsEqual ( literal, watched1 ) ) {
+			if ( VARLIST[literal . VAR] -> ATOMASSIGN[literal . VAL] == 0 && !  (literal == watched1) ) {
 				clause -> WATCHED[1] = literal;
 				unitClause = false;
 				break;
@@ -1241,28 +1248,19 @@ void Formula::SwapPointer ( int clause_num ) {
 	}
 }
 
+void Formula::watchedReduceTheory ( Literal lit ) {
 
-bool Formula::LitIsEqual ( Literal* literal1, Literal * literal2 ) {
+	if ( lit.EQUAL ) {
 
-	if ( literal1 -> VAR == literal2 -> VAR && literal1 -> VAL == literal2 -> VAL
-			&& literal1 -> EQUAL == literal2 -> EQUAL ) return true;
+		if ( LOG ) cout << lit.VAR << "=" << lit.VAL << " at level " << LEVEL << endl;
 
-	else return false;
-}
-
-void Formula::watchedReduceTheory ( int var, bool equals, int val ) {
-
-	if ( equals ) {
-
-		if ( LOG ) cout << var << "=" << val << " at level " << LEVEL << endl;
-
-		VARLIST[var] -> ATOMASSIGN[val] = 1;
-		VARLIST[var] -> ATOMLEVEL[val] = LEVEL;
-		VARLIST[var] -> VAL = val;
-		VARLIST[var] -> LEVEL = LEVEL; // value assigned a positive value at this level
-		VARLIST[var] -> CLAUSEID[val] = UNITCLAUSE; 		// Set the reason for the literal
-		DECSTACK.push_back(new Literal(var, equals, val)); 		// Add literal to the decision stack
-		VARLIST[var] -> ATOMINDEX[val] = DECSTACK.size() - 1; // to use in maxLit
+		VARLIST[lit.VAR] -> ATOMASSIGN[lit.VAL] = 1;
+		VARLIST[lit.VAR] -> ATOMLEVEL[lit.VAL] = LEVEL;
+		VARLIST[lit.VAR] -> VAL = lit.VAL;
+		VARLIST[lit.VAR] -> LEVEL = LEVEL; // value assigned a positive value at this level
+		VARLIST[lit.VAR] -> CLAUSEID[lit.VAL] = UNITCLAUSE; 		// Set the reason for the literal
+		DECSTACK.push_back(Literal(lit.VAR, lit.EQUAL, lit.VAL)); 		// Add literal to the decision stack
+		VARLIST[lit.VAR] -> ATOMINDEX[lit.VAL] = DECSTACK.size() - 1; // to use in maxLit
 
 		if ( LOG ) {
 			cout << "The reason for the literal: " << endl;
@@ -1271,68 +1269,68 @@ void Formula::watchedReduceTheory ( int var, bool equals, int val ) {
 		}
 
 		// update watched literals:
-		watchedSatisfyLiteral ( var, equals, val ); // set the literal to watched1 - then checkSat == 1
-		watchedFalsifyLiteral ( var, ! equals, val ); // if one of the watched literals falsified, swap watched literals
+		watchedSatisfyLiteral ( lit ); // set the literal to watched1 - then checkSat == 1
+		watchedFalsifyLiteral ( Literal(lit.VAR, ! lit.EQUAL, lit.VAL) ); // if one of the watched literals falsified, swap watched literals
 
 
-		//for each different domain value x from dom(var) which is not assigned (0) assign it
+		//for each different domain value x from dom(lit.VAR) which is not assigned (0) assign it
 
-		for ( int i = 0; i < val && ! CONFLICT; i++ ) {
+		for ( int i = 0; i < lit.VAL && ! CONFLICT; i++ ) {
 
-			if ( VARLIST[var] -> ATOMASSIGN[i] == 0 ) {
+			if ( VARLIST[lit.VAR] -> ATOMASSIGN[i] == 0 ) {
 
-				VARLIST[var]->ATOMASSIGN[i] = -1;
-				VARLIST[var]->ATOMLEVEL[i] = LEVEL;
+				VARLIST[lit.VAR]->ATOMASSIGN[i] = -1;
+				VARLIST[lit.VAR]->ATOMLEVEL[i] = LEVEL;
 
 				// Set the same reason:
-				VARLIST[var]->CLAUSEID[i] = UNITCLAUSE;
-				VARLIST[var] -> ATOMINDEX[i] = DECSTACK.size() - 1; // to use in maxLit
+				VARLIST[lit.VAR]->CLAUSEID[i] = UNITCLAUSE;
+				VARLIST[lit.VAR] -> ATOMINDEX[i] = DECSTACK.size() - 1; // to use in maxLit
 
 
-				watchedSatisfyLiteral ( var, !equals, i ); // set the literal to watched1 - then checkSat == 1
-				watchedFalsifyLiteral ( var, equals, i ); // if one of the watched literals falsified, swap watched literals
+				watchedSatisfyLiteral ( Literal(lit.VAR, !lit.EQUAL, i) ); // set the literal to watched1 - then checkSat == 1
+				watchedFalsifyLiteral ( Literal(lit.VAR, lit.EQUAL, i) ); // if one of the watched literals falsified, swap watched literals
 
 			}
 		}
 
-		for ( int i = val + 1; i < VARLIST[var] -> DOMAINSIZE && ! CONFLICT; i++ ) {
+		for ( int i = lit.VAL + 1; i < VARLIST[lit.VAR] -> DOMAINSIZE && ! CONFLICT; i++ ) {
 
-			if ( VARLIST[var] -> ATOMASSIGN[i] == 0 ) {
+			if ( VARLIST[lit.VAR] -> ATOMASSIGN[i] == 0 ) {
 
-				VARLIST[var]->ATOMASSIGN[i] = -1;
-				VARLIST[var]->ATOMLEVEL[i] = LEVEL;
+				VARLIST[lit.VAR]->ATOMASSIGN[i] = -1;
+				VARLIST[lit.VAR]->ATOMLEVEL[i] = LEVEL;
 
-				VARLIST[var] -> CLAUSEID[i] = UNITCLAUSE;
-				VARLIST[var] -> ATOMINDEX[i] = DECSTACK.size() - 1; // to use in maxLit
+				VARLIST[lit.VAR] -> CLAUSEID[i] = UNITCLAUSE;
+				VARLIST[lit.VAR] -> ATOMINDEX[i] = DECSTACK.size() - 1; // to use in maxLit
 
-				watchedSatisfyLiteral ( var, !equals, i ); // set the literal to watched1 - then checkSat == 1
-				watchedFalsifyLiteral ( var, equals, i ); // if one of the watched literals falsified, swap watched literals
+				watchedSatisfyLiteral ( Literal(lit.VAR, !lit.EQUAL, i) ); // set the literal to watched1 - then checkSat == 1
+				watchedFalsifyLiteral ( Literal(lit.VAR, lit.EQUAL, i) ); // if one of the watched literals falsified, swap watched literals
 			}
 		}
 	} else {
 
-		if ( LOG ) cout << var << "!" << val << " at level " << LEVEL << endl;
+		if ( LOG ) cout << lit.VAR << "!" << lit.VAL << " at level " << LEVEL << endl;
 
-		VARLIST[var] -> ATOMASSIGN[val] = -1;
-		VARLIST[var] -> ATOMLEVEL[val] = LEVEL;
+		VARLIST[lit.VAR] -> ATOMASSIGN[lit.VAL] = -1;
+		VARLIST[lit.VAR] -> ATOMLEVEL[lit.VAL] = LEVEL;
 		// Set the reason:
-		VARLIST[var] -> CLAUSEID[val] = UNITCLAUSE;
+		VARLIST[lit.VAR] -> CLAUSEID[lit.VAL] = UNITCLAUSE;
 		//Add literal to decision stack:
-		DECSTACK.push_back ( new Literal(var, equals, val) );
-		VARLIST[var] -> ATOMINDEX[val] = DECSTACK.size() - 1; // to use in maxLit
+		DECSTACK.push_back ( Literal(lit.VAR, lit.EQUAL, lit.VAL) );
+		VARLIST[lit.VAR] -> ATOMINDEX[lit.VAL] = DECSTACK.size() - 1; // to use in maxLit
 
-		watchedSatisfyLiteral ( var, equals, val );
-		watchedFalsifyLiteral ( var, ! equals, val );
+		watchedSatisfyLiteral ( lit );
+		watchedFalsifyLiteral ( Literal(lit.VAR, ! lit.EQUAL, lit.VAL) );
 
 
 		//check Entailment on this variable
-		int entailVal = checkEntail ( var );
+		int entailVal = checkEntail ( lit.VAR );
 		if ( entailVal != -1 ) {
-			if ( LOG ) cout << "Entailment... " << var << "=" << entailVal << endl;
+			if ( LOG ) cout << "Entailment... " << lit.VAR << "=" << entailVal << endl;
 			ENTAILS++;
 			// Set the reason:
 			UNITCLAUSE = -2;
-			watchedReduceTheory ( var, true, entailVal );
+			watchedReduceTheory ( Literal(lit.VAR, true, entailVal) );
 		}
 
 	}
@@ -1370,9 +1368,9 @@ int Formula::WatchedLiterals ( int restarts ) {
 
 			if ( LEVEL == 0 ) { cout << "UNSAT" << endl; return 2; }
 
-			Clause* learned = analyzeConflict ( CLAUSELIST[CONFLICTINGCLAUSE] );
-			if (learned->WATCHED[1] != NULL)
-				LEVEL = VARLIST[learned->WATCHED[1]->VAR]->ATOMLEVEL[learned->WATCHED[1]->VAL];
+			Clause* learned = analyzeConflict ( CLAUSELIST[CONFLICTINGCLAUSE], false );
+			if (learned->NumAtom > 1)
+				LEVEL = VARLIST[learned->WATCHED[1].VAR]->ATOMLEVEL[learned->WATCHED[1].VAL];
 			else
 				--LEVEL;
 
@@ -1406,16 +1404,16 @@ int Formula::WatchedLiterals ( int restarts ) {
 			WatchedUnitPropagation();
 
 	 if ( ! CONFLICT ) {
-			Literal * atom = NULL;
+			Literal atom;
 			if ( VSIDS ) atom = chooseLiteralVSIDS();
 			else atom = lazyWatchedChooseLiteral ();
-			if ( atom ) {
+			if ( atom.VAR != -1 ) {
 				DECISIONS++;
 				LEVEL++;
 				// set REASON for subsequent falsified atoms
 				UNITCLAUSE = -1;
-				if ( LOG ) cout << "Decision: " << atom -> VAR << ( atom -> EQUAL ? '=' : '!' ) << atom -> VAL << endl;
-				watchedReduceTheory ( atom -> VAR, atom -> EQUAL, atom -> VAL );
+				if ( LOG ) cout << "Decision: " << atom . VAR << ( atom . EQUAL ? '=' : '!' ) << atom . VAL << endl;
+				watchedReduceTheory ( atom );
 			}
 
 		}
@@ -1452,7 +1450,7 @@ int Formula::NonChronoBacktrack ( int restarts ) {
 
 			if ( LEVEL == 0 ) return 2;
 
-			LEVEL = backtrackLevel ( analyzeConflict ( CLAUSELIST[CONFLICTINGCLAUSE]) );
+			LEVEL = backtrackLevel ( analyzeConflict ( CLAUSELIST[CONFLICTINGCLAUSE], false) );
 
 			if ( LOG ) cout << "We are backtracking to the level: " << LEVEL << endl;
 
@@ -1479,21 +1477,21 @@ int Formula::NonChronoBacktrack ( int restarts ) {
 
 		// otherwise choose a literal and propagate
 		if (!CONFLICT) {
-			Literal* atom;
+			Literal atom;
 			if (VSIDS)
 				atom = chooseLiteralVSIDS();
 			else
 				atom = chooseLiteral();
 
-			if ( atom ) {
+			if ( atom.VAR != -1 ) {
 
-				if (LOG) cout << "Decision: " << atom -> VAR << ( atom -> EQUAL ? '=' : '!' ) << atom -> VAL << endl;
+				if (LOG) cout << "Decision: " << atom . VAR << ( atom . EQUAL ? '=' : '!' ) << atom . VAL << endl;
 
 				DECISIONS++;
 				LEVEL++;
 				UNITCLAUSE = -1; // REASON for subsequent falsified atoms
 
-				reduceTheory ( atom -> VAR, atom -> EQUAL, atom -> VAL);
+				reduceTheory ( atom . VAR, atom . EQUAL, atom . VAL);
 			}
 		}
 	}
@@ -1544,18 +1542,18 @@ int Formula::ChronoBacktrack(int level)
 
 	//since all is fine, now need to choose a literal
 	//to branch on
-	Literal * atom = NULL;
+	Literal atom;
 
 	if (VSIDS)
 		atom = chooseLiteralVSIDS();
 	else
 		atom = lazyChooseLiteral();
 
-	if(atom)
+	if(atom.VAR != -1)
 	{
 		DECISIONS++;
 		LEVEL++;
-		reduceTheory(atom->VAR, atom->EQUAL, atom->VAL);
+		reduceTheory(atom.VAR, atom.EQUAL, atom.VAL);
 		int result = ChronoBacktrack(LEVEL);
 		if(result == 0)
 			return 0;
@@ -1563,7 +1561,7 @@ int Formula::ChronoBacktrack(int level)
 			return 1;
 		else if((result == 2) && (LEVEL != 0))
 		{
-			reduceTheory(atom->VAR, !atom->EQUAL, atom->VAL);
+			reduceTheory(atom.VAR, !atom.EQUAL, atom.VAL);
 			return ChronoBacktrack(LEVEL);
 		}
 		else
@@ -1597,9 +1595,9 @@ bool Formula::unitPropagation()
 		{
 			for(int i=0; i<CLAUSELIST[unit_clause]->NumAtom && !flag; i++)
 			{
-				lit_var = CLAUSELIST[unit_clause]->ATOM_LIST[i]->VAR;
-				lit_equal = CLAUSELIST[unit_clause]->ATOM_LIST[i]->EQUAL;
-				lit_val = CLAUSELIST[unit_clause]->ATOM_LIST[i]->VAL;
+				lit_var = CLAUSELIST[unit_clause]->ATOM_LIST[i].VAR;
+				lit_equal = CLAUSELIST[unit_clause]->ATOM_LIST[i].EQUAL;
+				lit_val = CLAUSELIST[unit_clause]->ATOM_LIST[i].VAL;
 				if(VARLIST[lit_var]->ATOMASSIGN[lit_val] == 0)
 				{
 					flag = true;

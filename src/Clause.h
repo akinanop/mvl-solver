@@ -41,14 +41,14 @@ public:
   //NumAtom = number of atoms in the clause
   //NumUnAss = number of unassigned literals in the clause
   //LEVEL = Level at which the clause got satisfied, default -1
-  vector <Literal *> ATOM_LIST;
+  vector <Literal> ATOM_LIST;
 
   bool SAT;
   int NumAtom;
   int NumUnAss;
   int LEVEL;
   //Watched Literals:
-  Literal* WATCHED[2];
+  Literal WATCHED[2];
 
   //Zero Argument Constructor
   Clause();
@@ -57,13 +57,13 @@ public:
   //Destructor
   ~Clause();
   //AddAtom : adds an literal to clause
-  void addAtom(Literal * atom);
+  void addAtom(Literal atom);
   //Print : function to print the clause
   void Print();
 
   //Accessor functions
   //getAtom : returns atom at index
-  Literal * getAtom(int index);
+  Literal getAtom(int index);
   //getSAT : returns the SAT value
   bool getSAT();
   //setSAT : sets SAT value

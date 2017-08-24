@@ -69,7 +69,7 @@ public:
   int UNITCLAUSE;
   bool CONFLICT;
   int CONFLICTINGCLAUSE;
-  vector <Literal *> DECSTACK;
+  vector <Literal> DECSTACK;
   int RESTARTS;
   bool LOG; // verbose
   bool WATCH; //watched literals option
@@ -81,9 +81,9 @@ public:
   //One argument constructor
   Formula (CommandLine * cline);
   //BuildFunction : builds the theory using the input cnf file
-  bool falsifies ( Literal* literal1, Literal* literal2 );
-  int sat (Literal* literal);
-  bool hasAtom(Clause * clause, Literal * atom);
+  bool falsifies ( Literal literal1, Literal literal2 );
+  int sat (Literal literal);
+  bool hasAtom(Clause * clause, Literal atom);
   void watchedUndoTheory ( int level );
   void BuildFormula(CommandLine * cline);
   //PrintInfo : prints the backtrack, conflict, unit, entail, pure info
@@ -102,23 +102,23 @@ public:
   //domainvalue or -1 if no atom is entailed
   int checkEntail(int var);
   //chooseLiteral : selects next branching literal from the current theory
-  Literal* chooseLiteral();
+  Literal chooseLiteral();
   // choose random unassigned literal
-  Literal* lazyChooseLiteral();
+  Literal lazyChooseLiteral();
   void WatchedUnitPropagation();
-  Literal* chooseLiteralVSIDS();
+  Literal chooseLiteralVSIDS();
   void SwapPointer( int clause );
 
   //reduceTheory : reduces the theory by satisfying literals/clauses
   void reduceTheory(int var, bool equals, int val);
-  void watchedReduceTheory(int var, bool equals, int val);
+  void watchedReduceTheory(Literal lit);
 
   //satisfyClauses : reduces the theory by satisfying the clauses
   void satisfyClauses(int var, bool equals, int val);
   //removeLiteral : reduces the theory by removing literals from the claues
   void removeLiteral(int var, bool equals, int val);
-  void watchedFalsifyLiteral(int var, bool equals, int val);
-  void watchedSatisfyLiteral(int var, bool equals, int val);
+  void watchedFalsifyLiteral(Literal lit);
+  void watchedSatisfyLiteral(Literal lit);
   //undoTheory : brings the theory back at the level stage
   void undoTheory(int level);
   //unsatisfyClauses : brings back the clauses that were satisfied before
@@ -128,11 +128,11 @@ public:
   void addLiteral(int var, bool equals, int val);
   //analyzeConflict : finds the conflict, learns and creates a conflict clause,
   //add's the clause to theory and returns a backtrack level
-  Clause * analyzeConflict(Clause * clause);
+  Clause * analyzeConflict(Clause * clause, bool freeClauseAfterUse);
   bool potent(Clause * clause);
   int backtrackLevel(Clause * clause);
   //resolve: Extended resolution
-  Clause * resolve(Clause * clause, Literal * literal, Clause * reason);
+  Clause * resolve(Clause * clause, Literal literal, Clause * reason);
   //maxLit: return the literal in C that was falsified last (?)
   int maxLit(Clause * clause);
   //sets the watched literals of the clause to the two last falsified literals
@@ -140,7 +140,6 @@ public:
   //unitPropagation : does BCP in Finite Domain, returns true if no conflict
   //else returns false
   bool unitPropagation();
-  bool LitIsEqual(Literal * literal1, Literal * literal2);
   //NonChronoBacktrack : Extended DPLL algorithm with clause learning and
   //non chronological backtracking, returns backtrack level
   int NonChronoBacktrack(int restarts);
@@ -149,7 +148,7 @@ public:
   int ChronoBacktrack(int level);
   // watched literals algo from Jain:
   int WatchedLiterals( int restarts );
-  Literal* lazyWatchedChooseLiteral ();
+  Literal lazyWatchedChooseLiteral ();
 
 };
 // End of Code

@@ -41,7 +41,7 @@ Clause::~Clause()
 }
 
 //AddAtom
-void Clause::addAtom(Literal * atom)
+void Clause::addAtom(Literal atom)
 {
   ATOM_LIST.push_back(atom);
   NumAtom++;
@@ -53,7 +53,7 @@ void Clause::Print()
 {
   for(int i=0; i<NumAtom; i++)
     {
-      ATOM_LIST[i]->Print();
+      ATOM_LIST[i].Print();
       // cout<<" ";
     }
   cout<<endl;
@@ -61,7 +61,7 @@ void Clause::Print()
 
 //Accessor functions
 //getAtom
-inline Literal * Clause::getAtom(int index)
+inline Literal Clause::getAtom(int index)
 {
   return ATOM_LIST[index];
 }
