@@ -159,8 +159,8 @@ void Formula::BuildFormula ( CommandLine* cline ) {
 						{
 							VARLIST[var]->ATOMCNTNEG[val]++;
 							VARLIST[var]->addRecord(clause_num, val, false);
+							VARLIST[var]->VARCNTNEG++;
 						}
-						VARLIST[var]->VSIDSCOUNTER[val]++;
 						atom_num++;
 					}
 				}
@@ -384,6 +384,8 @@ Literal Formula::chooseLiteral () {
 Literal Formula::chooseLiteralVSIDS () {
 
 	/*  Pick a literal which is not yet satisfied, and which has a maximal vsids counter
+	 *
+	 *  Negative literals are counted as disjunctions of positive literals
 	 */
 
 
@@ -397,8 +399,10 @@ Literal Formula::chooseLiteralVSIDS () {
 		if ( VARLIST[i] -> VAL == -1 ) {
 			for ( int j = 0; j < VARLIST[i] -> DOMAINSIZE; j++ ) {
 				if ( VARLIST[i] -> ATOMASSIGN[j] == 0 ) {
-					tmax=VARLIST[i]->VSIDSCOUNTER[j];
-					if ( max < tmax ) {
+					tmax = VARLIST[i]->ATOMCNTPOS[j]
+							+ VARLIST[i]->VARCNTNEG
+							- VARLIST[i]->ATOMCNTNEG[j];
+					if (max < tmax) {
 						max = tmax;
 						tvar = i;
 						tval = j;
@@ -514,21 +518,25 @@ inline void Formula::satisfyClauses ( int var, bool equals, int val ) {
 
 			CLAUSELIST[current->c_num]->SAT = true;
 			CLAUSELIST[current->c_num]->LEVEL = LEVEL;
+			CLAUSELIST[current->c_num]->NumUnAss = 0;
 
 			// and update the counts for other unassigned literals in the clause (corresponds to deleting the clause from the theory)
 
-			for ( int i = 0; i < CLAUSELIST[current -> c_num] -> NumAtom; i++ ) {
+			if (!VSIDS) {
+				for (int i = 0; i < CLAUSELIST[current->c_num]->NumAtom; i++) {
 
-				lit_var = CLAUSELIST[current -> c_num] -> ATOM_LIST[i] . VAR;
-				lit_equal = CLAUSELIST[current -> c_num] -> ATOM_LIST[i] . EQUAL;
-				lit_val = CLAUSELIST[current -> c_num] -> ATOM_LIST[i] . VAL;
+					lit_var = CLAUSELIST[current->c_num]->ATOM_LIST[i].VAR;
+					lit_equal = CLAUSELIST[current->c_num]->ATOM_LIST[i].EQUAL;
+					lit_val = CLAUSELIST[current->c_num]->ATOM_LIST[i].VAL;
 
-				if ( VARLIST[lit_var] -> ATOMASSIGN[lit_val] == 0 ) {
+					if (VARLIST[lit_var]->ATOMASSIGN[lit_val] == 0) {
 
-					CLAUSELIST[current->c_num]->NumUnAss--;
+						if (lit_equal)
+							VARLIST[lit_var]->ATOMCNTPOS[lit_val]--;
+						else
+							VARLIST[lit_var]->ATOMCNTNEG[lit_val]--;
 
-					if ( lit_equal ) VARLIST[lit_var] -> ATOMCNTPOS[lit_val]--;
-					else VARLIST[lit_var] -> ATOMCNTNEG[lit_val]--;
+					}
 				}
 			}
 		}
@@ -556,8 +564,10 @@ inline void Formula::removeLiteral ( int var, bool equals, int val ) {
 
 			CLAUSELIST[current->c_num]->NumUnAss--;
 
-			if ( equals ) VARLIST[var] -> ATOMCNTPOS[val]--;
-			else VARLIST[var] -> ATOMCNTNEG[val]--;
+			if (!VSIDS) {
+				if ( equals ) VARLIST[var] -> ATOMCNTPOS[val]--;
+				else VARLIST[var] -> ATOMCNTNEG[val]--;
+			}
 
 			//checking for units and conflicts right away:
 
@@ -604,10 +614,12 @@ inline void Formula::unsatisfyClauses ( int var, bool equals, int val, int level
 
 					CLAUSELIST[current -> c_num] -> NumUnAss++;
 
-					if ( lit_equal )
-						VARLIST[lit_var]->ATOMCNTPOS[lit_val]++;
-					else
-						VARLIST[lit_var]->ATOMCNTNEG[lit_val]++;
+					if (!VSIDS) {
+						if ( lit_equal )
+							VARLIST[lit_var]->ATOMCNTPOS[lit_val]++;
+						else
+							VARLIST[lit_var]->ATOMCNTNEG[lit_val]++;
+					}
 
 				}
 			}
@@ -636,8 +648,10 @@ inline void Formula::addLiteral ( int var, bool equals, int val ) {
 
 			CLAUSELIST[current -> c_num] -> NumUnAss++;
 
-			if ( equals ) VARLIST[var] -> ATOMCNTPOS[val]++;
-			else VARLIST[var] -> ATOMCNTNEG[val]++;
+			if (!VSIDS) {
+				if ( equals ) VARLIST[var] -> ATOMCNTPOS[val]++;
+				else VARLIST[var] -> ATOMCNTNEG[val]++;
+			}
 		}
 		current = current->next;
 	}
@@ -958,14 +972,22 @@ Clause* Formula::analyzeConflict ( Clause * clause, bool freeClauseAfterUse ) {
 			Literal atom = clause->ATOM_LIST[i];
 			VARLIST[atom.VAR] -> addRecord( cid, atom.VAL, atom.EQUAL);
 
-			if ( VSIDS )
-				VARLIST[atom.VAR]->VSIDSCOUNTER[atom.VAL]++;
+			if ( VSIDS ) {
+				if (atom.EQUAL) {
+					VARLIST[atom.VAR]->ATOMCNTPOS[atom.VAL]++;
+				} else {
+					VARLIST[atom.VAR]->ATOMCNTNEG[atom.VAL]++;
+					VARLIST[atom.VAR]->VARCNTNEG++;
+				}
+			}
 		}
 
 		if ( VSIDS ) {
 			for ( int i = 0; i < VARLIST.size(); i++ ) {
+				VARLIST[i] -> VARCNTNEG /= 2;
 				for ( int j = 0; j < VARLIST[i] -> DOMAINSIZE; j++ ) {
-					VARLIST[i] -> VSIDSCOUNTER[j] /= 2;
+					VARLIST[i] -> ATOMCNTPOS[j] /= 2;
+					VARLIST[i] -> ATOMCNTNEG[j] /= 2;
 				}
 			}
 		}

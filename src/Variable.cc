@@ -19,13 +19,13 @@ Variable::Variable()
 	VAL = -1;
 	DOMAINSIZE = -1;
 	LEVEL = -1;
+	VARCNTNEG = 0;
 	ATOMLEVEL = NULL;
 	ATOMASSIGN = NULL;
 	ATOMCNTPOS = NULL;
 	ATOMCNTNEG = NULL;
 	ATOMRECPOS = NULL;
 	ATOMRECNEG = NULL;
-	VSIDSCOUNTER=NULL;
 	ATOMINDEX = NULL;
 	CLAUSEID = NULL;
 }
@@ -37,12 +37,12 @@ Variable::Variable(int var, int domain)
 	VAL = -1;
 	DOMAINSIZE = domain;
 	LEVEL = -1;
+	VARCNTNEG=0;
 	ATOMINDEX = new int[DOMAINSIZE];
 	ATOMLEVEL = new int[DOMAINSIZE];
 	ATOMASSIGN = new int[DOMAINSIZE];
 	ATOMCNTPOS = new int[DOMAINSIZE];
 	ATOMCNTNEG = new int[DOMAINSIZE];
-	VSIDSCOUNTER = new int[DOMAINSIZE];
 	CLAUSEID = new int[DOMAINSIZE];
 	ATOMRECPOS = new VARRECORD *[DOMAINSIZE];
 	ATOMRECNEG = new VARRECORD *[DOMAINSIZE];
@@ -52,7 +52,6 @@ Variable::Variable(int var, int domain)
 		ATOMASSIGN[i] = 0;
 		ATOMCNTPOS[i] = 0;
 		ATOMCNTNEG[i] = 0;
-		VSIDSCOUNTER[i] = 0;
 		CLAUSEID[i] = -10;
 		ATOMRECPOS[i] = NULL;
 		ATOMRECNEG[i] = NULL;
@@ -68,7 +67,6 @@ Variable::~Variable()
 	delete [] ATOMCNTPOS;
 	delete [] ATOMCNTNEG;
 	delete [] CLAUSEID;
-	delete [] VSIDSCOUNTER;
 
 	for(int i=0; i<DOMAINSIZE; i++)
 	{
