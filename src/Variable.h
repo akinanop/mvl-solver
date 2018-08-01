@@ -35,6 +35,7 @@ struct VARRECORD
   int c_num;
   //next = link to next element
   VARRECORD * next;
+  VARRECORD * prev;
 };
 
 // Variable
@@ -92,6 +93,8 @@ public:
   ~Variable();
   //AddRecord : adds the record to appropriate fields, true = '='; false= '!'
   void addRecord(int c_id, int d_id, bool flag);
+  //RemoveRecord : removes the record from the watched list
+  void removeRecord(VARRECORD* record, int d_id, bool flag);
   //Print : prints the indexes of the clause for each var domain
   void Print();
 };

@@ -95,7 +95,6 @@ public:
   bool verifyModel();
   //checkSat : returns true if theory satisfied else false
   bool checkSat();
-  int watchedCheckSat(); // 1 sat, 2 continue
   //checkUnit : checks for unit clauses and adds clause id to unitlist
   void checkUnit();
   //checkEntail : checks for entailed atom for var and returns entailed
@@ -107,7 +106,7 @@ public:
   Literal lazyChooseLiteral();
   void WatchedUnitPropagation();
   Literal chooseLiteralVSIDS();
-  void SwapPointer( int clause );
+  void SwapPointer( VARRECORD* current );
 
   //reduceTheory : reduces the theory by satisfying literals/clauses
   void reduceTheory(int var, bool equals, int val);
@@ -118,7 +117,6 @@ public:
   //removeLiteral : reduces the theory by removing literals from the claues
   void removeLiteral(int var, bool equals, int val);
   void watchedFalsifyLiteral(Literal lit);
-  void watchedSatisfyLiteral(Literal lit);
   //undoTheory : brings the theory back at the level stage
   void undoTheory(int level);
   //unsatisfyClauses : brings back the clauses that were satisfied before

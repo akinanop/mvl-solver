@@ -100,18 +100,37 @@ void Variable::addRecord ( int c_id, int d_id, bool flag )
 	//if memory allocated
 	if(temp)
 	{
-		//if flag = true then its "="; else "!"
-		if(flag)
-		{
+		temp->prev = NULL;
+		if (flag) {
 			temp->next = ATOMRECPOS[d_id];
+			if (ATOMRECPOS[d_id])
+				temp->next->prev = temp;
 			ATOMRECPOS[d_id] = temp;
-		}
-		else
-		{
+		} else {
 			temp->next = ATOMRECNEG[d_id];
+			if (ATOMRECNEG[d_id])
+				temp->next->prev = temp;
 			ATOMRECNEG[d_id] = temp;
 		}
 	}
+}
+
+//RemoveRecord
+void Variable::removeRecord ( VARRECORD* record, int d_id, bool flag )
+{
+	if (record->prev) {
+		record->prev->next = record->next;
+	} else {
+		if (flag)
+			ATOMRECPOS[d_id] = record->next;
+		else
+			ATOMRECNEG[d_id] = record->next;
+	}
+	if (record->next) {
+		record->next->prev = record->prev;
+	}
+
+	delete record;
 }
 
 //Print
