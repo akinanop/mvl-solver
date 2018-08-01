@@ -16,7 +16,6 @@ using namespace std;
 Clause::Clause()
 {
   ATOM_LIST.reserve(5);
-  SAT = false;
   NumAtom = 0;
 
 }
@@ -25,7 +24,6 @@ Clause::Clause()
 Clause::Clause(int size)
 {
   ATOM_LIST.reserve(size);
-  SAT = false;
   NumAtom = 0;
 
 }
@@ -66,18 +64,6 @@ void Clause::Print()
 inline Literal Clause::getAtom(int index)
 {
   return ATOM_LIST[index];
-}
-
-//getSAT
-inline bool Clause::getSAT()
-{
-  return SAT;
-}
-
-//setSAT
-inline void Clause::setSAT(bool flag)
-{
-  SAT = flag;
 }
 
 //getNumAtom

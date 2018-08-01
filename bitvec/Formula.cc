@@ -32,7 +32,6 @@ Formula::Formula () {
 	DECSTACK.reserve(10);
 	RESTARTS = 0;
 	LOG = false;
-	WATCH = false;
 	VSIDS=false;
 }
 
@@ -55,7 +54,6 @@ Formula::Formula ( CommandLine * cline ) {
 	DECSTACK.reserve(10);
 	RESTARTS = 0;
 	LOG = cline->LOG;
-	WATCH = cline->WATCH;
 	VSIDS = cline->VSIDS;
 }
 
@@ -366,29 +364,15 @@ inline void Formula::watchedUpdateVar ( int var ) {
 				Literal lit = CLAUSELIST[current->c_num]->WATCHED[1];
 				CLAUSELIST[current->c_num]->WATCHED[1] = CLAUSELIST[current->c_num]->WATCHED[0];
 				CLAUSELIST[current->c_num]->WATCHED[0] = lit;
-			} else
-			if (CLAUSELIST[current->c_num]->WATCHED[0].VAR == var) {
-				if (sat(CLAUSELIST[current->c_num]->WATCHED[0])==0) {
-					SwapPointer(current);
-				}
-			} else if (CLAUSELIST[current->c_num]->WATCHED[1].VAR == var) {
-				if (sat(CLAUSELIST[current->c_num]->WATCHED[1])==0) {
-					SwapPointer(current);
-				}
 			} else {
-
-				// assign the satisfied literal from the clause to be watched1
-
-				//TODO Try without this part
-				/*for (int i = 0; i < CLAUSELIST[current->c_num]->ATOM_LIST.size();i++) {
-					if (CLAUSELIST[current->c_num]->ATOM_LIST[i].VAR == var) {
-						if (sat(CLAUSELIST[current->c_num]->ATOM_LIST[i])==1) {
-							CLAUSELIST[current->c_num]->WATCHED[0] = CLAUSELIST[current->c_num]->ATOM_LIST[i];
-						}
-						break;
-					}
-				}*/
-
+				if (CLAUSELIST[current->c_num]->WATCHED[1].VAR == var) {
+					Literal lit = CLAUSELIST[current->c_num]->WATCHED[1];
+					CLAUSELIST[current->c_num]->WATCHED[1] = CLAUSELIST[current->c_num]->WATCHED[0];
+					CLAUSELIST[current->c_num]->WATCHED[0] = lit;
+				}
+				if (sat(CLAUSELIST[current->c_num]->WATCHED[0]) == 0) {
+					SwapPointer(current);
+				}
 			}
 		}
 		current = next;
@@ -426,18 +410,6 @@ Clause* Formula::analyzeConflict ( Clause * clause, bool freeClauseAfterUse ) {
     If yes, learn the clause: this way upon backtrack it becomes unit. Otherwise
     continue analyzing the conflict.
 	 */
-
-	if (freeClauseAfterUse)
-		assignWatched(clause);
-	else {
-		if (VARLIST[clause->WATCHED[0] . VAR] -> getIGNode(clause->WATCHED[0].VALS).index <
-				VARLIST[clause->WATCHED[1] . VAR] -> getIGNode(clause->WATCHED[1].VALS).index) {
-			Literal tmp = clause->WATCHED[0];
-			clause->WATCHED[0] = clause->WATCHED[1];
-			clause->WATCHED[1] = tmp;
-		}
-
-	}
 
 	if ( potent ( clause ) ) {
 
@@ -497,6 +469,8 @@ Clause* Formula::analyzeConflict ( Clause * clause, bool freeClauseAfterUse ) {
 	// resolve:
 	Clause * resolvent = resolve ( clause, lastFalse, reason );
 
+	assignWatched(resolvent);
+
 	if (freeClauseAfterUse) {
 		delete clause;
 	}
@@ -539,19 +513,6 @@ void Formula::assignWatched( Clause* clause) {
 }
 
 // WATCHED LITERALS ALGORITHM functions
-
-int Formula::watchedCheckSat () {
-
-	// returns 1 if all watched1 is sat (1), otherwise 2 -undefined (2)
-
-	if (LOG) cout << "Checking satisfiability..." << endl;
-
-	for ( unsigned int  i = 0; i < CLAUSELIST.size(); i++ ) {
-		if ( sat ( CLAUSELIST[i] -> WATCHED[0] ) != 1  ) return 2;
-	}
-
-	return 1;
-}
 
 int Formula::sat ( Literal literal ) {
 
@@ -652,34 +613,6 @@ void Formula::SwapPointer ( VARRECORD* current ) {
 				break;
 			}
 		}
-	} else if ( sat ( watched1 )  == 2  ) {
-
-		for ( int i = 0; i < clause -> NumAtom; i++ ) {
-
-			Literal literal = clause -> ATOM_LIST[i];
-
-			if (sat(literal)==1) {
-
-				VARLIST[watched2.VAR]->removeRecord(current);
-				VARLIST[literal.VAR]->addRecord(c_num);
-
-				clause->WATCHED[1] = clause->WATCHED[0];
-				clause->WATCHED[0] = literal;
-				unitClause=false;
-				break;
-			}
-
-			if ( sat(literal) == 2 &&   (literal.VAR != watched1.VAR) ) {
-
-				VARLIST[watched2.VAR]->removeRecord(current);
-				VARLIST[literal.VAR]->addRecord(c_num);
-
-				clause -> WATCHED[1] = literal;
-				unitClause = false;
-				break;
-
-			}
-		}
 	} else {
 		if ( LOG ) cout << "Conflict" << endl;
 		CONFLICT = true;
@@ -719,16 +652,9 @@ int Formula::WatchedLiterals ( int restarts ) {
 
 	int restartCount = restarts;
 
-	// returns 0 if sat, 1 if timeout, 2 if unsat
-
 	if ( LOG ) cout << "Solving with the watched literal algorithm..." << endl;
 
 	while ( true ) {
-		//Check if the theory satisfied
-
-
-		if ( watchedCheckSat() == 1 )
-			return 0; //
 		//Check if time out
 		TIME_E = GetTime();
 	//	if ( ( TIME_E - TIME_S ) > TIMELIMIT )
@@ -792,7 +718,8 @@ int Formula::WatchedLiterals ( int restarts ) {
 				UNITCLAUSE = -1;
 				if ( LOG ) cout << "Decision: " << atom . VAR << "=" << atom . VALS << endl;
 				watchedReduceTheory ( atom );
-			} else return 0;
+			}  // the theory is satisfied if all variables are assigned and there is no conflict
+			else return 0;
 
 		}
 	}

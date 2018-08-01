@@ -72,7 +72,6 @@ public:
   vector <Literal> DECSTACK;
   int RESTARTS;
   bool LOG; // verbose
-  bool WATCH; //watched literals option
   bool VSIDS; //vsids option
 
   //public variables and functions
@@ -82,7 +81,6 @@ public:
   Formula (CommandLine * cline);
   //BuildFunction : builds the theory using the input cnf file
   int sat (Literal literal);
-  bool hasAtom(Clause * clause, Literal atom);
   void watchedUndoTheory ( int level );
   void BuildFormula(CommandLine * cline);
   //PrintInfo : prints the backtrack, conflict, unit, entail, pure info
@@ -92,11 +90,6 @@ public:
   //verifyModel : verifies the model that was found, if any. returns true
   //if corret
   bool verifyModel();
-  //checkSat : returns true if theory satisfied else false
-  int watchedCheckSat(); // 1 sat, 2 continue
-  //checkEntail : checks for entailed atom for var and returns entailed
-  //domainvalue or -1 if no atom is entailed
-  int checkEntail(int var);
   void WatchedUnitPropagation();
   Literal chooseLiteralVSIDS();
   void SwapPointer( VARRECORD* current );
@@ -109,7 +102,6 @@ public:
   //add's the clause to theory and returns a backtrack level
   Clause * analyzeConflict(Clause * clause, bool freeClauseAfterUse);
   bool potent(Clause * clause);
-  int backtrackLevel(Clause * clause);
   //resolve: Extended resolution
   Clause * resolve(Clause * clause, Literal literal, Clause * reason);
   //sets the watched literals of the clause to the two last falsified literals

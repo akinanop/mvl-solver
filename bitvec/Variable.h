@@ -67,23 +67,12 @@ class Variable
   //public variables and functions
 public:
   //VAR = variable name
-  //VAL = value assigned to this variable
+  //CURRENT_DOMAIN = current domain of the variable
   //DOMAINSIZE = size of variable's domain
-  //SAT = boolean variable true if variable assigned else false
-  //LEVEL = Level at which the variable got satisfied and assigned , default -1
-  //ATOMLEVEL = array storing levels at which each domain value is assigned
-  //ATOMASSIGN = array storing whether = or != is satisfied,
-  //             0 is none, 1:=, -1:!=
 
   //ATOMCNTPOS = array storing counts of positive occurences of each domain - for choosing decision literal
-  //ATOMCNTNEG = array storing counts of negative occurences of each domain
 
-  //ATOMRECPOS = array storing records of positive occurences of each domain
-  //ATOMRECNEG = array storing records of negative occurences of each domain
-
-  //FLAG = array storing true if the literal is involved in conflict
-  //CLAUSEID = array storing the clause id which cause this literal to be
-  //           implied
+  //VARRECORD = linked list of clauses that watch the variable
 
   int VAR;
   bitset<MAX_DOMAIN> CURRENT_DOMAIN;
@@ -102,7 +91,7 @@ public:
   Variable(int var, int domain);
   //Destructor
   ~Variable();
-  //AddRecord : adds the record to appropriate fields, true = '='; false= '!'
+  //AddRecord : adds the record to VARREC
   void addRecord(int c_id);
   //RemoveRecord: removes the record from the list (if not watched anymore)
   void removeRecord ( VARRECORD* record );
