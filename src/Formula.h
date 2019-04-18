@@ -95,8 +95,6 @@ public:
   bool verifyModel();
   //checkSat : returns true if theory satisfied else false
   bool checkSat();
-  //checkUnit : checks for unit clauses and adds clause id to unitlist
-  void checkUnit();
   //checkEntail : checks for entailed atom for var and returns entailed
   //domainvalue or -1 if no atom is entailed
   int checkEntail(int var);

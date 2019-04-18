@@ -37,14 +37,10 @@ class Clause
   //public variables and functions
 public:
   //ATOM_LIST = vector of atoms
-  //SAT = boolean variable true if clause satisfied else false
-  //NumAtom = number of atoms in the clause
   //NumUnAss = number of unassigned literals in the clause
-  //LEVEL = Level at which the clause got satisfied, default -1
+  //LEVEL = Level at which the clause got satisfied, -1 if the clause is not satisfied
   vector <Literal> ATOM_LIST;
 
-  bool SAT;
-  int NumAtom;
   int NumUnAss;
   int LEVEL;
   //Watched Literals:
@@ -64,12 +60,6 @@ public:
   //Accessor functions
   //getAtom : returns atom at index
   Literal getAtom(int index);
-  //getSAT : returns the SAT value
-  bool getSAT();
-  //setSAT : sets SAT value
-  void setSAT(bool val);
-  //getNumAtom : returns the NumAtom value
-  int getNumAtom();
   //getNumUnAss : returns the NumUnAssigned value
   int getNumUnAss();
   //incNumUnAss : increments the NumUnAssigned value

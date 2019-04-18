@@ -16,8 +16,6 @@ using namespace std;
 Clause::Clause()
 {
   ATOM_LIST.reserve(5);
-  SAT = false;
-  NumAtom = 0;
   NumUnAss = 0;
   LEVEL = -1;
 
@@ -27,8 +25,6 @@ Clause::Clause()
 Clause::Clause(int size)
 {
   ATOM_LIST.reserve(size);
-  SAT = false;
-  NumAtom = 0;
   NumUnAss = 0;
   LEVEL = -1;
 
@@ -44,14 +40,13 @@ Clause::~Clause()
 void Clause::addAtom(Literal atom)
 {
   ATOM_LIST.push_back(atom);
-  NumAtom++;
   NumUnAss++;
 }
 
 //Print
 void Clause::Print()
 {
-  for(int i=0; i<NumAtom; i++)
+  for(int i=0; i<ATOM_LIST.size(); i++)
     {
       ATOM_LIST[i].Print();
       // cout<<" ";
@@ -64,24 +59,6 @@ void Clause::Print()
 inline Literal Clause::getAtom(int index)
 {
   return ATOM_LIST[index];
-}
-
-//getSAT
-inline bool Clause::getSAT()
-{
-  return SAT;
-}
-
-//setSAT
-inline void Clause::setSAT(bool flag)
-{
-  SAT = flag;
-}
-
-//getNumAtom
-inline int Clause::getNumAtom()
-{
-  return NumAtom;
 }
 
 //getNumUnAss

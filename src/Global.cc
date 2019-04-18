@@ -294,14 +294,14 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 					cline->NUM_CLAUSE = atoi(argv[++current]);
 				else if(!strcmp(argv[current], "-clausesize"))
 					cline->CLAUSE_SIZE = atoi(argv[++current]);
-				else if(!strcmp(argv[current], "-bool"))
-					cline->BOOL_FINITE = atoi(argv[current]);
 				else if(!strcmp(argv[current], "-file"))
 					cline->FILE = argv[++current];
 				else if(!strcmp(argv[current], "-model"))
 					cline->MODEL_FILE = argv[++current];
 				else if(!strcmp(argv[current], "-time"))
 					cline->TIME = atoi(argv[++current]);
+				else if(!strcmp(argv[current], "-verbose"))
+					cline->LOG = true;
 				else
 					;
 			}
@@ -329,12 +329,8 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 					cline->NUM_CLAUSE = atoi(argv[++current]);
 				else if(!strcmp(argv[current], "-clausesize"))
 					cline->CLAUSE_SIZE = atoi(argv[++current]);
-				else if(!strcmp(argv[current], "-bool"))
-					cline->BOOL_FINITE = atoi(argv[current]);
 				else if(!strcmp(argv[current], "-file"))
 					cline->FILE = argv[++current];
-				else if(!strcmp(argv[current], "-model"))
-					cline->MODEL_FILE = argv[++current];
 				else if(!strcmp(argv[current], "-time"))
 					cline->TIME = atoi(argv[++current]);
 				else

@@ -53,8 +53,6 @@ public:
   //VAR = variable name
   //VAL = value assigned to this variable
   //DOMAINSIZE = size of variable's domain
-  //SAT = boolean variable true if variable assigned else false
-  //LEVEL = Level at which the variable got satisfied and assigned , default -1
   //ATOMLEVEL = array storing levels at which each domain value is assigned
   //ATOMASSIGN = array storing whether = or != is satisfied,
   //             0 is none, 1:=, -1:!=
@@ -65,14 +63,12 @@ public:
   //ATOMRECPOS = array storing records of positive occurences of each domain
   //ATOMRECNEG = array storing records of negative occurences of each domain
 
-  //FLAG = array storing true if the literal is involved in conflict
   //CLAUSEID = array storing the clause id which cause this literal to be
   //           implied
 
   int VAR;
   int VAL;
   int DOMAINSIZE;
-  int LEVEL;
   int VARCNTNEG; // need this for choosing a decision literal
   //  array storing index (decstack size) at which literal is falsified
   int * ATOMINDEX; // order at which atoms where was falsified

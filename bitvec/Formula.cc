@@ -657,8 +657,8 @@ int Formula::WatchedLiterals ( int restarts ) {
 	while ( true ) {
 		//Check if time out
 		TIME_E = GetTime();
-	//	if ( ( TIME_E - TIME_S ) > TIMELIMIT )
-		//	return 1;
+		if ( ( TIME_E - TIME_S ) > TIMELIMIT )
+			return 1;
 
 		if ( CONFLICT ) {
 			if ( LOG ) {
@@ -676,7 +676,7 @@ int Formula::WatchedLiterals ( int restarts ) {
 			if (learned->NumAtom > 1)
 				LEVEL = VARLIST[learned->WATCHED[1].VAR]->getIGNode(learned->WATCHED[1].VALS).level;
 			else
-				--LEVEL;
+				LEVEL=0;
 
 			BACKTRACKS++;
 			if ( LOG ) {

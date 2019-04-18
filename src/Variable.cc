@@ -18,7 +18,6 @@ Variable::Variable()
 	VAR = -1;
 	VAL = -1;
 	DOMAINSIZE = -1;
-	LEVEL = -1;
 	VARCNTNEG = 0;
 	ATOMLEVEL = NULL;
 	ATOMASSIGN = NULL;
@@ -36,7 +35,6 @@ Variable::Variable(int var, int domain)
 	VAR = var;
 	VAL = -1;
 	DOMAINSIZE = domain;
-	LEVEL = -1;
 	VARCNTNEG=0;
 	ATOMINDEX = new int[DOMAINSIZE];
 	ATOMLEVEL = new int[DOMAINSIZE];
@@ -141,28 +139,6 @@ void Variable::Print()
 	for(int i=0; i<DOMAINSIZE; i++)
 	{
 		cout<<"Domain = "<<i<<endl;
-		//print POS
-		cout<<"(POS Records = ";
-		VARRECORD * curr = ATOMRECPOS[i];
-		while(curr)
-		{
-			cout<<curr->c_num<<" ";
-			curr = curr->next;
-		}
-		cout<<")"<<endl;
-		if(curr) delete curr;
-
-		//print NEG
-		cout<<"(NEG Records = ";
-		VARRECORD * curr1 = ATOMRECPOS[i];
-		curr1 = ATOMRECNEG[i];
-		while(curr1)
-		{
-			cout<<curr1->c_num<<" ";
-			curr1 = curr1->next;
-		}
-		cout<<")"<<endl<<endl;
-		if (curr1) delete curr1;
 	}
 }
 //End of Code
