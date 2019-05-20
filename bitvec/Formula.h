@@ -22,7 +22,6 @@
 #include <string>
 #include <list>
 #include <vector>
-
 #include "Global.h"
 #include "Literal.h"
 #include "Variable.h"

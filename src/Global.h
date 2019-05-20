@@ -29,6 +29,9 @@ using namespace std;
 //Global Declaration - Variables
 #define MAX_LINE 3000
 
+// Enum for decision heuristic choices
+enum class Heuristic {BK, VSIDS, lazy, VSIDS_pos};
+
 struct CommandLine
 { // print model option
   bool MODEL;
@@ -59,8 +62,8 @@ struct CommandLine
   int TIME;
   // Number of backtracks at which the search is started from the level 0
   int RESTARTS;
-  //vsids option
-  bool VSIDS;
+  //decision heuristic
+  Heuristic heuristic;
 };
 
 //Global Declaration - Functions

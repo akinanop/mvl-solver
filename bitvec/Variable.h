@@ -77,7 +77,7 @@ public:
   int VAR;
   bitset<MAX_DOMAIN> CURRENT_DOMAIN;
   int DOMAINSIZE;
-  int * ATOMCNTPOS; // need this for choosing a decision literal
+  double * VSIDS_SCORE; // scores of var values for vsids decision heuristic
 
   //  array storing implication graph information for nodes of variable VAR
   vector< IGNode > graphNodes;

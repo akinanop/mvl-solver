@@ -33,7 +33,7 @@ Formula::Formula () {
 	RESTARTS = 0;
 	LOG = false;
 	WATCH = false;
-	VSIDS=false;
+	heuristic = Heuristic::BK;
 }
 
 //1-arg constructor
@@ -56,7 +56,7 @@ Formula::Formula ( CommandLine * cline ) {
 	RESTARTS = 0;
 	LOG = cline->LOG;
 	WATCH = cline->WATCH;
-	VSIDS = cline->VSIDS;
+	heuristic = cline->heuristic;
 }
 
 // Parse input and build the formula aka theory
@@ -152,14 +152,25 @@ void Formula::BuildFormula ( CommandLine* cline ) {
 						//the value count, else increment others count
 						if(ch == '=')
 						{
-							VARLIST[var]->ATOMCNTPOS[val]++;
+							if (heuristic==Heuristic::VSIDS || heuristic==Heuristic::VSIDS_pos)
+								VARLIST[var]->VSIDS_SCORE[val]++;
+							else if (heuristic == Heuristic::BK)
+								VARLIST[var]->ATOMCNTPOS[val]++;
 							if (!WATCH)
 								VARLIST[var]->addRecord(clause_num, val, true);
 						}
 						else
 						{
-							VARLIST[var]->ATOMCNTNEG[val]++;
-							VARLIST[var]->VARCNTNEG++;
+							if (heuristic==Heuristic::VSIDS) {
+								VARLIST[var]->VSIDS_SCORE_NEG[val]++;
+							} else if (heuristic == Heuristic::BK)
+								VARLIST[var]->ATOMCNTNEG[val]++;
+							else if (heuristic == Heuristic::VSIDS_pos) {
+								for (int j=0;j<VARLIST[var] -> DOMAINSIZE;j++) {
+									if (j!=val)
+										VARLIST[var]->VSIDS_SCORE[j]++;
+								}
+							}
 							if (!WATCH)
 								VARLIST[var]->addRecord(clause_num, val, false);
 						}
@@ -364,12 +375,54 @@ Literal Formula::chooseLiteralVSIDS () {
 
 	/*  Pick a literal which is not yet satisfied, and which has a maximal vsids counter
 	 *
+	 *  Positive and negative literals have separate scores
+	 */
+
+
+	double max = -1;
+	double tmax = -1;
+	int tvar = -1;
+	int tval = -1;
+	UNITCLAUSE = -1;
+	bool equals = false;
+
+	for ( int i = 0; i < VARLIST.size(); i++ ) {
+		if ( VARLIST[i] -> VAL == -1 ) {
+			for ( int j = 0; j < VARLIST[i] -> DOMAINSIZE; j++ ) {
+				if ( VARLIST[i] -> ATOMASSIGN[j] == 0 ) {
+					// get score for i=j
+					tmax = VARLIST[i]->VSIDS_SCORE[j];
+					if (max < tmax) {
+						max = tmax;
+						tvar = i;
+						tval = j;
+						equals = true;
+					}
+					//get score for i!=j
+					tmax = VARLIST[i]->VSIDS_SCORE_NEG[j];
+					if (max < tmax) {
+						max = tmax;
+						tvar = i;
+						tval = j;
+						equals = false;
+					}
+				}
+			}
+		}
+	}
+	return Literal ( tvar, equals, tval );
+}
+
+Literal Formula::chooseLiteralVSIDS_allPos () {
+
+	/*  Pick a literal which is not yet satisfied, and which has a maximal vsids counter
+	 *
 	 *  Negative literals are counted as disjunctions of positive literals
 	 */
 
 
-	int max = INT_MIN;
-	int tmax = -1;
+	double max = -1;
+	double tmax = -1;
 	int tvar = -1;
 	int tval = -1;
 	UNITCLAUSE = -1;
@@ -378,9 +431,7 @@ Literal Formula::chooseLiteralVSIDS () {
 		if ( VARLIST[i] -> VAL == -1 ) {
 			for ( int j = 0; j < VARLIST[i] -> DOMAINSIZE; j++ ) {
 				if ( VARLIST[i] -> ATOMASSIGN[j] == 0 ) {
-					tmax = VARLIST[i]->ATOMCNTPOS[j]
-							+ VARLIST[i]->VARCNTNEG
-							- VARLIST[i]->ATOMCNTNEG[j];
+					tmax = VARLIST[i]->VSIDS_SCORE[j];
 					if (max < tmax) {
 						max = tmax;
 						tvar = i;
@@ -390,7 +441,7 @@ Literal Formula::chooseLiteralVSIDS () {
 			}
 		}
 	}
-	return Literal ( tvar, tval );
+	return Literal ( tvar, true, tval );
 }
 
 void Formula::reduceTheory ( int var, bool equals, int val ) {
@@ -403,7 +454,7 @@ void Formula::reduceTheory ( int var, bool equals, int val ) {
 
 		satisfyClauses ( var, equals, val );
 		removeLiteral ( var, !equals, val );
-		if (!VSIDS) {
+		if (heuristic==Heuristic::BK) {
 			VARLIST[var] -> ATOMCNTPOS[val] = 0;
 			VARLIST[var] -> ATOMCNTNEG[val] = 0;
 		}
@@ -430,7 +481,7 @@ void Formula::reduceTheory ( int var, bool equals, int val ) {
 
 				satisfyClauses ( var, !equals, i );
 				removeLiteral ( var, equals, i );
-				if (!VSIDS) {
+				if (heuristic==Heuristic::BK) {
 					VARLIST[var] -> ATOMCNTPOS[i] = 0;
 					VARLIST[var] -> ATOMCNTNEG[i] = 0;
 				}
@@ -447,7 +498,7 @@ void Formula::reduceTheory ( int var, bool equals, int val ) {
 
 				satisfyClauses ( var, !equals, i );
 				removeLiteral ( var, equals, i );
-				if (!VSIDS) {
+				if (heuristic==Heuristic::BK) {
 					VARLIST[var] -> ATOMCNTPOS[i] = 0;
 					VARLIST[var] -> ATOMCNTNEG[i] = 0;
 				}
@@ -464,7 +515,7 @@ void Formula::reduceTheory ( int var, bool equals, int val ) {
 
 		satisfyClauses ( var, equals, val );
 		removeLiteral ( var, !equals, val );
-		if (!VSIDS) {
+		if (heuristic==Heuristic::BK) {
 			VARLIST[var] -> ATOMCNTPOS[val] = 0;
 			VARLIST[var] -> ATOMCNTNEG[val] = 0;
 		}
@@ -513,7 +564,7 @@ inline void Formula::satisfyClauses ( int var, bool equals, int val ) {
 
 			// and update the counts for other unassigned literals in the clause (corresponds to deleting the clause from the theory)
 
-			if (!VSIDS) {
+			if (heuristic==Heuristic::BK) {
 				for (int i = 0; i < CLAUSELIST[current->c_num]->ATOM_LIST.size(); i++) {
 
 					lit_var = CLAUSELIST[current->c_num]->ATOM_LIST[i].VAR;
@@ -600,7 +651,7 @@ inline void Formula::unsatisfyClauses ( int var, bool equals, int val, int level
 
 					CLAUSELIST[current -> c_num] -> NumUnAss++;
 
-					if (!VSIDS) {
+					if (heuristic==Heuristic::BK) {
 						if ( lit_equal )
 							VARLIST[lit_var]->ATOMCNTPOS[lit_val]++;
 						else
@@ -633,7 +684,7 @@ inline void Formula::addLiteral ( int var, bool equals, int val ) {
 
 			CLAUSELIST[current -> c_num] -> NumUnAss++;
 
-			if (!VSIDS) {
+			if (heuristic==Heuristic::BK) {
 				if ( equals ) VARLIST[var] -> ATOMCNTPOS[val]++;
 				else VARLIST[var] -> ATOMCNTNEG[val]++;
 			}
@@ -924,22 +975,37 @@ Clause* Formula::analyzeConflict ( Clause * clause, bool freeClauseAfterUse ) {
 			if (!WATCH)
 				VARLIST[atom.VAR] -> addRecord( cid, atom.VAL, atom.EQUAL);
 
-			if ( VSIDS ) {
+			if ( heuristic==Heuristic::VSIDS ) {
 				if (atom.EQUAL) {
-					VARLIST[atom.VAR]->ATOMCNTPOS[atom.VAL]++;
+					VARLIST[atom.VAR]->VSIDS_SCORE[atom.VAL]++;
 				} else {
-					VARLIST[atom.VAR]->ATOMCNTNEG[atom.VAL]++;
-					VARLIST[atom.VAR]->VARCNTNEG++;
+					VARLIST[atom.VAR]->VSIDS_SCORE_NEG[atom.VAL]++;
+				}
+			}
+			if ( heuristic==Heuristic::VSIDS_pos ) {
+				if (atom.EQUAL) {
+					VARLIST[atom.VAR]->VSIDS_SCORE[atom.VAL]++;
+				} else {
+					for (int j=0;j<VARLIST[atom.VAR] -> DOMAINSIZE;j++) {
+						if (j!=atom.VAL)
+							VARLIST[atom.VAR]->VSIDS_SCORE[j]++;
+					}
 				}
 			}
 		}
 
-		if ( VSIDS ) {
+		if ( heuristic==Heuristic::VSIDS ) {
 			for ( int i = 0; i < VARLIST.size(); i++ ) {
-				VARLIST[i] -> VARCNTNEG /= 2;
 				for ( int j = 0; j < VARLIST[i] -> DOMAINSIZE; j++ ) {
-					VARLIST[i] -> ATOMCNTPOS[j] /= 2;
-					VARLIST[i] -> ATOMCNTNEG[j] /= 2;
+					VARLIST[i] -> VSIDS_SCORE[j] /= 2;
+					VARLIST[i] -> VSIDS_SCORE_NEG[j] /= 2;
+				}
+			}
+		}
+		else if ( heuristic==Heuristic::VSIDS_pos ) {
+			for ( int i = 0; i < VARLIST.size(); i++ ) {
+				for ( int j = 0; j < VARLIST[i] -> DOMAINSIZE; j++ ) {
+					VARLIST[i] -> VSIDS_SCORE[j] /= 2;
 				}
 			}
 		}
@@ -1361,8 +1427,11 @@ int Formula::WatchedLiterals ( int restarts ) {
 
 	 if ( ! CONFLICT ) {
 			Literal atom;
-			if ( VSIDS ) atom = chooseLiteralVSIDS();
-			else atom = lazyWatchedChooseLiteral ();
+			switch(heuristic) {
+			case Heuristic::VSIDS : atom = chooseLiteralVSIDS(); break;
+			case Heuristic::VSIDS_pos : atom = chooseLiteralVSIDS_allPos(); break;
+			case Heuristic::lazy  : atom = lazyWatchedChooseLiteral (); break;
+			}
 			if ( atom.VAR != -1 ) {
 				DECISIONS++;
 				LEVEL++;
@@ -1436,10 +1505,12 @@ int Formula::NonChronoBacktrack ( int restarts ) {
 		// otherwise choose a literal and propagate
 		if (!CONFLICT) {
 			Literal atom;
-			if (VSIDS)
-				atom = chooseLiteralVSIDS();
-			else
-				atom = chooseLiteral();
+			switch(heuristic) {
+				case Heuristic::VSIDS : atom = chooseLiteralVSIDS(); break;
+				case Heuristic::VSIDS_pos : atom = chooseLiteralVSIDS_allPos(); break;
+				case Heuristic::BK  : atom = chooseLiteral (); break;
+				case Heuristic::lazy  : atom = lazyChooseLiteral (); break;
+			}
 
 			if ( atom.VAR != -1 ) {
 
@@ -1495,7 +1566,10 @@ int Formula::ChronoBacktrack(int level)
 	//to branch on
 	Literal atom;
 
-	atom = chooseLiteral();
+	switch(heuristic) {
+		case Heuristic::BK  : atom = chooseLiteral (); break;
+		case Heuristic::lazy  : atom = lazyChooseLiteral (); break;
+	}
 
 	if(atom.VAR != -1)
 	{

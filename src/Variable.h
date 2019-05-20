@@ -69,13 +69,14 @@ public:
   int VAR;
   int VAL;
   int DOMAINSIZE;
-  int VARCNTNEG; // need this for choosing a decision literal
   //  array storing index (decstack size) at which literal is falsified
   int * ATOMINDEX; // order at which atoms where was falsified
   int * ATOMLEVEL;
   int * ATOMASSIGN;
   int * ATOMCNTPOS; // need this for choosing a decision literal
   int * ATOMCNTNEG; // need this for choosing a decision literal
+  double * VSIDS_SCORE; // literal score for the VSIDS decision heuristic
+  double * VSIDS_SCORE_NEG; // literal score for the VSIDS decision heuristic
   int * CLAUSEID;
   VARRECORD ** ATOMRECPOS;
   VARRECORD ** ATOMRECNEG;

@@ -171,7 +171,7 @@ void Formula::BuildFormula ( CommandLine* cline ) {
 				Literal lit = temp_clause->ATOM_LIST[i];
 				for (int j=0;j<VARLIST[lit.VAR]->DOMAINSIZE;j++) {
 					if (lit.VALS.test(j)) {
-						VARLIST[lit.VAR]->ATOMCNTPOS[j]++;
+						VARLIST[lit.VAR]->VSIDS_SCORE[j]++;
 					}
 				}
 			}
@@ -267,8 +267,8 @@ Literal Formula::chooseLiteralVSIDS () {
 	 */
 
 
-	int max = INT_MIN;
-	int tmax = -1;
+	double max = -1;
+	double tmax = -1;
 	int tvar = -1;
 	int tval = -1;
 	UNITCLAUSE = -1;
@@ -277,7 +277,7 @@ Literal Formula::chooseLiteralVSIDS () {
 		if ( VARLIST[i] -> CURRENT_DOMAIN.count() > 1 ) {
 			for ( int j = 0; j < VARLIST[i] -> DOMAINSIZE; j++ ) {
 				if ( VARLIST[i] -> CURRENT_DOMAIN.test(j) ) {
-					tmax = VARLIST[i]->ATOMCNTPOS[j];
+					tmax = VARLIST[i]->VSIDS_SCORE[j];
 
 					if (max < tmax) {
 						max = tmax;
@@ -431,17 +431,15 @@ Clause* Formula::analyzeConflict ( Clause * clause, bool freeClauseAfterUse ) {
 		// update global records for each atom in the clause
 		for ( int i = 0; i < clause -> NumAtom; i++ ) {
 			Literal atom = clause->ATOM_LIST[i];
-		//	VARLIST[atom.VAR] -> addRecord( cid );
 
 			for (int j = 0; j < VARLIST[atom.VAR]->DOMAINSIZE; j++) {
 				if (atom.VALS.test(j))
-					VARLIST[atom.VAR]->ATOMCNTPOS[j]++;
+					VARLIST[atom.VAR]->VSIDS_SCORE[j]++;
 			}
 		}
-
-		for (int i = 0; i < VARLIST.size(); i++) {
-			for (int j = 0; j < VARLIST[i]->DOMAINSIZE; j++) {
-				VARLIST[i]->ATOMCNTPOS[j] /= 2;
+		for ( int i = 0; i < VARLIST.size(); i++ ) {
+			for ( int j = 0; j < VARLIST[i] -> DOMAINSIZE; j++ ) {
+				VARLIST[i] -> VSIDS_SCORE[j] /=2;
 			}
 		}
 

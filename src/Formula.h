@@ -73,7 +73,8 @@ public:
   int RESTARTS;
   bool LOG; // verbose
   bool WATCH; //watched literals option
-  bool VSIDS; //vsids option
+  // option for decision heuristic, the enum Heuristic is defined in Global.h
+  Heuristic heuristic;
 
   //public variables and functions
   //Zero argument constructor
@@ -103,7 +104,10 @@ public:
   // choose random unassigned literal
   Literal lazyChooseLiteral();
   void WatchedUnitPropagation();
+  // choose literal with VSIDS
   Literal chooseLiteralVSIDS();
+  // choose literal with VSIDS, negative literals are treated as disjunctions of positive literals
+  Literal chooseLiteralVSIDS_allPos();
   void SwapPointer( VARRECORD* current );
 
   //reduceTheory : reduces the theory by satisfying literals/clauses

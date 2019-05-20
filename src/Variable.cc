@@ -18,11 +18,12 @@ Variable::Variable()
 	VAR = -1;
 	VAL = -1;
 	DOMAINSIZE = -1;
-	VARCNTNEG = 0;
 	ATOMLEVEL = NULL;
 	ATOMASSIGN = NULL;
 	ATOMCNTPOS = NULL;
 	ATOMCNTNEG = NULL;
+	VSIDS_SCORE = NULL;
+	VSIDS_SCORE_NEG = NULL;
 	ATOMRECPOS = NULL;
 	ATOMRECNEG = NULL;
 	ATOMINDEX = NULL;
@@ -35,12 +36,13 @@ Variable::Variable(int var, int domain)
 	VAR = var;
 	VAL = -1;
 	DOMAINSIZE = domain;
-	VARCNTNEG=0;
 	ATOMINDEX = new int[DOMAINSIZE];
 	ATOMLEVEL = new int[DOMAINSIZE];
 	ATOMASSIGN = new int[DOMAINSIZE];
 	ATOMCNTPOS = new int[DOMAINSIZE];
 	ATOMCNTNEG = new int[DOMAINSIZE];
+	VSIDS_SCORE = new double[DOMAINSIZE];
+	VSIDS_SCORE_NEG = new double[DOMAINSIZE];
 	CLAUSEID = new int[DOMAINSIZE];
 	ATOMRECPOS = new VARRECORD *[DOMAINSIZE];
 	ATOMRECNEG = new VARRECORD *[DOMAINSIZE];
@@ -50,6 +52,8 @@ Variable::Variable(int var, int domain)
 		ATOMASSIGN[i] = 0;
 		ATOMCNTPOS[i] = 0;
 		ATOMCNTNEG[i] = 0;
+		VSIDS_SCORE[i] = 0;
+		VSIDS_SCORE_NEG[i] = 0;
 		CLAUSEID[i] = -10;
 		ATOMRECPOS[i] = NULL;
 		ATOMRECNEG[i] = NULL;
@@ -64,6 +68,8 @@ Variable::~Variable()
 	delete [] ATOMASSIGN;
 	delete [] ATOMCNTPOS;
 	delete [] ATOMCNTNEG;
+	delete [] VSIDS_SCORE;
+	delete [] VSIDS_SCORE_NEG;
 	delete [] CLAUSEID;
 
 	for(int i=0; i<DOMAINSIZE; i++)
@@ -136,10 +142,6 @@ void Variable::Print()
 {
 	//print variable name
 	cout<<"Variable = "<<VAR<<endl;
-	for(int i=0; i<DOMAINSIZE; i++)
-	{
-		cout<<"Domain = "<<i<<endl;
-	}
 }
 //End of Code
 //**************************************************************

@@ -17,7 +17,7 @@ Variable::Variable()
 {
 	VAR = -1;
 	DOMAINSIZE = -1;
-	ATOMCNTPOS = NULL;
+	VSIDS_SCORE = NULL;
 	VARREC = NULL;
 }
 
@@ -31,11 +31,11 @@ Variable::Variable(int var, int domain)
 	CURRENT_DOMAIN>>=MAX_DOMAIN-domain;
 
 	DOMAINSIZE = domain;
-	ATOMCNTPOS = new int[DOMAINSIZE];
+	VSIDS_SCORE = new double[DOMAINSIZE];
 	VARREC = NULL;
 	for(int i=0; i<DOMAINSIZE; i++)
 	{ // CHANGED DEFAULT ATOMLEVEL TO -10
-		ATOMCNTPOS[i] = 0;
+		VSIDS_SCORE[i] = 0;
 	}
 
 	graphNodes.reserve(5);
@@ -45,7 +45,7 @@ Variable::Variable(int var, int domain)
 //Destructor
 Variable::~Variable()
 {
-	delete [] ATOMCNTPOS;
+	delete [] VSIDS_SCORE;
 
 	VARRECORD * temp = VARREC;
 	VARRECORD * temp2;
@@ -99,18 +99,6 @@ void Variable::Print()
 	//print variable name
 	cout<<"Variable = "<<VAR<<endl;
 	cout<<"Domain = "<<DOMAINSIZE<<endl;
-	for(int i=0; i<DOMAINSIZE; i++)
-	{
-		//print POS
-		cout<<"(Records = ";
-		VARRECORD * curr = VARREC;
-		while(curr)
-		{
-			cout<<curr->c_num<<" ";
-			curr = curr->next;
-		}
-		cout<<")"<<endl;
-	}
 }
 
 IGNode Variable::getIGNode(bitset<MAX_DOMAIN> values) {

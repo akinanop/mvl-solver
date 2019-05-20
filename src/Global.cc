@@ -193,11 +193,11 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 	cline->BOOL_FINITE = false;
 	cline->FILE = NULL;
 	cline->MODEL_FILE = NULL;
-	cline->TIME = 3600; //1 hour = 60mins * 60secs
+	cline->TIME = 3600000; //1000 hours = 1000 * 60mins * 60secs
 	cline -> RESTARTS = 0;
 	cline->MODEL = true;
 	cline -> WATCH = false;
-	cline -> VSIDS = false;
+	cline -> heuristic = Heuristic::BK;
 	cline -> LOG = false;
 
 
@@ -300,6 +300,8 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 					cline->MODEL_FILE = argv[++current];
 				else if(!strcmp(argv[current], "-time"))
 					cline->TIME = atoi(argv[++current]);
+				else if(!strcmp(argv[current], "-lazy"))
+					cline -> heuristic = Heuristic::lazy;
 				else if(!strcmp(argv[current], "-verbose"))
 					cline->LOG = true;
 				else
@@ -317,10 +319,17 @@ void ParseCommandLine(CommandLine * cline, int argc, char ** argv)
 					cline->RESTARTS = atoi(argv[++current]);
 				else if(!strcmp(argv[current], "-verbose"))
 					cline->LOG = true;
-				else if(!strcmp(argv[current], "-wl"))
+				else if(!strcmp(argv[current], "-wl")) {
 					cline -> WATCH = true;
+					if (cline->heuristic == Heuristic::BK)
+						cline->heuristic = Heuristic::VSIDS;
+				}
 				else if(!strcmp(argv[current], "-vsids"))
-					cline -> VSIDS = true;
+					cline -> heuristic = Heuristic::VSIDS;
+				else if(!strcmp(argv[current], "-vsids_pos"))
+					cline -> heuristic = Heuristic::VSIDS_pos;
+				else if(!strcmp(argv[current], "-lazy"))
+					cline -> heuristic = Heuristic::lazy;
 				else if(!strcmp(argv[current], "-model"))
 					cline->MODEL = true;
 				else if(!strcmp(argv[current], "-var"))
