@@ -24,6 +24,8 @@ Variable::Variable()
 	ATOMCNTNEG = NULL;
 	VSIDS_SCORE = NULL;
 	VSIDS_SCORE_NEG = NULL;
+	ATOMWATCHPOS = NULL;
+	ATOMWATCHNEG = NULL;
 	ATOMRECPOS = NULL;
 	ATOMRECNEG = NULL;
 	ATOMINDEX = NULL;
@@ -44,8 +46,10 @@ Variable::Variable(int var, int domain)
 	VSIDS_SCORE = new double[DOMAINSIZE];
 	VSIDS_SCORE_NEG = new double[DOMAINSIZE];
 	CLAUSEID = new int[DOMAINSIZE];
-	ATOMRECPOS = new VARRECORD *[DOMAINSIZE];
-	ATOMRECNEG = new VARRECORD *[DOMAINSIZE];
+	ATOMWATCHPOS = new VARRECORD *[DOMAINSIZE];
+	ATOMWATCHNEG = new VARRECORD *[DOMAINSIZE];
+	ATOMRECPOS = new vector<int> [DOMAINSIZE];
+	ATOMRECNEG = new vector<int> [DOMAINSIZE];
 	for(int i=0; i<DOMAINSIZE; i++)
 	{ // CHANGED DEFAULT ATOMLEVEL TO -10
 		ATOMLEVEL[i] = -10;
@@ -55,8 +59,8 @@ Variable::Variable(int var, int domain)
 		VSIDS_SCORE[i] = 0;
 		VSIDS_SCORE_NEG[i] = 0;
 		CLAUSEID[i] = -10;
-		ATOMRECPOS[i] = NULL;
-		ATOMRECNEG[i] = NULL;
+		ATOMWATCHPOS[i] = NULL;
+		ATOMWATCHNEG[i] = NULL;
 		ATOMINDEX[i] = -1;
 	}
 }
@@ -74,7 +78,7 @@ Variable::~Variable()
 
 	for(int i=0; i<DOMAINSIZE; i++)
 	{
-		VARRECORD * temp = ATOMRECPOS[i];
+		VARRECORD * temp = ATOMWATCHPOS[i];
 		VARRECORD * temp2;
 		while(temp)
 		{
@@ -82,15 +86,15 @@ Variable::~Variable()
 			temp = temp->next;
 			delete temp2;
 		}
-		temp = ATOMRECNEG[i];
+		temp = ATOMWATCHNEG[i];
 		while(temp)
 		{
 			temp2 = temp;
 			temp = temp->next;
 			delete temp2;
 		}
-		delete ATOMRECPOS[i];
-		delete ATOMRECNEG[i];
+		delete ATOMWATCHPOS[i];
+		delete ATOMWATCHNEG[i];
 	}
 }
 
@@ -106,15 +110,15 @@ void Variable::addRecord ( int c_id, int d_id, bool flag )
 	{
 		temp->prev = NULL;
 		if (flag) {
-			temp->next = ATOMRECPOS[d_id];
-			if (ATOMRECPOS[d_id])
+			temp->next = ATOMWATCHPOS[d_id];
+			if (ATOMWATCHPOS[d_id])
 				temp->next->prev = temp;
-			ATOMRECPOS[d_id] = temp;
+			ATOMWATCHPOS[d_id] = temp;
 		} else {
-			temp->next = ATOMRECNEG[d_id];
-			if (ATOMRECNEG[d_id])
+			temp->next = ATOMWATCHNEG[d_id];
+			if (ATOMWATCHNEG[d_id])
 				temp->next->prev = temp;
-			ATOMRECNEG[d_id] = temp;
+			ATOMWATCHNEG[d_id] = temp;
 		}
 	}
 }
@@ -126,9 +130,9 @@ void Variable::removeRecord ( VARRECORD* record, int d_id, bool flag )
 		record->prev->next = record->next;
 	} else {
 		if (flag)
-			ATOMRECPOS[d_id] = record->next;
+			ATOMWATCHPOS[d_id] = record->next;
 		else
-			ATOMRECNEG[d_id] = record->next;
+			ATOMWATCHNEG[d_id] = record->next;
 	}
 	if (record->next) {
 		record->next->prev = record->prev;

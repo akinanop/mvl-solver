@@ -237,8 +237,6 @@ void Formula::PrintInfo()
 
 bool Formula::verifyModel() {
 	//for each clause check whether at least one literal is satisfied
-	int var = 0;
-	int domainsize = 0;
 	VARRECORD * curr = NULL;
 	bool sat;
 	Literal lit;

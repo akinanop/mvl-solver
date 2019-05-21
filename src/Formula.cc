@@ -157,7 +157,7 @@ void Formula::BuildFormula ( CommandLine* cline ) {
 							else if (heuristic == Heuristic::BK)
 								VARLIST[var]->ATOMCNTPOS[val]++;
 							if (!WATCH)
-								VARLIST[var]->addRecord(clause_num, val, true);
+								VARLIST[var]->ATOMRECPOS[val].push_back(clause_num);
 						}
 						else
 						{
@@ -172,7 +172,7 @@ void Formula::BuildFormula ( CommandLine* cline ) {
 								}
 							}
 							if (!WATCH)
-								VARLIST[var]->addRecord(clause_num, val, false);
+								VARLIST[var]->ATOMRECNEG[val].push_back(clause_num);
 						}
 						atom_num++;
 					}
@@ -241,51 +241,28 @@ void Formula::PrintInfo()
 
 
 bool Formula::verifyModel() {
-	//set all clause to false
-	for(unsigned int  i=0; i<CLAUSELIST.size(); i++)
-		CLAUSELIST[i]->LEVEL = -1;
-	//for each variable and its value set all clauses in
-	//which it occurs to true
-	int val = 0;
-	int domainsize = 0;
-	VARRECORD * curr = NULL;
-	for(unsigned int  i=1; i<VARLIST.size(); i++) {
-		val = VARLIST[i]->VAL;
-		if(val != -1) {
-			domainsize = VARLIST[i]->DOMAINSIZE;
-			for(int j=0; j<domainsize; j++) {
-				if(j != val) {
-					curr = VARLIST[i]->ATOMRECNEG[j];
-					while(curr) {
-						CLAUSELIST[curr->c_num]->LEVEL = 0;
-						curr = curr->next;
-					}
+	bool sat;
+	//for every clause check whether at least one literal is satisfied
+	for(unsigned int  i=0; i<CLAUSELIST.size(); i++) {
+		sat=false;
+		for (int j=0;j<CLAUSELIST[i]->ATOM_LIST.size();j++) {
+			Literal atom = CLAUSELIST[i]->ATOM_LIST[j];
+			if (atom.EQUAL) {
+				if (VARLIST[atom.VAR]->ATOMASSIGN[atom.VAL] == 1) {
+					sat=true;
+					break;
 				}
-				else {
-					curr = VARLIST[i]->ATOMRECPOS[j];
-					while(curr) {
-						CLAUSELIST[curr->c_num]->LEVEL = 0;
-						curr = curr->next;
-					}
+			} else {
+				if (VARLIST[atom.VAR]->ATOMASSIGN[atom.VAL] == -1) {
+					sat=true;
+					break;
 				}
 			}
 		}
-		else {
-			domainsize = VARLIST[i]->DOMAINSIZE;
-			for(int j=0; j<domainsize; j++){
-				if(VARLIST[i]->ATOMASSIGN[j] == -1) {
-					curr = VARLIST[i]->ATOMRECNEG[j];
-					while(curr) {
-						CLAUSELIST[curr->c_num]->LEVEL = 0;
-						curr = curr->next;
-					}
-				}
-				else
-					VARLIST[i]->VAL = j;
-			}
-		}
+		if (!sat)
+			return false;
 	}
-	return (checkSat());
+	return true;
 }
 
 bool Formula::checkSat () {
@@ -547,29 +524,32 @@ inline void Formula::satisfyClauses ( int var, bool equals, int val ) {
 	bool lit_equal = false;
 	int lit_val = -1;
 
-	VARRECORD * current = NULL;
+	vector<int>::iterator current;
+	vector<int>::iterator end;
 
 	// Get clauses where the literal appears:
-	if ( equals ) current = VARLIST[var] -> ATOMRECPOS[val];
-	else current = VARLIST[var] -> ATOMRECNEG[val];
+	if ( equals ) current = VARLIST[var] -> ATOMRECPOS[val].begin();
+	else current = VARLIST[var] -> ATOMRECNEG[val].begin();
+	if ( equals ) end = VARLIST[var] -> ATOMRECPOS[val].end();
+	else end = VARLIST[var] -> ATOMRECNEG[val].end();
 
-	while ( current ) {
+	while ( current != end ) {
 
 		// For every clause that contains this literal, satisfy it
 
-		if ( CLAUSELIST[current->c_num] -> LEVEL == -1 ) {
+		if ( CLAUSELIST[*current] -> LEVEL == -1 ) {
 
-			CLAUSELIST[current->c_num]->LEVEL = LEVEL;
-			CLAUSELIST[current->c_num]->NumUnAss = 0;
+			CLAUSELIST[*current]->LEVEL = LEVEL;
+			CLAUSELIST[*current]->NumUnAss = 0;
 
 			// and update the counts for other unassigned literals in the clause (corresponds to deleting the clause from the theory)
 
 			if (heuristic==Heuristic::BK) {
-				for (int i = 0; i < CLAUSELIST[current->c_num]->ATOM_LIST.size(); i++) {
+				for (int i = 0; i < CLAUSELIST[*current]->ATOM_LIST.size(); i++) {
 
-					lit_var = CLAUSELIST[current->c_num]->ATOM_LIST[i].VAR;
-					lit_equal = CLAUSELIST[current->c_num]->ATOM_LIST[i].EQUAL;
-					lit_val = CLAUSELIST[current->c_num]->ATOM_LIST[i].VAL;
+					lit_var = CLAUSELIST[*current]->ATOM_LIST[i].VAR;
+					lit_equal = CLAUSELIST[*current]->ATOM_LIST[i].EQUAL;
+					lit_val = CLAUSELIST[*current]->ATOM_LIST[i].VAL;
 
 					if (VARLIST[lit_var]->ATOMASSIGN[lit_val] == 0) {
 
@@ -582,9 +562,8 @@ inline void Formula::satisfyClauses ( int var, bool equals, int val ) {
 				}
 			}
 		}
-		current = current -> next;
+		++current;
 	}
-	current = NULL;
 }
 
 
@@ -592,64 +571,69 @@ inline void Formula::satisfyClauses ( int var, bool equals, int val ) {
 //removeLiteral
 inline void Formula::removeLiteral ( int var, bool equals, int val ) {
 
-	VARRECORD * current = NULL;
+	vector<int>::iterator current;
+	vector<int>::iterator end;
 
 	// for every record of this literal reduce the number of unassigned literals in unsatisfied clauses
 	// update counts
 
-	if ( equals ) current = VARLIST[var] -> ATOMRECPOS[val];
-	else current = VARLIST[var] -> ATOMRECNEG[val];
+	if ( equals ) current = VARLIST[var] -> ATOMRECPOS[val].begin();
+	else current = VARLIST[var] -> ATOMRECNEG[val].begin();
+	if ( equals ) end = VARLIST[var] -> ATOMRECPOS[val].end();
+	else end = VARLIST[var] -> ATOMRECNEG[val].end();
 
-	while ( current ) {
+	while ( current != end ) {
 
-		if( CLAUSELIST[current->c_num] -> LEVEL == -1 ) {
+		if( CLAUSELIST[*current] -> LEVEL == -1 ) {
 
-			CLAUSELIST[current->c_num]->NumUnAss--;
+			CLAUSELIST[*current]->NumUnAss--;
 
 			//checking for units and conflicts right away:
 
-			if ( CLAUSELIST[current->c_num] -> NumUnAss == 1 ) {
-				UNITLIST.push_front(current -> c_num);
+			if ( CLAUSELIST[*current] -> NumUnAss == 1 ) {
+				UNITLIST.push_front(*current);
 			}
 
-			if ( CLAUSELIST[current->c_num] -> NumUnAss == 0 ) {
+			if ( CLAUSELIST[*current] -> NumUnAss == 0 ) {
 
 				CONFLICT = true;
-				CONFLICTINGCLAUSE = current->c_num;
+				CONFLICTINGCLAUSE = *current;
 			}
 		}
-		current = current->next;
+		++current;
 	}
-	current = NULL;
 }
 
 
 //unsatisfyClauses, used in undoTheory(level)
 inline void Formula::unsatisfyClauses ( int var, bool equals, int val, int level ) {
 
-	VARRECORD * current = NULL;
+	vector<int>::iterator current;
+	vector<int>::iterator end;
 
 	int lit_var = -1;
 	bool lit_equal = false;
 	int lit_val = -1;
 
-	if ( equals ) current = VARLIST[var] -> ATOMRECPOS[val];
-	else current = VARLIST[var] -> ATOMRECNEG[val];
+	if ( equals ) current = VARLIST[var] -> ATOMRECPOS[val].begin();
+	else current = VARLIST[var] -> ATOMRECNEG[val].begin();
+	if ( equals ) end = VARLIST[var] -> ATOMRECPOS[val].end();
+	else end = VARLIST[var] -> ATOMRECNEG[val].end();
 
-	while ( current ) {
+	while ( current != end ) {
 
-		if ( CLAUSELIST[current -> c_num] -> LEVEL > level ) {
+		if ( CLAUSELIST[*current] -> LEVEL > level ) {
 
-			for ( int i = 0; i < CLAUSELIST[current -> c_num] -> ATOM_LIST.size(); i++ ) {
+			for ( int i = 0; i < CLAUSELIST[*current] -> ATOM_LIST.size(); i++ ) {
 
-				lit_var = CLAUSELIST[current->c_num]->ATOM_LIST[i].VAR;
-				lit_equal = CLAUSELIST[current->c_num]->ATOM_LIST[i].EQUAL;
-				lit_val = CLAUSELIST[current->c_num]->ATOM_LIST[i].VAL;
+				lit_var = CLAUSELIST[*current]->ATOM_LIST[i].VAR;
+				lit_equal = CLAUSELIST[*current]->ATOM_LIST[i].EQUAL;
+				lit_val = CLAUSELIST[*current]->ATOM_LIST[i].VAL;
 
 				if ( ( VARLIST[lit_var] -> ATOMLEVEL[lit_val] > level )
 						|| ( VARLIST[lit_var] -> ATOMASSIGN[lit_val] == 0 ) ) {
 
-					CLAUSELIST[current -> c_num] -> NumUnAss++;
+					CLAUSELIST[*current] -> NumUnAss++;
 
 					if (heuristic==Heuristic::BK) {
 						if ( lit_equal )
@@ -661,37 +645,38 @@ inline void Formula::unsatisfyClauses ( int var, bool equals, int val, int level
 				}
 			}
 
-			CLAUSELIST[current->c_num]->LEVEL = -1;
+			CLAUSELIST[*current]->LEVEL = -1;
 		}
-		current = current->next;
+		++current;
 	}
-	current = NULL;
 }
 
 //addLiteral : used when undoing the theory
 inline void Formula::addLiteral ( int var, bool equals, int val ) {
 
-	VARRECORD * current = NULL;
+	vector<int>::iterator current;
+	vector<int>::iterator end;
 
 	//for every record of this literal increase the number of
 	//unassigned literals from unsatisfied clauses
 
-	if ( equals ) current = VARLIST[var] -> ATOMRECPOS[val];
-	else current = VARLIST[var] -> ATOMRECNEG[val];
+	if ( equals ) current = VARLIST[var] -> ATOMRECPOS[val].begin();
+	else current = VARLIST[var] -> ATOMRECNEG[val].begin();
+	if ( equals ) end = VARLIST[var] -> ATOMRECPOS[val].end();
+	else end = VARLIST[var] -> ATOMRECNEG[val].end();
 
-	while ( current ) {
-		if ( CLAUSELIST[current -> c_num] -> LEVEL == -1 ) {
+	while ( current != end ) {
+		if ( CLAUSELIST[*current] -> LEVEL == -1 ) {
 
-			CLAUSELIST[current -> c_num] -> NumUnAss++;
+			CLAUSELIST[*current] -> NumUnAss++;
 
 			if (heuristic==Heuristic::BK) {
 				if ( equals ) VARLIST[var] -> ATOMCNTPOS[val]++;
 				else VARLIST[var] -> ATOMCNTNEG[val]++;
 			}
 		}
-		current = current->next;
+		++current;
 	}
-	current = NULL;
 }
 
 
@@ -873,8 +858,8 @@ inline void Formula::watchedFalsifyLiteral ( Literal lit ) {
 
 	// Go through all occurrences of the literal in clauses and update watched literals
 
-	if ( lit.EQUAL ) current = VARLIST[lit.VAR] -> ATOMRECPOS[lit.VAL];
-	else current = VARLIST[lit.VAR] -> ATOMRECNEG[lit.VAL];
+	if ( lit.EQUAL ) current = VARLIST[lit.VAR] -> ATOMWATCHPOS[lit.VAL];
+	else current = VARLIST[lit.VAR] -> ATOMWATCHNEG[lit.VAL];
 
 	while ( current &&!CONFLICT ) {
 
@@ -973,7 +958,11 @@ Clause* Formula::analyzeConflict ( Clause * clause, bool freeClauseAfterUse ) {
 			Literal atom = clause->ATOM_LIST[i];
 
 			if (!WATCH)
-				VARLIST[atom.VAR] -> addRecord( cid, atom.VAL, atom.EQUAL);
+				if (atom.EQUAL)
+					VARLIST[atom.VAR]->ATOMRECPOS[atom.VAL].push_back(cid);
+				else
+					VARLIST[atom.VAR]->ATOMRECNEG[atom.VAL].push_back(cid);
+
 
 			if ( heuristic==Heuristic::VSIDS ) {
 				if (atom.EQUAL) {

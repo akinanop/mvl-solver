@@ -60,8 +60,9 @@ public:
   //ATOMCNTPOS = array storing counts of positive occurences of each domain - for choosing decision literal
   //ATOMCNTNEG = array storing counts of negative occurences of each domain
 
-  //ATOMRECPOS = array storing records of positive occurences of each domain
-  //ATOMRECNEG = array storing records of negative occurences of each domain
+  //ATOMWATCHPOS, ATOMWATCHNEG = linked lists storing clause ids of clauses where the literal is watched
+
+  //ATOMRECPOS, ATOMRECNEG = arrays storing clause ids of literal occurrences for positive/negative literals
 
   //CLAUSEID = array storing the clause id which cause this literal to be
   //           implied
@@ -78,8 +79,10 @@ public:
   double * VSIDS_SCORE; // literal score for the VSIDS decision heuristic
   double * VSIDS_SCORE_NEG; // literal score for the VSIDS decision heuristic
   int * CLAUSEID;
-  VARRECORD ** ATOMRECPOS;
-  VARRECORD ** ATOMRECNEG;
+  VARRECORD ** ATOMWATCHPOS;
+  VARRECORD ** ATOMWATCHNEG;
+  vector<int> * ATOMRECPOS;
+  vector<int> * ATOMRECNEG;
   //public variables and functions
 public:
   //Zero argument constructor
