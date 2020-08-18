@@ -701,18 +701,18 @@ Clause* Formula::resolve ( Clause* clause, Literal literal, Clause* reason ) {
 
 	Clause * resolvent = new Clause();
 
-	// Add literals L from the clause that are satisfied by at least one interpretation that does not satisfy L:
+	Literal neg_lit = literal;
+	neg_lit.EQUAL = !literal.EQUAL;
+	// Add literals L' from the clause that are satisfied by at least one interpretation that does not satisfy the resolution literal L, i.e., doesn't falsify NOT L.
 
 	for ( unsigned int i = 0; i < clause -> ATOM_LIST.size(); i++ ) {
 
 		Literal c_atom = clause -> ATOM_LIST[i];
 
-		if ( c_atom . VAR != literal . VAR ) resolvent -> addAtom ( c_atom );
-		else if ( c_atom . VAL != literal . VAL && c_atom . EQUAL != literal . EQUAL ) resolvent -> addAtom ( c_atom );
-		else if ( falsifies ( c_atom, literal ) ) resolvent -> addAtom ( c_atom );
+		if ( ! falsifies ( c_atom, neg_lit ) ) resolvent -> addAtom ( c_atom );
 
 	}
-	// Add literals L from the reason clause that are satisfied by at least one interpretation that also satisfies L, i.e., doesn't falsify.
+	// Add literals L' from the reason clause that are satisfied by at least one interpretation that also satisfies the resolution literal L, i.e., doesn't falsify L.
 
 	for ( unsigned int  i = 0; i < reason -> ATOM_LIST.size(); i++ ) {
 
@@ -1128,7 +1128,7 @@ bool Formula::falsifies ( Literal literal, Literal decision ) {
 	// true if literal falsifies decision
 
 	if ( literal . VAR != decision . VAR ) return false;
-	else if ( literal . VAL != decision . VAL && literal . EQUAL != decision . EQUAL ) return false;
+	else if ( literal . VAL != decision . VAL && (!literal . EQUAL || !decision . EQUAL) ) return false;
 	else if ( literal . VAL == decision . VAL && literal . EQUAL == decision . EQUAL ) return false;
 
 	else return true;
