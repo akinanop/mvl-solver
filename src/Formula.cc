@@ -500,9 +500,9 @@ void Formula::reduceTheory ( int var, bool equals, int val ) {
 		VARLIST[var] -> ATOMASSIGN[val] = -1;
 		VARLIST[var] -> ATOMLEVEL[val] = LEVEL;
 		VARLIST[var] -> CLAUSEID[val] = UNITCLAUSE;
+		DECSTACK.push_back ( Literal ( var, '!', val ) );
 		VARLIST[var] -> ATOMINDEX[val] = DECSTACK.size() - 1;
 
-		DECSTACK.push_back ( Literal ( var, '!', val ) );
 
 		// Check entailment on this variable
 
