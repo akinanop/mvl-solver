@@ -130,6 +130,8 @@ public:
   //add's the clause to theory and returns a backtrack level
   Clause * analyzeConflict(Clause * clause, bool freeClauseAfterUse);
   bool potent(Clause * clause);
+  //learnClause: the learned clause clause is added to CLAUSELIST and the required clause fields are set
+  Clause* learnClause ( Clause * clause );
   int backtrackLevel(Clause * clause);
   //resolve: Extended resolution
   Clause * resolve(Clause * clause, Literal literal, Clause * reason);
@@ -137,9 +139,8 @@ public:
   int maxLit(Clause * clause);
   //sets the watched literals of the clause to the two last falsified literals
   void assignWatched( Clause* clause);
-  //unitPropagation : does BCP in Finite Domain, returns true if no conflict
-  //else returns false
-  bool unitPropagation();
+  //unitPropagation : does BCP in Finite Domain
+  void unitPropagation();
   //NonChronoBacktrack : Extended DPLL algorithm with clause learning and
   //non chronological backtracking, returns backtrack level
   int NonChronoBacktrack(int restarts);

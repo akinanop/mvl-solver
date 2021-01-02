@@ -53,7 +53,7 @@ public:
   //UNITCLAUSE = clause that just got unit and satisfied
   //CONFLICT = boolean variable true when conflict in theory
   //CONFLICTINGCLAUSE = clause that is causing conflict in theory
-  //DECSTACK = stores the decisions/implications made in order
+  //ATOMINDEX = stores number of active assignments
   vector<Variable *> VARLIST;
   vector<Clause *> CLAUSELIST;
   int TIMELIMIT;
@@ -68,7 +68,7 @@ public:
   int UNITCLAUSE;
   bool CONFLICT;
   int CONFLICTINGCLAUSE;
-  vector <Literal> DECSTACK;
+  int ATOMINDEX;
   int RESTARTS;
   bool LOG; // verbose
   bool VSIDS; //vsids option
@@ -100,7 +100,10 @@ public:
   //analyzeConflict : finds the conflict, learns and creates a conflict clause,
   //add's the clause to theory and returns a backtrack level
   Clause * analyzeConflict(Clause * clause, bool freeClauseAfterUse);
+  //checks if a clause has exactly one literal falsified at current level
   bool potent(Clause * clause);
+  //adds the parameter clause to CLAUSELIST and updates other required fields
+  Clause* learnClause ( Clause * clause );
   //resolve: Extended resolution
   Clause * resolve(Clause * clause, Literal literal, Clause * reason);
   //sets the watched literals of the clause to the two last falsified literals

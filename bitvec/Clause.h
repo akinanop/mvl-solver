@@ -37,10 +37,8 @@ class Clause
   //public variables and functions
 public:
   //ATOM_LIST = vector of atoms
-  //NumAtom = number of atoms in the clause
   vector <Literal> ATOM_LIST;
 
-  int NumAtom;
   //Watched Literals:
   Literal WATCHED[2];
 
@@ -58,8 +56,6 @@ public:
   //Accessor functions
   //getAtom : returns atom at index
   Literal getAtom(int index);
-  //getNumAtom : returns the NumAtom value
-  int getNumAtom();
 };
 // End of Code
 //

@@ -56,6 +56,9 @@ public:
   bool operator==(const Literal& lit) const {
     return (VAR == lit.VAR && VAL == lit.VAL && EQUAL == lit.EQUAL);
   }
+  bool operator!=(const Literal& lit) const {
+    return !(*this==lit);
+  }
 
   //Print : function to print the atom
   void Print()

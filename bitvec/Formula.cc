@@ -29,7 +29,7 @@ Formula::Formula () {
 	UNITCLAUSE = -1;
 	CONFLICT = false;
 	CONFLICTINGCLAUSE = -1;
-	DECSTACK.reserve(10);
+	ATOMINDEX = 0;
 	RESTARTS = 0;
 	LOG = false;
 	VSIDS=false;
@@ -51,7 +51,7 @@ Formula::Formula ( CommandLine * cline ) {
 	UNITCLAUSE = -1;
 	CONFLICT = false;
 	CONFLICTINGCLAUSE = -1;
-	DECSTACK.reserve(10);
+	ATOMINDEX = 0;
 	RESTARTS = 0;
 	LOG = cline->LOG;
 	VSIDS = cline->VSIDS;
@@ -176,7 +176,7 @@ void Formula::BuildFormula ( CommandLine* cline ) {
 				}
 			}
 
-			if (temp_clause->NumAtom == 1) {
+			if (temp_clause->ATOM_LIST.size() == 1) {
 				UNITLIST.push_back(clause_num);
 			}
 
@@ -188,7 +188,7 @@ void Formula::BuildFormula ( CommandLine* cline ) {
 			temp_clause -> WATCHED[0] = watched1;
 			VARLIST[watched1.VAR]->addRecord(clause_num);
 
-			if ( temp_clause -> NumAtom > 1 ) {
+			if ( temp_clause -> ATOM_LIST.size() > 1 ) {
 
 				Literal watched2 = temp_clause -> ATOM_LIST[1];
 				temp_clause -> WATCHED[1] = watched2;
@@ -244,7 +244,7 @@ bool Formula::verifyModel() {
 		sat=false;
 		for (int j=0;j<CLAUSELIST[i]->ATOM_LIST.size();j++) {
 			lit = CLAUSELIST[i]->ATOM_LIST[j];
-			if (lit.superset(VARLIST[lit.VAR]->CURRENT_DOMAIN)) {
+			if (lit.isSuperset(VARLIST[lit.VAR]->CURRENT_DOMAIN)) {
 				sat=true;
 				break;
 			}
@@ -329,7 +329,7 @@ bool Formula::potent ( Clause* clause ) {
 
 	// Check if there is exactly one atom falsified at the current level
 
-	if (clause->NumAtom == 1) {
+	if (clause->ATOM_LIST.size() == 1) {
 		return true;
 	}
 
@@ -339,6 +339,36 @@ bool Formula::potent ( Clause* clause ) {
 	}
 	return false;
 
+}
+
+Clause* Formula::learnClause ( Clause * clause ) {
+	if (LOG) {
+		cout << "Learned a clause: " << endl;
+		clause->Print();
+	}
+	// add the clause to the clause list
+	CLAUSELIST.push_back( clause );
+	// it's id
+	int cid = CLAUSELIST.size()-1;
+
+	VARLIST[clause->WATCHED[0].VAR] -> addRecord( cid );
+	if (clause->ATOM_LIST.size()>1)
+		VARLIST[clause->WATCHED[1].VAR] -> addRecord( cid );
+
+	// update global records for each atom in the clause
+	for ( int i = 0; i < clause -> ATOM_LIST.size(); i++ ) {
+		Literal atom = clause->ATOM_LIST[i];
+
+		for (int j = 0; j < VARLIST[atom.VAR]->DOMAINSIZE; j++) {
+			if (atom.VALS.test(j))
+				VARLIST[atom.VAR]->VSIDS_SCORE[j]++;
+		}
+	}
+	for ( int i = 0; i < VARLIST.size(); i++ ) {
+		for ( int j = 0; j < VARLIST[i] -> DOMAINSIZE; j++ ) {
+			VARLIST[i] -> VSIDS_SCORE[j] /=2;
+		}
+	}
 }
 
 // Corresponding functions for watched literals version of the algorithm:
@@ -386,16 +416,10 @@ void Formula::watchedUndoTheory ( int level ) { // FIXME  fixed ?
 			VARLIST[i]->CURRENT_DOMAIN = VARLIST[i]->CURRENT_DOMAIN | VARLIST[i]->graphNodes.back().values;
 
 			VARLIST[i]->graphNodes.pop_back();
+			--ATOMINDEX;
 
 		}
 
-	}
-	//undo the decision stack
-	int decsize = DECSTACK.size();
-	for ( int i = decsize - 1; i > -1; i-- ) {
-		if ( sat(DECSTACK[i]) == 2 ) {
-			DECSTACK.erase ( DECSTACK.begin() + i );
-		}
 	}
 }
 
@@ -410,39 +434,8 @@ Clause* Formula::analyzeConflict ( Clause * clause, bool freeClauseAfterUse ) {
 	 */
 
 	if ( potent ( clause ) ) {
-
-		// After backtracking the clause should be detected as unit
-
-		if (LOG) {
-			cout << "Learned a clause: " << endl;
-			clause->Print();
-		}
-		// add the clause to the clause list
-		CLAUSELIST.push_back( clause );
-		// it's id
-		int cid = CLAUSELIST.size()-1;
-
-		VARLIST[clause->WATCHED[0].VAR] -> addRecord( cid );
-		if (clause->NumAtom>1)
-			VARLIST[clause->WATCHED[1].VAR] -> addRecord( cid );
-
-		// update global records for each atom in the clause
-		for ( int i = 0; i < clause -> NumAtom; i++ ) {
-			Literal atom = clause->ATOM_LIST[i];
-
-			for (int j = 0; j < VARLIST[atom.VAR]->DOMAINSIZE; j++) {
-				if (atom.VALS.test(j))
-					VARLIST[atom.VAR]->VSIDS_SCORE[j]++;
-			}
-		}
-		for ( int i = 0; i < VARLIST.size(); i++ ) {
-			for ( int j = 0; j < VARLIST[i] -> DOMAINSIZE; j++ ) {
-				VARLIST[i] -> VSIDS_SCORE[j] /=2;
-			}
-		}
-
+		learnClause(clause);
 		return clause;
-
 	}
 
 	// Resolve the clause and its latest falsified literal's reason
@@ -471,7 +464,7 @@ Clause* Formula::analyzeConflict ( Clause * clause, bool freeClauseAfterUse ) {
 		delete clause;
 	}
 
-	//cout << "Clause size: " << resolvent -> NumAtom << endl;
+	//cout << "Clause size: " << resolvent -> ATOM_LIST.size() << endl;
 
 	if (LOG) {
 		cout << "Resolvent:" << endl;
@@ -488,7 +481,7 @@ void Formula::assignWatched( Clause* clause) {
 	int max_decision_index = -1;
 	int second_max_decision_index = -1;
 
-	for ( int i = 0; i < clause -> NumAtom; i++ ) {
+	for ( int i = 0; i < clause -> ATOM_LIST.size(); i++ ) {
 
 		Literal atom = clause -> ATOM_LIST[i];
 
@@ -515,7 +508,7 @@ int Formula::sat ( Literal literal ) {
 	// computes literal -> SAT
 	// literal -> SAT == 2 unassigned, == 1 satisfied, == 0 falsified
 
-	if ( literal.superset(VARLIST[literal . VAR] -> CURRENT_DOMAIN ) ) return 1; // literal is satisfied
+	if ( literal.isSuperset(VARLIST[literal . VAR] -> CURRENT_DOMAIN ) ) return 1; // literal is satisfied
 	else if ( literal.falsifies(VARLIST[literal . VAR] -> CURRENT_DOMAIN ) ) return 0; // falsified
 	else return 2; //  literal is undefined
 
@@ -539,15 +532,13 @@ void Formula::WatchedUnitPropagation()
 			cout<<"unit c : "<<unit_clause<<endl;
 			clause->Print();
 		}
-		if ( sat ( clause -> WATCHED[0] ) != 1 ) {
-			if ( sat ( clause -> WATCHED[0] ) == 2 ) {
-				watchedReduceTheory(clause -> WATCHED[0]);
-				UNITS++;
-			}
-			else if ( sat ( clause -> WATCHED[1] ) == 2 ) {
-				watchedReduceTheory(clause -> WATCHED[1]);
-				UNITS++;
-			}
+		if ( sat ( clause -> WATCHED[0] ) == 2 ) {
+			watchedReduceTheory(clause -> WATCHED[0]);
+			UNITS++;
+		}
+		else if ( clause->ATOM_LIST.size() > 1 && sat ( clause -> WATCHED[1] ) == 2 ) {
+			watchedReduceTheory(clause -> WATCHED[1]);
+			UNITS++;
 		}
 	}
 
@@ -583,29 +574,17 @@ void Formula::SwapPointer ( VARRECORD* current ) {
 
 		// if watched2 unassigned, watched1 falsified
 
-		for ( int i = 0; i < clause -> NumAtom; i++ ) {
+		for ( int i = 0; i < clause -> ATOM_LIST.size(); i++ ) {
 
 			Literal literal = clause -> ATOM_LIST[i];
 
-			if (sat(literal)==1) {
+			if ( sat(literal) != 0  && literal.VAR != watched2.VAR ) {
 
 				VARLIST[watched1.VAR]->removeRecord(current);
 				VARLIST[literal.VAR]->addRecord(c_num);
 
 				clause->WATCHED[0] = literal;
 				unitClause=false;
-				break;
-			}
-
-			if (  sat(literal) == 2 &&   (literal.VAR != watched2.VAR)  ) {
-
-
-				VARLIST[watched1.VAR]->removeRecord(current);
-				VARLIST[literal.VAR]->addRecord(c_num);
-
-				clause -> WATCHED[0] = literal;
-
-				unitClause = false;
 				break;
 			}
 		}
@@ -632,9 +611,10 @@ void Formula::watchedReduceTheory ( Literal lit ) {
 
 
 	if (change.any()) {
-		DECSTACK.push_back(lit);
 
-		VARLIST[lit.VAR]->graphNodes.push_back(IGNode(DECSTACK.size() - 1, LEVEL, UNITCLAUSE, change));
+		++ATOMINDEX;
+
+		VARLIST[lit.VAR]->graphNodes.push_back(IGNode(ATOMINDEX, LEVEL, UNITCLAUSE, change));
 
 		VARLIST[lit.VAR]->CURRENT_DOMAIN = VARLIST[lit.VAR]->CURRENT_DOMAIN & lit.VALS;
 
@@ -669,7 +649,7 @@ int Formula::WatchedLiterals ( int restarts ) {
 			if ( LEVEL == 0 ) { cout << "UNSAT" << endl; return 2; }
 
 			Clause* learned = analyzeConflict ( CLAUSELIST[CONFLICTINGCLAUSE], false );
-			if (learned->NumAtom > 1)
+			if (learned->ATOM_LIST.size() > 1)
 				LEVEL = VARLIST[learned->WATCHED[1].VAR]->getIGNode(learned->WATCHED[1].VALS).level;
 			else
 				LEVEL=0;
@@ -691,12 +671,20 @@ int Formula::WatchedLiterals ( int restarts ) {
 
 				restartCount = BACKTRACKS + restarts;
 				RESTARTS++;
-			}
-			else watchedUndoTheory ( LEVEL );
 
-			//After backtracking the learned clause is the only unit clause
-			UNITLIST.clear();
-			UNITLIST.push_back(CLAUSELIST.size()-1);
+				// After a restart the learned clause is the only potential unit clause
+				// The learned clause is a unit clause at level 0 if the backtrack level would be 0
+				UNITLIST.clear();
+				if (LEVEL==0)
+					UNITLIST.push_back(CLAUSELIST.size()-1);
+				LEVEL = 0;
+			}
+			else {
+				watchedUndoTheory ( LEVEL );
+				//After backtracking the learned clause is the only unit clause
+				UNITLIST.clear();
+				UNITLIST.push_back(CLAUSELIST.size()-1);
+			}
 		}
 
 		// If there is a unit clause, propagate

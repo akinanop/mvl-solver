@@ -16,16 +16,12 @@ using namespace std;
 Clause::Clause()
 {
   ATOM_LIST.reserve(5);
-  NumAtom = 0;
-
 }
 
 //One Argument Constructor
 Clause::Clause(int size)
 {
   ATOM_LIST.reserve(size);
-  NumAtom = 0;
-
 }
 
 //Destructor
@@ -45,13 +41,12 @@ void Clause::addAtom(Literal atom)
 	}
 
   ATOM_LIST.push_back(atom);
-  NumAtom++;
 }
 
 //Print
 void Clause::Print()
 {
-  for(int i=0; i<NumAtom; i++)
+  for(int i=0; i<ATOM_LIST.size(); i++)
     {
       ATOM_LIST[i].Print();
       // cout<<" ";
@@ -64,12 +59,6 @@ void Clause::Print()
 inline Literal Clause::getAtom(int index)
 {
   return ATOM_LIST[index];
-}
-
-//getNumAtom
-inline int Clause::getNumAtom()
-{
-  return NumAtom;
 }
 //End of Code
 //**************************************************************

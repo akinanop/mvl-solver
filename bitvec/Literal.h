@@ -56,7 +56,8 @@ public:
 	  VALS = vals;
   }
 
-  bool superset(bitset<MAX_DOMAIN> vals) {
+//returns true if VALS is a superset of vals
+  bool isSuperset(bitset<MAX_DOMAIN> vals) {
 	  return (~VALS & vals).none();
   }
 
